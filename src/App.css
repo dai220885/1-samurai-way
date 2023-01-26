@@ -1,3 +1,39 @@
+.app-wrapper{
+  margin: 0 auto;
+  max-width: 1200px;
+  background-color: rgb(34, 33, 33);
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 3fr 10fr;
+  grid-gap: 3px;
+  grid-template-areas:
+    "header header"
+    "nav cont"
+;
+}
+
+
+.header{
+  background-color: dimgrey;
+  grid-area: header;
+}
+
+.header img{
+  max-width: 80px;
+}
+
+.nav{
+  background-color: darkslategrey;
+  grid-area: nav;
+  margin-left: 3px;
+  padding: 5px;
+}
+
+.content{
+  background-color: lightslategray;
+  grid-area: cont;
+}
+
 .App {
   text-align: center;
 }

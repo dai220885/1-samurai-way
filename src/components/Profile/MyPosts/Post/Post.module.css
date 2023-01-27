@@ -1,0 +1,9 @@
+.item {
+    color: aqua;
+
+}
+
+.item img {
+    width: 50px;
+    border-radius: 50%;
+}

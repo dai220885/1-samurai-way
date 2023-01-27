@@ -1,0 +1,9 @@
+.content{
+    background-color: lightslategray;
+    grid-area: cont;
+}
+
+.item {
+    color: aqua;
+
+}

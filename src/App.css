@@ -12,6 +12,14 @@
 ;
 }
 
+.app-wrapper-content{
+  background-color: lightslategray;
+  grid-area: cont;
+
+
+}
+
+
 .App {
   text-align: center;
 }

@@ -1,53 +1,58 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
 import classes from './Dialogs.module.css'
+import DialogItem from "./DialogItem/DialogItem";
+import Message from "./Message/Message";
 
-type DialogItemPropsType = {
-    id: number;
-    name: string;
+type DialogsPropsType = Array<DialogType>
 
+type DialogType = {
+    id: number
+    name: string
 }
 
-function DialogItem(props: DialogItemPropsType) {
-    let path = "/dialogs/" + props.id;
-    return (
-        <div className={classes.dialog}>
-            <NavLink to={path} activeClassName={classes.active}>{props.name}</NavLink>
-        </div>
+type MessageType = {
+    id: number
+    message: string
+}
+function Dialogs () {
+    let dialogs: Array<DialogType> = [
+        {id: 1, name: "Alexandr"},
+        {id: 2, name: "Victor"},
+        {id: 3, name: "Sergey"},
+        {id: 4, name: "Vladimir"},
+        {id: 5, name: "Petr"},
+        {id: 6, name: "Galina"},
+
+    ]
+
+    let messages: Array<MessageType> = [
+        {id: 1, message: "Helloooo!!!"},
+        {id: 2, message: "How are you?"},
+        {id: 3, message: "Good morning, bro"},
+        {id: 4, message: "Good Buy!!"},
+        {id: 4, message: "Good Buy!!"},
+        {id: 4, message: "Good Buy!!"},
+        {id: 4, message: "Good Buy!!"},
+
+    ]
+
+    let dialogsElements = dialogs.map((dialog) => {
+        return <DialogItem id={dialog.id} name={dialog.name}/>
+        }
     )
-}
+    //тот же синтаксис, что и у dialogsElements, но покороче, опущены скобки вокруг message внутри map
+    //т.к. только один параметр, также опущено слово return (т.к. перед ним ничего нет)  и фигурные скобки после него
+    let messagesElements = messages.map(message => <Message message={message.message}/>)
 
-type MessagePropsType = {
-    message: string;
-
-}
-
-function Message(props: MessagePropsType) {
-    return (
-        <div className={classes.message}>{props.message}</div>
-    )
-}
-
-function Dialogs() {
     return (
         <div className={classes.dialogs}>
             <div className={classes.dialogItems}>
-                <DialogItem id={1} name={"Alexandr"}/>
-                <DialogItem id={2} name={"Victor"}/>
-                <DialogItem id={3} name={"Sergey"}/>
-                <DialogItem id={4} name={"Vladimir"}/>
-                <DialogItem id={5} name={"Petr"}/>
-                <DialogItem id={6} name={"Galina"}/>
+                {dialogsElements}
             </div>
             <div className={classes.messages}>
-                <Message message={"Helloooo!!!"}/>
-                <Message message={"How are you?"}/>
-                <Message message={"Good morning, bro"}/>
-                <Message message={"Good Buy!!"}/>
+                {messagesElements}
             </div>
         </div>
-
-
     )
 }
 

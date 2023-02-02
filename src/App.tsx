@@ -7,16 +7,21 @@ import Profile from './components/Profile/Profile';
 import Dialogs from "./components/Dialogs/Dialogs";
 
 import {BrowserRouter, Route} from "react-router-dom";
+import {AllDataType} from "./index";
 
-function App() {
+type AppPropsType = {
+    data: AllDataType
+}
+
+function App(props: AppPropsType) {
     return (
         <BrowserRouter>
             <div className="app-wrapper">
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Route path="/dialogs" component={Dialogs}/>
-                    <Route path="/profile" component={Profile}/>
+                    <Route path="/dialogs" render={()=><Dialogs dialogs={props.data.dialogs} messages={props.data.messages}/>}/>
+                    <Route path="/profile" render={()=><Profile posts = {props.data.posts}/>}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}
                     {/*<Route path="/settings" component={Settings}/>*/}

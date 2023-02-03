@@ -56,13 +56,4 @@ export default Dialogs;
 //
 // ]
 //
-// let messages: Array<MessageType> = [
-//     {id: 1, message: "Helloooo!!!"},
-//     {id: 2, message: "How are you?"},
-//     {id: 3, message: "Good morning, bro"},
-//     {id: 4, message: "Good Buy!!"},
-//     {id: 4, message: "Good Buy!!"},
-//     {id: 4, message: "Good Buy!!"},
-//     {id: 4, message: "Good Buy!!"},
-//
-// ]
+

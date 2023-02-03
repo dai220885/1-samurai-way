@@ -2,14 +2,15 @@ import React from "react";
 import classes from './MyPosts.module.css'
 import Post from "./Post/Post";
 
-type MyPostsPropsType ={
-    posts:Array<PostType>
-
-}
 export type PostType = {
     id: number
     message: string
     likeCount: number
+}
+
+type MyPostsPropsType ={
+    posts:Array<PostType>
+    addNewPost: Function
 }
 
 function MyPosts(props: MyPostsPropsType) {
@@ -24,10 +25,10 @@ function MyPosts(props: MyPostsPropsType) {
             <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea></textarea>
+                    <textarea ></textarea>
                 </div>
                 <div>
-                    <button>Add post</button>
+                    <button onClick={() => {props.addNewPost("Hello I'm a new post")}}>Add post</button>
                 </div>
             </div>
             <div className={classes.posts}>

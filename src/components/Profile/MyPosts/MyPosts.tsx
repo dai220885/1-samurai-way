@@ -28,7 +28,7 @@ function MyPosts(props: MyPostsPropsType) {
                     <textarea ></textarea>
                 </div>
                 <div>
-                    <button onClick={() => {props.addNewPost("Hello I'm a new post")}}>Add post</button>
+                    <button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>
                 </div>
             </div>
             <div className={classes.posts}>

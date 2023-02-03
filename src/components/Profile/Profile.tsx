@@ -13,6 +13,9 @@ type ProfilePropsType = {
 function Profile (props: ProfilePropsType) {
     return (
         <div>
+            <div>
+                <button onClick={() => {props.addNewPost("Hello I'm a new post from Profile")}}>Add post from Profile</button>
+            </div>
             <ProfileInfo/>
             <MyPosts posts={props.posts} addNewPost={props.addNewPost}/>
 

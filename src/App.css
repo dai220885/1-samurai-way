@@ -1,7 +1,7 @@
 .app-wrapper{
   margin: 0 auto;
   max-width: 1200px;
-  background-color: rgb(34, 33, 33);
+  background-color: rgb(229, 221, 221);
   display: grid;
   grid-template-rows: 60px 1fr;
   grid-template-columns: 3fr 10fr;

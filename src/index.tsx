@@ -32,7 +32,7 @@ let posts: Array<PostType>= [
 
 
 ReactDOM.render(
-    <App dialogs={dialogs} messages={messages} posts={posts}/>,
+    <App dialogs={dialogs} messages={messages}/>,
     document.getElementById('root')
 );
 

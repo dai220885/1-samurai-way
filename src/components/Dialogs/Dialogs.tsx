@@ -32,12 +32,12 @@ export type MessageType = {
 function Dialogs (props: DialogsPropsType) {
 
     let dialogsElements = props.dialogs.map((dialog) => {
-        return <DialogItem id={dialog.id} name={dialog.name}/>
+        return <DialogItem key = {dialog.id} id={dialog.id} name={dialog.name}/>
         }
     )
     //тот же синтаксис, что и у dialogsElements, но покороче, опущены скобки вокруг message внутри map
     //т.к. только один параметр, также опущено слово return (т.к. перед ним ничего нет)  и фигурные скобки после него
-    let messagesElements = props.messages.map(message => <Message message={message.message}/>)
+    let messagesElements = props.messages.map((message, index) => <Message key = {index} message={message.message}/>)
 
     return (
         <>

@@ -21,7 +21,7 @@ function App(props: AppPropsType) {
     let [messages, setMessages] = useState<Array<MessageType>>(props.messages)
 
     function removeMessage (id: number){
-        debugger
+        //debugger
         let newMessages = messages.filter(m => m.id !==id) //filter возвращает новый массив
         setMessages(newMessages)
     }
@@ -33,7 +33,7 @@ function App(props: AppPropsType) {
     }
 
     function addNewMessage (message:string) {
-        debugger
+        //debugger
         let newMessage:MessageType = {id: messages.length+1, message: message}
         let newMessages = [...messages, newMessage];//копируем содержимое одного массива в другой и добавляем новый элемент
         //newMessages.push(newMessage) добавили новый объект в предыдущей строке

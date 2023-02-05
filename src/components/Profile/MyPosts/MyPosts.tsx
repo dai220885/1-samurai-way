@@ -25,8 +25,8 @@ function MyPosts(props: MyPostsPropsType) {
         return insertedText
     };
 
-    let postsElements = props.posts.map((post)=>{
-        return <Post message={post.message} likeCount={post.likeCount}/>
+    let postsElements = props.posts.map((post, index)=>{
+        return <Post key={index} message={post.message} likeCount={post.likeCount} />
     })
 
     return (
@@ -39,8 +39,6 @@ function MyPosts(props: MyPostsPropsType) {
                 <div>
                     {/*<button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>*/}
                     <Button name={"Add New Post (component)"} buttonCallBack={() => {props.addNewPost(insertedText)}}/>
-
-
                 </div>
             </div>
             <div className={classes.posts}>

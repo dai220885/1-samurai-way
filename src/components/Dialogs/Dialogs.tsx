@@ -2,11 +2,20 @@ import React from "react";
 import classes from './Dialogs.module.css'
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
+import {Button} from "../Button/Button";
+
+
+type buttonCallBackType = {
+    name:string;
+    function: Function
+}
 
 export type DialogsPropsType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
     removeMessage: Function
+    addNewMessage: Function
+    buttonCallBack?: Array<Function>
 }
 
 export type DialogType = {
@@ -31,18 +40,23 @@ function Dialogs (props: DialogsPropsType) {
     let messagesElements = props.messages.map(message => <Message message={message.message}/>)
 
     return (
-        <div className={classes.dialogs}>
+        <>
             <div>
-                <button onClick={() => {props.removeMessage("Hello, it's a new message")}}>Add new message</button>
+                <Button name={"Remove last message"} buttonCallBack={props.removeMessage}/>
+                <Button name={"Add Yo"} buttonCallBack={() => {props.addNewMessage("Yo-Yo-Yo")}}/>
                 {/*<button onClick={() => {props.removeMessage(1)}}>remove message</button>*/}
             </div>
-            <div className={classes.dialogItems}>
-                {dialogsElements}
+            <div className={classes.dialogs}>
+
+                <div className={classes.dialogItems}>
+                    {dialogsElements}
+                </div>
+                <div className={classes.messages}>
+                    {messagesElements}
+                </div>
             </div>
-            <div className={classes.messages}>
-                {messagesElements}
-            </div>
-        </div>
+        </>
+
     )
 }
 

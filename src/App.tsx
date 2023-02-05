@@ -22,14 +22,21 @@ function App(props: AppPropsType) {
 
     function removeMessage (id: number){
         debugger
-        let newMessages = messages.filter(m => m.id !==id)
+        let newMessages = messages.filter(m => m.id !==id) //filter возвращает новый массив
         setMessages(newMessages)
     }
+
+    function removeLastMessage (id: number){
+        let newMessages = [...messages]
+        newMessages.pop()
+        setMessages(newMessages)
+    }
+
     function addNewMessage (message:string) {
         debugger
-        let newMessages = [...messages];//копируем содержимое одного массива в другой
         let newMessage:MessageType = {id: messages.length+1, message: message}
-        newMessages.push(newMessage)
+        let newMessages = [...messages, newMessage];//копируем содержимое одного массива в другой и добавляем новый элемент
+        //newMessages.push(newMessage) добавили новый объект в предыдущей строке
         setMessages(newMessages)
     }
 
@@ -41,9 +48,10 @@ function App(props: AppPropsType) {
 
     function addNewPost (message:string) {
         //debugger
-        let newPosts= [...posts]
         let newPost:PostType = {id: posts.length+1, message: message, likeCount: posts.length}
-        newPosts.push(newPost)
+        let newPosts= [...posts, newPost]
+
+        //newPosts.push(newPost)
         setPosts(newPosts)
         //setCount(count-=1)
     }
@@ -66,7 +74,11 @@ function App(props: AppPropsType) {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Route path="/dialogs" render={()=><Dialogs dialogs={props.dialogs} messages={messages} removeMessage={addNewMessage}/>}/>
+                    <Route path="/dialogs" render={()=><Dialogs dialogs={props.dialogs}
+                                                                messages={messages}
+                                                                addNewMessage ={addNewMessage}
+                                                                removeMessage={removeLastMessage}
+                                                                /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
                     <Route path="/profile" render={()=><Profile posts = {posts} addNewPost={addNewPost} />}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}

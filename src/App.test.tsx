@@ -20,7 +20,7 @@ function addNewPost (message:string) {
 }
 
 test('renders learn react link', () => {
-  render(<App dialogs={dialogs} messages={messages}/>);
+  render(<App dialogs={dialogs} messages={messages} posts={posts}/>);
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });

@@ -12,16 +12,27 @@ import {PostType} from "./components/Profile/MyPosts/MyPosts";
 type AppPropsType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
-    //posts: Array<PostType>
+    posts: Array<PostType>
 }
 
 function App(props: AppPropsType) {
-    let [posts, setPosts] = useState<Array<PostType>>([
-        {id: 1, message: "Hello, it's a post 1", likeCount: 7},
-        {id: 2, message: "Hi, it's a post 2", likeCount: 3},
-        {id: 3, message: "By-By", likeCount: 4},
-        {id: 4, message: "How are you?", likeCount: 1},
-    ])
+    let [posts, setPosts] = useState<Array<PostType>>(props.posts)
+    let [count, setCount] = useState<number>(1)
+    let [messages, setMessages] = useState<Array<MessageType>>(props.messages)
+
+    function removeMessage (id: number){
+        debugger
+        let newMessages = messages.filter(m => m.id !==id)
+        setMessages(newMessages)
+    }
+    function addNewMessage (message:string) {
+        debugger
+        let newMessages = [...messages];//копируем содержимое одного массива в другой
+        let newMessage:MessageType = {id: messages.length+1, message: message}
+        newMessages.push(newMessage)
+        setMessages(newMessages)
+    }
+
     function removePost (id: number){
        // debugger
         let newPosts = posts.filter(p => p.id !==id)
@@ -29,14 +40,13 @@ function App(props: AppPropsType) {
     }
 
     function addNewPost (message:string) {
-        debugger
+        //debugger
+        let newPosts= [...posts]
         let newPost:PostType = {id: posts.length+1, message: message, likeCount: posts.length}
-        posts.push(newPost)
-        setPosts(posts)
+        newPosts.push(newPost)
+        setPosts(newPosts)
         //setCount(count-=1)
     }
-
-    let [count, setCount] = useState<number>(1)
 
     function addCount(){
         setCount(count+=1)
@@ -56,8 +66,8 @@ function App(props: AppPropsType) {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Route path="/dialogs" render={()=><Dialogs dialogs={props.dialogs} messages={props.messages}/>}/>
-                    <Route path="/profile" render={()=><Profile posts = {posts} addNewPost={addNewPost}/>}/>
+                    <Route path="/dialogs" render={()=><Dialogs dialogs={props.dialogs} messages={messages} removeMessage={addNewMessage}/>}/>
+                    <Route path="/profile" render={()=><Profile posts = {posts} addNewPost={addNewPost} />}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}
                     {/*<Route path="/settings" component={Settings}/>*/}

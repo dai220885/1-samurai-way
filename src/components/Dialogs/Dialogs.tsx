@@ -6,6 +6,7 @@ import Message from "./Message/Message";
 export type DialogsPropsType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
+    removeMessage: Function
 }
 
 export type DialogType = {
@@ -31,6 +32,10 @@ function Dialogs (props: DialogsPropsType) {
 
     return (
         <div className={classes.dialogs}>
+            <div>
+                <button onClick={() => {props.removeMessage("Hello, it's a new message")}}>Add new message</button>
+                {/*<button onClick={() => {props.removeMessage(1)}}>remove message</button>*/}
+            </div>
             <div className={classes.dialogItems}>
                 {dialogsElements}
             </div>

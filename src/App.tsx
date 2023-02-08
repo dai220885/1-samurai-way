@@ -8,6 +8,7 @@ import Dialogs, {DialogType, MessageType} from "./components/Dialogs/Dialogs";
 
 import {BrowserRouter, Route} from "react-router-dom";
 import {PostType} from "./components/Profile/MyPosts/MyPosts";
+import {TextArea} from "./components/TextArea/TextArea";
 
 type AppPropsType = {
     dialogs: Array<DialogType>
@@ -19,6 +20,7 @@ function App(props: AppPropsType) {
     let [posts, setPosts] = useState<Array<PostType>>(props.posts)
     let [count, setCount] = useState<number>(1)
     let [messages, setMessages] = useState<Array<MessageType>>(props.messages)
+    let [title, setTitle] = useState("")
 
     function removeMessage (id: number){
         //debugger
@@ -41,7 +43,7 @@ function App(props: AppPropsType) {
     }
 
     function removePost (id: number){
-       // debugger
+        //debugger
         let newPosts = posts.filter(p => p.id !==id)
         setPosts(newPosts)
     }
@@ -49,10 +51,9 @@ function App(props: AppPropsType) {
     function addNewPost (message:string) {
         //debugger
         let newPost:PostType = {id: posts.length+1, message: message, likeCount: posts.length}
-        let newPosts= [...posts, newPost]
-
-        //newPosts.push(newPost)
+        let newPosts= [newPost, ...posts]
         setPosts(newPosts)
+        setTitle("")
         //setCount(count-=1)
     }
 
@@ -62,11 +63,12 @@ function App(props: AppPropsType) {
 
     return (
         <BrowserRouter>
-
-
             <div className="app-wrapper">
                 <div>
                     {count}
+                </div>
+                <div>
+
                 </div>
                 <div>
                     <button onClick={() => {addCount()}}>Add count</button>
@@ -79,7 +81,11 @@ function App(props: AppPropsType) {
                                                                 addNewMessage ={addNewMessage}
                                                                 removeMessage={removeLastMessage}
                                                                 /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
-                    <Route path="/profile" render={()=><Profile posts = {posts} addNewPost={addNewPost} />}/>
+                    <Route path="/profile" render={()=><Profile posts = {posts}
+                                                                addNewPost={addNewPost}
+                                                                removePost={removePost}
+                                                                inputTitle={title}
+                                                                inputSetTitle={setTitle}/>}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}
                     {/*<Route path="/settings" component={Settings}/>*/}

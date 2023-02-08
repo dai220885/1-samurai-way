@@ -7,6 +7,9 @@ import ProfileInfo from "./ProfileInfo/ProfileInfo";
 type ProfilePropsType = {
     posts: Array<PostType>
     addNewPost: Function
+    removePost: Function
+    inputTitle: string
+    inputSetTitle:(inputTitle:string)=> void;
 
 }
 
@@ -17,7 +20,7 @@ function Profile (props: ProfilePropsType) {
                 <button onClick={() => {props.addNewPost("Hello, I'm a new post from Profile")}}>Add post from Profile</button>
             </div>
             <ProfileInfo/>
-            <MyPosts posts={props.posts} addNewPost={props.addNewPost}/>
+            <MyPosts posts={props.posts} addNewPost={props.addNewPost} removePost={props.removePost} inputTitle = {props.inputTitle} inputSetTitle={props.inputSetTitle}/>
 
         </div>
     )

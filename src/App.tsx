@@ -20,7 +20,7 @@ function App(props: AppPropsType) {
     let [posts, setPosts] = useState<Array<PostType>>(props.posts)
     let [count, setCount] = useState<number>(1)
     let [messages, setMessages] = useState<Array<MessageType>>(props.messages)
-    let [title, setTitle] = useState("")
+    // let [title, setTitle] = useState("")
 
     function removeMessage (id: number){
         //debugger
@@ -53,7 +53,7 @@ function App(props: AppPropsType) {
         let newPost:PostType = {id: posts.length+1, message: message, likeCount: posts.length}
         let newPosts= [newPost, ...posts]
         setPosts(newPosts)
-        setTitle("")
+        //setTitle("")
         //setCount(count-=1)
     }
 
@@ -83,9 +83,7 @@ function App(props: AppPropsType) {
                                                                 /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
                     <Route path="/profile" render={()=><Profile posts = {posts}
                                                                 addNewPost={addNewPost}
-                                                                removePost={removePost}
-                                                                inputTitle={title}
-                                                                inputSetTitle={setTitle}/>}/>
+                                                                removePost={removePost}/>}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}
                     {/*<Route path="/settings" component={Settings}/>*/}

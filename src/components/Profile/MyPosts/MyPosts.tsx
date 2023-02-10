@@ -36,7 +36,9 @@ function MyPosts(props: MyPostsPropsType) {
             <h3>My posts</h3>
             <div>
                 <div>
-                    <TextArea title={title} setTitle={setTitle}/>
+                    <TextArea title={title} setTitle={setTitle} textAreaCallBack={()=>{
+                        props.addNewPost(title); setTitle('')
+                    }}/>
                 </div>
                 <div>
                     {/*<button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>*/}

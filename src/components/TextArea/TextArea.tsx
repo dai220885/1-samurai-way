@@ -1,8 +1,9 @@
-import React, {ChangeEvent, KeyboardEventHandler} from 'react';
+import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
 
 type InputPropsType = {
     title: string;
     setTitle: (title:string)=> void;
+    textAreaCallBack: Function
 }
 
 
@@ -10,16 +11,14 @@ export const TextArea = (props:InputPropsType) => {
     let onChangeTextAreaHandler = (event: ChangeEvent<HTMLTextAreaElement>)=>{
         props.setTitle(event.currentTarget.value)
     }
-    let onKeyPressTextAreaHandler = (event: KeyboardEventHandler<HTMLTextAreaElement>)=>{
-if (1){
-
-}
+    let onKeyPressTextAreaHandler = (e: KeyboardEvent<HTMLTextAreaElement>)=>{
+        if(e.charCode===13 && e.ctrlKey){
+            props.textAreaCallBack()
+        }
     }
 
-
     return (
-        <textarea value ={props.title} onChange={onChangeTextAreaHandler} onKeyPress={(e)=>{
-            console.log(e)}}></textarea>
+        <textarea value ={props.title} onChange={onChangeTextAreaHandler} onKeyPress={onKeyPressTextAreaHandler} ></textarea>
     );
 };
 

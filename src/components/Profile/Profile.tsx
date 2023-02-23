@@ -6,8 +6,8 @@ import ProfileInfo from "./ProfileInfo/ProfileInfo";
 
 type ProfilePropsType = {
     posts: Array<PostType>
-    addNewPost: Function
-    removePost: Function
+    addNewPost: (post: string) => void
+    removePost: (id: string) => void
     // inputTitle: string
     // inputSetTitle:(inputTitle:string)=> void;
 

@@ -12,7 +12,7 @@ export const TextArea = (props:InputPropsType) => {
         props.setTitle(event.currentTarget.value)
     }
     let onKeyPressTextAreaHandler = (e: KeyboardEvent<HTMLTextAreaElement>)=>{
-        if(e.charCode===13 && e.ctrlKey){
+        if(e.code==="Enter" && e.ctrlKey){
             props.textAreaCallBack()
         }
     }

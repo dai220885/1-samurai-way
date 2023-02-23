@@ -3,24 +3,26 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 import {DialogType, MessageType} from "./components/Dialogs/Dialogs";
 import {PostType} from "./components/Profile/MyPosts/MyPosts";
+import state from './redux/state'
+import {v1} from 'uuid';
 
 
-let dialogs:Array<DialogType> = [
-    {id: 1, name: "Alexandr"},
+let dialogs: DialogType[] = [
+    {id: v1(), name: "Alexandr"},
   ]
 let messages: Array<MessageType> =[
-    {id: 1, message: "Helloooo!!!"},
+    {id: v1(), message: "Helloooo!!!"},
   ]
 let posts: Array<PostType> =[
-    {id: 1, message: "Hello, it's a post 1", likeCount: 7},
+    {id: v1(), message: "Hello, it's a post 1", likeCount: 7},
   ]
 function addNewPost (message:string) {
-    let newPost:PostType = {id: posts.length, message: message, likeCount: 0}
+    let newPost:PostType = {id: v1(), message: message, likeCount: 0}
     posts.push(newPost)
 }
 
 test('renders learn react link', () => {
-  render(<App dialogs={dialogs} messages={messages} posts={posts}/>);
+  render(<App state={state}/>);
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });

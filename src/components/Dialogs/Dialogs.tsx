@@ -11,20 +11,20 @@ type buttonCallBackType = {
 }
 
 export type DialogsPropsType = {
-    dialogs: Array<DialogType>
-    messages: Array<MessageType>
-    removeMessage: Function
-    addNewMessage: Function
-    buttonCallBack?: Array<Function>
+    dialogs: DialogType[]
+    messages: MessageType[]
+    removeMessage: (id: string)=>void
+    addNewMessage: (message: string)=>void
+    buttonCallBack?: Function[]
 }
 
 export type DialogType = {
-    id: number
+    id: string
     name: string
 }
 
 export type MessageType = {
-    id: number
+    id: string
     message: string
 }
 

@@ -1,6 +1,7 @@
 .app-wrapper{
   margin: 0 auto;
   max-width: 1200px;
+  height: 100vh;
   background-color: rgb(229, 221, 221);
   display: grid;
   grid-template-rows: 60px 1fr;
@@ -10,11 +11,14 @@
     "header header"
     "nav cont"
 ;
+  /*align-content: end;*/
+  /*grid-auto-rows: max-content;*/
 }
 
 .app-wrapper-content{
   background-color: lightslategray;
   grid-area: cont;
+  /*height: auto;*/
 
 
 }

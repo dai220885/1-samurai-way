@@ -1,5 +1,9 @@
 .mainLogo{
-    max-width: 1000px;
+    /*max-width: 1000px;*/
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
 }
 
 .descriptionBlock{

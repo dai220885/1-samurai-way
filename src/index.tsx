@@ -4,7 +4,9 @@ import './index.css';
 import App from './App';
 import {DialogType, MessageType} from "./components/Dialogs/Dialogs";
 import {PostType} from "./components/Profile/MyPosts/MyPosts";
+import state from './redux/state';
 
+/*
 let dialogs: Array<DialogType> = [
     {id: 1, name: "Alexandr"},
     {id: 2, name: "Victor"},
@@ -13,7 +15,6 @@ let dialogs: Array<DialogType> = [
     {id: 5, name: "Petr"},
     {id: 6, name: "Galina"},
 ]
-
 let messages: Array<MessageType> = [
     {id: 1, message: "Helloooo!!!"},
     {id: 2, message: "How are you?"},
@@ -23,18 +24,19 @@ let messages: Array<MessageType> = [
     {id: 6, message: "Good Buy!!"},
     {id: 7, message: "Good Buy!!"},
 ]
-
 let posts: Array<PostType>= [
     {id: 1, message: "Hello, it's a post 1", likeCount: 7},
     {id: 2, message: "Hi, it's a post 2", likeCount: 3},
     {id: 3, message: "By-By", likeCount: 4},
     {id: 4, message: "How are you?", likeCount: 1},
 ]
-
+//*/
 
 ReactDOM.render(
-    <App dialogs={dialogs} messages={messages} posts={posts}/>,
-    document.getElementById('root')
+    // <App dialogs={dialogs} messages={messages} posts={posts}/>,
+    // document.getElementById('root')
+    <App state = {state}/>,
+document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

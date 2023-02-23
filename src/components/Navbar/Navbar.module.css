@@ -4,6 +4,7 @@
     grid-area: nav;
     margin-left: 3px;
     padding: 7px;
+    /*height: auto;*/
 }
 
 .item a {

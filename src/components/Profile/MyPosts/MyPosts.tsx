@@ -20,13 +20,15 @@ type MyPostsPropsType = {
 }
 
 function MyPosts(props: MyPostsPropsType) {
-    let [title, setTitle] = useState('')
+    let [title, setTitle] = useState('') //стейт для хранения введенного текста в textArea
+    //
 
     let postsElements = props.posts.map((post, index) => {
+        let removePostOnClickHandler = () => props.removePost(post.id)
         return (
             <>
                 <Post key={index} message={post.message} likeCount={post.likeCount}/>
-                <Button name={'-'} buttonCallBack={() => props.removePost(post.id)}/>
+                <Button name={'-'} buttonCallBack={removePostOnClickHandler}/>
             </>
         )
     })
@@ -34,20 +36,27 @@ function MyPosts(props: MyPostsPropsType) {
         props.addNewPost(title);
         setTitle('')
     }
-
+    let buttonCallBackHandler = () => {
+        props.addNewPost(title);
+        setTitle('')
+    }
     return (
         <div className={classes.postBlock}>
             <h3>My posts</h3>
             <div>
                 <div>
-                    <TextArea title={title} setTitle={setTitle} textAreaCallBack={textAreaCallBackHandler}/>
+                    <TextArea
+                        title={title}
+                        setTitle={setTitle}
+                        textAreaCallBack={textAreaCallBackHandler}
+                    />
                 </div>
                 <div>
                     {/*<button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>*/}
-                    <Button name={'Add New Post (component)'} buttonCallBack={() => {
-                        props.addNewPost(title);
-                        setTitle('')
-                    }}/>
+                    <Button
+                        name={'Add New Post (component)'}
+                        buttonCallBack={buttonCallBackHandler}
+                    />
                 </div>
             </div>
             <div className={classes.posts}>

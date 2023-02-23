@@ -9,11 +9,13 @@ import Dialogs, {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
-import {stateType} from './redux/state';
+import {removeLastMessage, stateType} from './redux/state';
 import {v1} from 'uuid';
 
 type AppPropsType = {
     state: stateType
+    addNewMessageTest?:(message: string) => void
+    removeMessageTest:()=>void
 }
 
 function App(props: AppPropsType) {
@@ -51,7 +53,7 @@ function App(props: AppPropsType) {
 
     function addNewPost(message: string) {
         //debugger
-        let newPost: PostType = {id: v1(), message: message, likeCount: posts.length}
+        let newPost: PostType = {id: v1(), message: message, likeCount: 0}
         let newPosts = [newPost, ...posts]
         setPosts(newPosts)
         //setTitle("")
@@ -63,7 +65,6 @@ function App(props: AppPropsType) {
     }
 
     return (
-        <BrowserRouter>
             <div className="app-wrapper">
                 <div>
                     {count}
@@ -81,6 +82,8 @@ function App(props: AppPropsType) {
                                                                   messages={messages}
                                                                   addNewMessage={addNewMessage}
                                                                   removeMessage={removeLastMessage}
+                                                                  addNewMessageTest={props.addNewMessageTest}
+                                                                  removeMessageTest={props.removeMessageTest}
                         /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
                     <Route path="/profile" render={() => <Profile posts={posts}
                                                                   addNewPost={addNewPost}
@@ -92,8 +95,6 @@ function App(props: AppPropsType) {
                     {/*<Dialogs/>*/}
                 </div>
             </div>
-        </BrowserRouter>
-
     );
 }
 

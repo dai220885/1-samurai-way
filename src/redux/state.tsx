@@ -1,6 +1,7 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
+import {rerenderEntireTree} from '../render';
 
 export type stateType = {
     profilePage: {
@@ -40,6 +41,16 @@ let state: stateType = {
             {id: v1(), message: "How are you?", likeCount: 1},
         ]
     }
+}
+export function removeLastMessage() {
+    state.messagesPage.messages.pop()
+    rerenderEntireTree(state);
+}
+export let addNewMessageTest = (message: string) => {
+    //debugger
+    let newMessage: MessageType = {id: v1(), message: message}
+    state.messagesPage.messages.push(newMessage)
+    rerenderEntireTree(state);
 }
 
 export default state;

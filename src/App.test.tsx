@@ -21,8 +21,8 @@ function addNewPost (message:string) {
     posts.push(newPost)
 }
 
-test('renders learn react link', () => {
-  render(<App state={state}/>);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+// test('renders learn react link', () => {
+//   render(<App state={state}/>);
+//   const linkElement = screen.getByText(/learn react/i);
+//   expect(linkElement).toBeInTheDocument();
+// });

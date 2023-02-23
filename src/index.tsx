@@ -2,9 +2,15 @@ import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {DialogType, MessageType} from "./components/Dialogs/Dialogs";
-import {PostType} from "./components/Profile/MyPosts/MyPosts";
-import state from './redux/state';
+import {DialogType, MessageType} from './components/Dialogs/Dialogs';
+import {PostType} from './components/Profile/MyPosts/MyPosts';
+import state, {addNewMessageTest} from './redux/state';
+import {BrowserRouter} from 'react-router-dom';
+import {rerenderEntireTree} from './render';
+
+
+rerenderEntireTree(state);
+
 
 /*
 let dialogs: Array<DialogType> = [
@@ -31,13 +37,6 @@ let posts: Array<PostType>= [
     {id: 4, message: "How are you?", likeCount: 1},
 ]
 //*/
-
-ReactDOM.render(
-    // <App dialogs={dialogs} messages={messages} posts={posts}/>,
-    // document.getElementById('root')
-    <App state = {state}/>,
-document.getElementById('root')
-);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

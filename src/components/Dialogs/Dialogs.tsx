@@ -16,6 +16,8 @@ export type DialogsPropsType = {
     removeMessage: (id: string)=>void
     addNewMessage: (message: string)=>void
     buttonCallBack?: Function[]
+    addNewMessageTest? :(message: string)=>void
+    removeMessageTest: ()=>void
 }
 
 export type DialogType = {
@@ -42,8 +44,8 @@ function Dialogs (props: DialogsPropsType) {
     return (
         <>
             <div>
-                <Button name={"Remove last message"} buttonCallBack={props.removeMessage}/>
-                <Button name={"Add Yo"} buttonCallBack={() => {props.addNewMessage("Yo-Yo-Yo")}}/>
+                <Button name={"Remove last message"} buttonCallBack={props.removeMessageTest}/>
+                <Button name={"Add Yo"} buttonCallBack={() => {props.addNewMessageTest?props.addNewMessageTest("Yo-Yo-Yo-test"):alert('no addNewMessageTest')}}/>
                 {/*<button onClick={() => {props.removeMessage(1)}}>remove message</button>*/}
             </div>
             <div className={classes.dialogs}>

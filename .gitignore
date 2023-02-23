@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /.idea
+/src/images/DAI.jpg
+/src/images/DAI_3889.JPG

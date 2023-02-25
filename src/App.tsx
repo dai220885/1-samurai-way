@@ -9,56 +9,62 @@ import Dialogs, {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
-import {removeLastMessage, stateType} from './redux/state';
+import {addNewPost, removeLastMessage, removePost, setNewMessageText, setNewPostText, stateType} from './redux/state';
 import {v1} from 'uuid';
 
 type AppPropsType = {
     state: stateType
-    addNewMessageTest?:(message: string) => void
-    removeMessageTest:()=>void
+    addNewMessage:(message: string) => void
+    removeMessage:(id: string)=>void
+    addNewPost: (post: string)=>void
+    removePost: (id: string) =>void
+    setNewPostText:(NewPostText: string)=>void
+    setNewMessageText:(NewMessageText: string)=>void
 }
 
 function App(props: AppPropsType) {
-    let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
+
+
+   // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
     let [count, setCount] = useState<number>(1)
-    let [messages, setMessages] = useState<MessageType[]>(props.state.messagesPage.messages)
+    //let [messages, setMessages] = useState<MessageType[]>(props.state.messagesPage.messages)
 
     // let [title, setTitle] = useState("")
 
-    function removeMessage(id: string) {
-        //debugger
-        let newMessages = messages.filter(m => m.id !== id) //filter возвращает новый массив
-        setMessages(newMessages)
-    }
-
-    function removeLastMessage(id: string) {
-        let newMessages = [...messages]
-        newMessages.pop()
-        setMessages(newMessages)
-    }
-
-    function addNewMessage(message: string) {
-        //debugger
-        let newMessage: MessageType = {id: v1(), message: message}
-        let newMessages = [...messages, newMessage];//копируем содержимое одного массива в другой и добавляем новый элемент
-        //newMessages.push(newMessage) добавили новый объект в предыдущей строке
-        setMessages(newMessages)
-    }
-
-    function removePost(id: string) {
-        //debugger
-        let newPosts = posts.filter(p => p.id !== id)
-        setPosts(newPosts)
-    }
-
-    function addNewPost(message: string) {
-        //debugger
-        let newPost: PostType = {id: v1(), message: message, likeCount: 0}
-        let newPosts = [newPost, ...posts]
-        setPosts(newPosts)
-        //setTitle("")
-        //setCount(count-=1)
-    }
+    // function removeMessage(id: string) {
+    //     //debugger
+    //     let newMessages = messages.filter(m => m.id !== id) //filter возвращает новый массив
+    //     setMessages(newMessages)
+    // }
+    //
+    // function removeLastMessage(id: string) {
+    //     let newMessages = [...messages]
+    //     newMessages.pop()
+    //     setMessages(newMessages)
+    // }
+    //
+    // function addNewMessage(message: string) {
+    //     //debugger
+    //     let newMessage: MessageType = {id: v1(), message: message}
+    //     let newMessages = [...messages, newMessage];//копируем содержимое одного массива в другой и добавляем новый элемент
+    //     //newMessages.push(newMessage) добавили новый объект в предыдущей строке
+    //     setMessages(newMessages)
+    // }
+    //
+    // function removePost(id: string) {
+    //     //debugger
+    //     let newPosts = posts.filter(p => p.id !== id)
+    //     setPosts(newPosts)
+    // }
+    //
+    // function addNewPost(message: string) {
+    //     //debugger
+    //     let newPost: PostType = {id: v1(), message: message, likeCount: 0}
+    //     let newPosts = [newPost, ...posts]
+    //     setPosts(newPosts)
+    //     //setTitle("")
+    //     //setCount(count-=1)
+    // }
 
     function addCount() {
         setCount(count += 1)
@@ -79,15 +85,17 @@ function App(props: AppPropsType) {
                 <Navbar/>
                 <div className="app-wrapper-content">
                     <Route path="/dialogs" render={() => <Dialogs dialogs={props.state.messagesPage.dialogs}
-                                                                  messages={messages}
-                                                                  addNewMessage={addNewMessage}
-                                                                  removeMessage={removeLastMessage}
-                                                                  addNewMessageTest={props.addNewMessageTest}
-                                                                  removeMessageTest={props.removeMessageTest}
+                                                                  messages={props.state.messagesPage.messages}
+                                                                  addNewMessage={props.addNewMessage}
+                                                                  removeMessage={props.removeMessage}
+                                                                  newMessageText={props.state.messagesPage.newMessageText}
+                                                                  setNewMessageText={props.setNewMessageText}
                         /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
-                    <Route path="/profile" render={() => <Profile posts={posts}
-                                                                  addNewPost={addNewPost}
-                                                                  removePost={removePost}/>}/>
+                    <Route path="/profile" render={() => <Profile posts={props.state.profilePage.posts}
+                                                                  addNewPost={props.addNewPost}
+                                                                  removePost={props.removePost}
+                                                                  newPostText ={props.state.profilePage.newPostText}
+                                                                  setNewPostText = {props.setNewPostText}/>}/>
                     {/*<Route path="/news" component={News}/>*/}
                     {/*<Route path="/music" component={Music}/>*/}
                     {/*<Route path="/settings" component={Settings}/>*/}

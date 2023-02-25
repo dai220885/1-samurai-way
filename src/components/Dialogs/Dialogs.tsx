@@ -3,6 +3,7 @@ import classes from './Dialogs.module.css'
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import {Button} from "../Button/Button";
+import {TextArea} from '../TextArea/TextArea';
 
 
 type buttonCallBackType = {
@@ -13,11 +14,11 @@ type buttonCallBackType = {
 export type DialogsPropsType = {
     dialogs: DialogType[]
     messages: MessageType[]
+    newMessageText: string
     removeMessage: (id: string)=>void
     addNewMessage: (message: string)=>void
-    buttonCallBack?: Function[]
-    addNewMessageTest? :(message: string)=>void
-    removeMessageTest: ()=>void
+    setNewMessageText: (newMessageText: string)=>void
+    //buttonCallBack?: Function[]
 }
 
 export type DialogType = {
@@ -39,26 +40,39 @@ function Dialogs (props: DialogsPropsType) {
     )
     //тот же синтаксис, что и у dialogsElements, но покороче, опущены скобки вокруг message внутри map
     //т.к. только один параметр, также опущено слово return (т.к. перед ним ничего нет)  и фигурные скобки после него
-    let messagesElements = props.messages.map((message, index) => <Message key = {index} message={message.message}/>)
+    let messagesElements = props.messages.map((message, index) => {
+        const removeMessageOnClickHandler =()=>props.removeMessage(message.id)
+        return(
+            <>
+                <Message key = {message.id} message={message.message}/>
+                <Button name={'remove message'} buttonCallBack={removeMessageOnClickHandler}/>
+                <p></p>
+        </>
+        )
+    }
+    )
+    let addNewMessageCallBackHandler = () => props.addNewMessage(props.newMessageText);
 
     return (
         <>
-            <div>
-                <Button name={"Remove last message"} buttonCallBack={props.removeMessageTest}/>
-                <Button name={"Add Yo"} buttonCallBack={() => {props.addNewMessageTest?props.addNewMessageTest("Yo-Yo-Yo-test"):alert('no addNewMessageTest')}}/>
-                {/*<button onClick={() => {props.removeMessage(1)}}>remove message</button>*/}
-            </div>
             <div className={classes.dialogs}>
-
                 <div className={classes.dialogItems}>
                     {dialogsElements}
                 </div>
                 <div className={classes.messages}>
+                    <TextArea
+                        value={props.newMessageText}
+                        setValue={props.setNewMessageText}
+                        textAreaCallBack={addNewMessageCallBackHandler}
+                    />
+                    <Button
+                        name={"Send message"}
+                        buttonCallBack={addNewMessageCallBackHandler}
+                    />
                     {messagesElements}
                 </div>
             </div>
         </>
-
     )
 }
 

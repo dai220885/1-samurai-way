@@ -1,15 +1,15 @@
 import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
 
 type InputPropsType = {
-    title: string;
-    setTitle: (title:string)=> void;
+    value: string;
+    setValue: (newPostText:string)=> void;
     textAreaCallBack: () => void
 }
 
 
 export const TextArea = (props:InputPropsType) => {
     let onChangeTextAreaHandler = (e: ChangeEvent<HTMLTextAreaElement>)=>{
-        props.setTitle(e.currentTarget.value);
+        props.setValue(e.currentTarget.value);
 
     }
     let onKeyPressTextAreaHandler = (e: KeyboardEvent<HTMLTextAreaElement>)=>{
@@ -22,7 +22,7 @@ export const TextArea = (props:InputPropsType) => {
     return (
         <textarea
             placeholder={'add new post'}
-            value ={props.title}
+            value ={props.value}
             onChange={onChangeTextAreaHandler}
             onKeyPress={onKeyPressTextAreaHandler}>
         </textarea>

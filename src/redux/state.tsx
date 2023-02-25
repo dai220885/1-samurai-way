@@ -6,10 +6,12 @@ import {rerenderEntireTree} from '../render';
 export type stateType = {
     profilePage: {
         posts: PostType[]
+        newPostText:string
     }
     messagesPage:{
         dialogs: DialogType[]
         messages: MessageType[]
+        newMessageText: string
     }
 }
 
@@ -31,7 +33,8 @@ let state: stateType = {
             {id: v1(), message: "Good Buy!!"},
             {id: v1(), message: "Good Buy!!"},
             {id: v1(), message: "Good Buy!!"},
-        ]
+        ],
+        newMessageText: ''
     },
     profilePage: {
         posts: [
@@ -39,17 +42,55 @@ let state: stateType = {
             {id: v1(), message: "Hi, it's a post 2", likeCount: 3},
             {id: v1(), message: "By-By", likeCount: 4},
             {id: v1(), message: "How are you?", likeCount: 1},
-        ]
+        ],
+        newPostText: ''
     }
 }
-export function removeLastMessage() {
+
+export const setNewPostText = (newText: string) =>{
+    state.profilePage.newPostText = newText;
+    rerenderEntireTree(state);
+}
+
+export const removeLastMessage = () =>{
     state.messagesPage.messages.pop()
     rerenderEntireTree(state);
 }
-export let addNewMessageTest = (message: string) => {
+
+export const removeMessage = (id: string) => {
     //debugger
+    state.messagesPage.messages = state.messagesPage.messages.filter(m => m.id !== id) //filter возвращает новый массив
+    rerenderEntireTree(state);
+}
+
+export const setNewMessageText = (newMessage: string) =>{
+    state.messagesPage.newMessageText = newMessage;
+    rerenderEntireTree(state);
+}
+
+export const addNewMessage = (message: string) => {
+    //debugger
+    //можно вообще не передавать  извне текст сообщения, которое хотим добавить, а брать его из поля newMessageText (которое будет содержать актуальное значение, введенное в TextArea
     let newMessage: MessageType = {id: v1(), message: message}
     state.messagesPage.messages.push(newMessage)
+    state.messagesPage.newMessageText = ''
+    rerenderEntireTree(state);
+}
+
+export const addNewPost = (message: string) =>{
+    //debugger
+    //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
+    let newPost: PostType = {id: v1(), message: message, likeCount: 0}
+    state.profilePage.posts = [newPost, ...state.profilePage.posts]
+    state.profilePage.newPostText = '';
+    rerenderEntireTree(state);
+    //так тоже работает, но новый пост добавится в конец списка постов:
+    //state.profilePage.posts.push(newPost)
+}
+
+export const removePost = (id: string)=> {
+    debugger
+    state.profilePage.posts = state.profilePage.posts.filter(p => p.id !== id)
     rerenderEntireTree(state);
 }
 

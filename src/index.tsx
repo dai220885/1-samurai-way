@@ -4,10 +4,9 @@ import './index.css';
 import App from './App';
 import {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
-import state, {addNewMessageTest} from './redux/state';
+import state, {addNewMessage} from './redux/state';
 import {BrowserRouter} from 'react-router-dom';
 import {rerenderEntireTree} from './render';
-
 
 rerenderEntireTree(state);
 

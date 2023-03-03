@@ -3,6 +3,7 @@ import classes from './../Dialogs.module.css'
 
 type MessagePropsType = {
     message: string;
+    className?: string
 }
 
 function Message(props: MessagePropsType) {

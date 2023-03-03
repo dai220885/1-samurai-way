@@ -1,10 +1,14 @@
 .dialogs {
     display: grid;
-    grid-template-columns: 2fr 10fr;
+    /*grid-template-columns: 2fr 10fr;*/
+    grid-template-columns: 200px 1fr;
 }
 
 .dialogItems  {
-    padding: 10px;
+    word-break: normal;
+    /*width: 200px;*/
+    padding: 5px;
+    margin-bottom: 5px;
 }
 
 .dialogItems a {
@@ -20,9 +24,23 @@
 }
 
 .messages {
-    padding: 10px;
+
+    word-wrap: break-word;
+    /*white-space: break-spaces;*/
+    width: 400px;
+    font-size: 20px;
+    /*padding: 10px;*/
 }
 
 .message {
+    word-wrap: break-word;
+    /*white-space: break-spaces;*/
+    width: 400px;
+    font-size: 20px;
+    /*padding: 10px;*/
+    color: darkslategrey;
+    background-color: #889aad;
+    border: 2px solid #889aad;
 
+    border-radius: 5px;
 }

@@ -40,14 +40,14 @@ function Dialogs (props: DialogsPropsType) {
     )
     //тот же синтаксис, что и у dialogsElements, но покороче, опущены скобки вокруг message внутри map
     //т.к. только один параметр, также опущено слово return (т.к. перед ним ничего нет)  и фигурные скобки после него
-    let messagesElements = props.messages.map((message, index) => {
+    let messagesElements = props.messages.map((message) => {
         const removeMessageOnClickHandler =()=>props.removeMessage(message.id)
         return(
-            <>
-                <Message key = {message.id} message={message.message}/>
+            <div key={message.id} className={classes.dialogItems}>
+                <Message message={message.message} className={classes.dialogItems}/>
                 <Button name={'remove message'} buttonCallBack={removeMessageOnClickHandler}/>
-                <p></p>
-        </>
+                {/*<p></p>*/}
+        </div>
         )
     }
     )
@@ -61,6 +61,7 @@ function Dialogs (props: DialogsPropsType) {
                 </div>
                 <div className={classes.messages}>
                     <TextArea
+                        placeholder={'add new message'}
                         value={props.newMessageText}
                         setValue={props.setNewMessageText}
                         textAreaCallBack={addNewMessageCallBackHandler}

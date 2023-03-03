@@ -24,13 +24,13 @@ type MyPostsPropsType = {
 function MyPosts(props: MyPostsPropsType) {
     //let [title, setTitle] = useState('') //стейт для хранения введенного текста в textArea
 
-    let postsElements = props.posts.map((post, index) => {
+    let postsElements = props.posts.map((post) => {
         let removePostOnClickHandler = () => props.removePost(post.id)
         return (
-            <>
-                <Post key={index} message={post.message} likeCount={post.likeCount}/>
+            <div key={post.id}>
+                <Post message={post.message} likeCount={post.likeCount}/>
                 <Button name={'-'} buttonCallBack={removePostOnClickHandler}/>
-            </>
+            </div>
         )
     })
     const addNewPostCallBackHandler = () => {
@@ -44,6 +44,7 @@ function MyPosts(props: MyPostsPropsType) {
             <div>
                 <div>
                     <TextArea
+                        placeholder={'add new post'}
                         value={props.newPostText}
                         setValue={props.setNewPostText}
                         textAreaCallBack={addNewPostCallBackHandler}

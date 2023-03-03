@@ -1,7 +1,15 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
-import {rerenderEntireTree} from '../render';
+
+let rerenderEntireTree = () =>{
+    console.log('state was changed')
+}
+
+//subscribe вызывается в index.tsx и получает в качестве коллбэка функцию rerenderEntireTree (уже настоящую, которая перерисовывает все дерево)) Получив коллбэк subscribe присваивает его в локальную для state.tsx функцию rerenderEntireTree
+export const subscribe = (observer:()=>void) =>{
+    rerenderEntireTree = observer //паттерн observer, похож на паттерн publisher-subscriber (по нему работает addEventListener, onClick, onChange...)
+}
 
 export type stateType = {
     profilePage: {
@@ -49,23 +57,23 @@ let state: stateType = {
 
 export const setNewPostText = (newText: string) =>{
     state.profilePage.newPostText = newText;
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const removeLastMessage = () =>{
     state.messagesPage.messages.pop()
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const removeMessage = (id: string) => {
     //debugger
     state.messagesPage.messages = state.messagesPage.messages.filter(m => m.id !== id) //filter возвращает новый массив
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const setNewMessageText = (newMessage: string) =>{
     state.messagesPage.newMessageText = newMessage;
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const addNewMessage = (message: string) => {
@@ -74,7 +82,7 @@ export const addNewMessage = (message: string) => {
     let newMessage: MessageType = {id: v1(), message: message}
     state.messagesPage.messages.push(newMessage)
     state.messagesPage.newMessageText = ''
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const addNewPost = (message: string) =>{
@@ -83,15 +91,15 @@ export const addNewPost = (message: string) =>{
     let newPost: PostType = {id: v1(), message: message, likeCount: 0}
     state.profilePage.posts = [newPost, ...state.profilePage.posts]
     state.profilePage.newPostText = '';
-    rerenderEntireTree(state);
+    rerenderEntireTree();
     //так тоже работает, но новый пост добавится в конец списка постов:
     //state.profilePage.posts.push(newPost)
 }
 
 export const removePost = (id: string)=> {
-    debugger
+    //debugger
     state.profilePage.posts = state.profilePage.posts.filter(p => p.id !== id)
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export default state;

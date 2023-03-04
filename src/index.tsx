@@ -4,16 +4,7 @@ import './index.css';
 import App from './App';
 import {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
-import state, {
-    addNewMessage,
-    addNewPost,
-    removeLastMessage,
-    removeMessage,
-    removePost,
-    setNewMessageText,
-    setNewPostText, stateType,
-    subscribe
-} from './redux/state';
+import {store} from './redux/state';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
@@ -24,14 +15,16 @@ let rerenderEntireTree = () => {
         <BrowserRouter>
             {/*// <App dialogs={dialogs} messages={messages} posts={posts}/>,*/}
             {/*// document.getElementById('root')*/}
-            <App
-                state={state}
-                addNewMessage={addNewMessage}
-                removeMessage = {removeMessage}
-                addNewPost = {addNewPost}
-                removePost={removePost}
-                setNewPostText = {setNewPostText}
-                setNewMessageText={setNewMessageText}/>
+            {/*<App*/}
+            {/*    state={store._state}*/}
+            {/*    addNewMessage={store.addNewMessage}*/}
+            {/*    removeMessage = {store.removeMessage}*/}
+            {/*    addNewPost = {store.addNewPost}*/}
+            {/*    removePost={store.removePost}*/}
+            {/*    setNewPostText = {store.setNewPostText}*/}
+            {/*    setNewMessageText={store.setNewMessageText}*/}
+            {/*/>*/}
+            <App store = {store}/>
         </BrowserRouter>,
         document.getElementById('root')
     );
@@ -41,7 +34,7 @@ let rerenderEntireTree = () => {
 
 rerenderEntireTree();
 
-subscribe(rerenderEntireTree)
+store.subscribe(rerenderEntireTree)
 
 
 /*

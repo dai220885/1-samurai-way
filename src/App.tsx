@@ -9,28 +9,28 @@ import Dialogs, {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
-import {addNewPost, removeLastMessage, removePost, setNewMessageText, setNewPostText, stateType} from './redux/state';
+import {stateType, storeType} from './redux/state';
 import {v1} from 'uuid';
 
-type AppPropsType = {
-    state: stateType
-    addNewMessage:(message: string) => void
-    removeMessage:(id: string)=>void
-    addNewPost: (post: string)=>void
-    removePost: (id: string) =>void
-    setNewPostText:(NewPostText: string)=>void
-    setNewMessageText:(NewMessageText: string)=>void
+// старая версия проппсов
+// type AppPropsType = {
+//     state: stateType
+//     addNewMessage:(message: string) => void
+//     removeMessage:(id: string)=>void
+//     addNewPost: (post: string)=>void
+//     removePost: (id: string) =>void
+//     setNewPostText:(NewPostText: string)=>void
+//     setNewMessageText:(NewMessageText: string)=>void
+// }
+
+export type AppPropsType = {
+    store: storeType
 }
-
-function App(props: AppPropsType) {
-
-
-   // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
+const App: React.FC<AppPropsType> = (props) => {
+    // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
     let [count, setCount] = useState<number>(1)
     //let [messages, setMessages] = useState<MessageType[]>(props.state.messagesPage.messages)
-
     // let [title, setTitle] = useState("")
-
     // function removeMessage(id: string) {
     //     //debugger
     //     let newMessages = messages.filter(m => m.id !== id) //filter возвращает новый массив
@@ -65,44 +65,55 @@ function App(props: AppPropsType) {
     //     //setTitle("")
     //     //setCount(count-=1)
     // }
-
     function addCount() {
         setCount(count += 1)
     }
 
+    const state = props.store.getState();
     return (
-            <div className="app-wrapper">
-                <div>
-                    {count}
-                </div>
-                <div>
-                    <button onClick={() => {
-                        addCount()
-                    }}>Add count
-                    </button>
-                </div>
-                <Header/>
-                <Navbar/>
-                <div className="app-wrapper-content">
-                    <Route path="/dialogs" render={() => <Dialogs dialogs={props.state.messagesPage.dialogs}
-                                                                  messages={props.state.messagesPage.messages}
-                                                                  addNewMessage={props.addNewMessage}
-                                                                  removeMessage={props.removeMessage}
-                                                                  newMessageText={props.state.messagesPage.newMessageText}
-                                                                  setNewMessageText={props.setNewMessageText}
-                        /*buttonCallBack = {[removeLastMessage, addNewMessage]}*//>}/>
-                    <Route path="/profile" render={() => <Profile posts={props.state.profilePage.posts}
-                                                                  addNewPost={props.addNewPost}
-                                                                  removePost={props.removePost}
-                                                                  newPostText ={props.state.profilePage.newPostText}
-                                                                  setNewPostText = {props.setNewPostText}/>}/>
-                    {/*<Route path="/news" component={News}/>*/}
-                    {/*<Route path="/music" component={Music}/>*/}
-                    {/*<Route path="/settings" component={Settings}/>*/}
-                    {/*<Profile/>*/}
-                    {/*<Dialogs/>*/}
-                </div>
+        <div className="app-wrapper">
+            <div>
+                {count}
             </div>
+            <div>
+                <button onClick={() => {
+                    addCount()
+                }}>Add count
+                </button>
+            </div>
+            <Header/>
+            <Navbar/>
+            <div className="app-wrapper-content">
+                <Route
+                    path="/dialogs"
+                    render={() =>
+                        <Dialogs
+                            dialogs={state.messagesPage.dialogs}
+                            messages={state.messagesPage.messages}
+                            addNewMessage={props.store.addNewMessage.bind(props.store)}
+                            removeMessage={props.store.removeMessage.bind(props.store)}
+                            newMessageText={state.messagesPage.newMessageText}
+                            setNewMessageText={props.store.setNewMessageText.bind(props.store)}
+                        />}
+                />
+                <Route
+                    path="/profile"
+                    render={() =>
+                        <Profile
+                            posts={state.profilePage.posts}
+                            addNewPost={props.store.addNewPost.bind(props.store)}
+                            removePost={props.store.removePost.bind(props.store)}
+                            newPostText={state.profilePage.newPostText}
+                            setNewPostText={props.store.setNewPostText.bind(props.store)}
+                        />}
+                />
+                {/*<Route path="/news" component={News}/>*/}
+                {/*<Route path="/music" component={Music}/>*/}
+                {/*<Route path="/settings" component={Settings}/>*/}
+                {/*<Profile/>*/}
+                {/*<Dialogs/>*/}
+            </div>
+        </div>
     );
 }
 

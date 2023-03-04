@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 import {DialogType, MessageType} from "./components/Dialogs/Dialogs";
 import {PostType} from "./components/Profile/MyPosts/MyPosts";
-import state from './redux/state'
+import {store} from './redux/state'
 import {v1} from 'uuid';
 
 

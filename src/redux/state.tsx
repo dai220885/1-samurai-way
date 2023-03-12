@@ -1,6 +1,8 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
+import profileReduser from './profile-reduser';
+import dialogsReduser from './dialogs-reduser';
 
 //переменные, в которые сохраним значения свойств type для dispatch
 const ADD_POST = 'ADD-POST';
@@ -11,17 +13,19 @@ const REMOVE_MESSAGE = 'REMOVE-MESSAGE';
 const SET_NEW_MESSAGE_TEXT = 'SET-NEW-MESSAGE-TEXT';
 
 //subscribe вызывается в index.tsx и получает в качестве коллбэка функцию rerenderEntireTree (уже настоящую, которая перерисовывает все дерево)) Получив коллбэк subscribe присваивает его в локальную для state.tsx функцию rerenderEntireTree
-
-export type stateType = {
-    profilePage: {
+export type profilePageType ={
         posts: PostType[]
         newPostText: string
-    }
-    messagesPage: {
-        dialogs: DialogType[]
-        messages: MessageType[]
-        newMessageText: string
-    }
+}
+export type messagePageType ={
+    dialogs: DialogType[]
+    messages: MessageType[]
+    newMessageText: string
+}
+
+export type stateType = {
+    profilePage: profilePageType
+    messagesPage: messagePageType
 }
 
 export type storeType = {
@@ -119,50 +123,48 @@ export const store: storeType = {
     }, //+
 
     dispatch(action: any){
+
+        this._state.profilePage = profileReduser(this._state.profilePage, action)
+        this._state.messagesPage = dialogsReduser(this._state.messagesPage, action)
+        this._rerenderEntireTree(this._state);
         //action - это объект, который описывает, какое действие нужно совершить.
         // Обязательно должно быть свойсво "тип" (например, type: 'ADD-POST') с описанием действия, которое нужно совершить.
-    if(action.type === ADD_POST) {
-//debugger
-        //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
-        let newPost: PostType = {id: v1(), message: this._state.profilePage.newPostText, likeCount: 0}
-        this._state.profilePage.posts = [newPost, ...this._state.profilePage.posts]
-        this._state.profilePage.newPostText = '';
-        this._rerenderEntireTree(this._state);
-        //так тоже работает, но новый пост добавится в конец списка постов:
-        //state.profilePage.posts.push(newPost)
-    }
-    else if (action.type === REMOVE_POST){
-        this._state.profilePage.posts = this._state.profilePage.posts.filter(p => p.id !== action.postForRemoveId) // при вызове в диспатч нужно передать action c доп. свойством "postForRemoveId"
-        this._rerenderEntireTree(this._state);
-    }
-    else if(action.type === SET_NEW_POST_TEXT) {
-        this._state.profilePage.newPostText = action.newPostText; // при вызове в диспатч нужно передать action c доп. свойством "newText"
-        this._rerenderEntireTree(this._state);
-    }
-    else if (action.type === ADD_MESSAGE) {
-        let newMessage: MessageType = {id: v1(), message: this._state.messagesPage.newMessageText}
-        this._state.messagesPage.messages.push(newMessage)
-        this._state.messagesPage.newMessageText = ''
-        this._rerenderEntireTree(this._state);
-    }
-    else if (action.type === REMOVE_MESSAGE){
-        this._state.messagesPage.messages = this._state.messagesPage.messages.filter(m => m.id !== action.messageForRemoveId) //filter возвращает новый массив
-        this._rerenderEntireTree(this._state);
-    }
-    else if (action.type === SET_NEW_MESSAGE_TEXT) {
-        this._state.messagesPage.newMessageText = action.newMessageText;
-        this._rerenderEntireTree(this._state);
-    }
+//     if(action.type === ADD_POST) {
+// //debugger
+//         //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
+//         let newPost: PostType = {id: v1(), message: this._state.profilePage.newPostText, likeCount: 0}
+//         this._state.profilePage.posts = [newPost, ...this._state.profilePage.posts]
+//         this._state.profilePage.newPostText = '';
+//         this._rerenderEntireTree(this._state);
+//         //так тоже работает, но новый пост добавится в конец списка постов:
+//         //state.profilePage.posts.push(newPost)
+//     }
+//     else if (action.type === REMOVE_POST){
+//         this._state.profilePage.posts = this._state.profilePage.posts.filter(p => p.id !== action.postForRemoveId) // при вызове в диспатч нужно передать action c доп. свойством "postForRemoveId"
+//         this._rerenderEntireTree(this._state);
+//     }
+//     else if(action.type === SET_NEW_POST_TEXT) {
+//         this._state.profilePage.newPostText = action.newPostText; // при вызове в диспатч нужно передать action c доп. свойством "newText"
+//         this._rerenderEntireTree(this._state);
+//     }
+//     else if (action.type === ADD_MESSAGE) {
+//         let newMessage: MessageType = {id: v1(), message: this._state.messagesPage.newMessageText}
+//         this._state.messagesPage.messages.push(newMessage)
+//         this._state.messagesPage.newMessageText = ''
+//         this._rerenderEntireTree(this._state);
+//     }
+//     else if (action.type === REMOVE_MESSAGE){
+//         this._state.messagesPage.messages = this._state.messagesPage.messages.filter(m => m.id !== action.messageForRemoveId) //filter возвращает новый массив
+//         this._rerenderEntireTree(this._state);
+//     }
+//     else if (action.type === SET_NEW_MESSAGE_TEXT) {
+//         this._state.messagesPage.newMessageText = action.newMessageText;
+//         this._rerenderEntireTree(this._state);
+//     }
     }
 }
 
 
-//функции, которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const addPostActionCreator =()=> ({type: ADD_POST})
-export const removePostActionCreator = (postForRemoveId: string) => ({type: REMOVE_POST, postForRemoveId: postForRemoveId})
-export const setNewPostTextActionCreator = (newPostText:string) => ({type: SET_NEW_POST_TEXT, newPostText: newPostText})
-export const addMessageActionCreator =()=> ({type: ADD_MESSAGE})
-export const removeMessageActionCreator = (messageForRemoveId: string) =>({type: REMOVE_MESSAGE, messageForRemoveId: messageForRemoveId})
-export const setNewMessageTextActionCreator = (newMessageText:string) => ({type: SET_NEW_MESSAGE_TEXT, newMessageText: newMessageText})
+
 
 

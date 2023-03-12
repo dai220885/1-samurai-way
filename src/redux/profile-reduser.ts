@@ -1,4 +1,4 @@
-import {profilePageType, stateType} from './state';
+import {AddPostActionType, ProfilePageType, RemovePostActionType, SetNewPostTextActionType, StateType} from './state';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
 
@@ -6,7 +6,7 @@ const ADD_POST = 'ADD-POST';
 const REMOVE_POST = 'REMOVE-POST';
 const SET_NEW_POST_TEXT = 'SET-NEW-POST-TEXT';
 
-const profileReduser = (state: profilePageType, action: any) => {
+const profileReduser = (state: ProfilePageType, action: any) => {
     switch (action.type) {
         case ADD_POST:
             //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
@@ -29,7 +29,7 @@ const profileReduser = (state: profilePageType, action: any) => {
 }
 
 //функции, которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const addPostActionCreator =()=> ({type: ADD_POST})
-export const removePostActionCreator = (postForRemoveId: string) => ({type: REMOVE_POST, postForRemoveId: postForRemoveId})
-export const setNewPostTextActionCreator = (newPostText:string) => ({type: SET_NEW_POST_TEXT, newPostText: newPostText})
+export const addPostActionCreator =():AddPostActionType=> ({type: ADD_POST})
+export const removePostActionCreator = (postForRemoveId: string) => ({type: REMOVE_POST, postForRemoveId: postForRemoveId}) as const
+export const setNewPostTextActionCreator = (newPostText:string):SetNewPostTextActionType => ({type: SET_NEW_POST_TEXT, newPostText: newPostText})
 export default profileReduser;

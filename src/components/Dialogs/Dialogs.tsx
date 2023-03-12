@@ -9,6 +9,7 @@ import {
     removeMessageActionCreator,
     setNewMessageTextActionCreator
 } from '../../redux/dialogs-reduser';
+import {ActionsType} from '../../redux/state';
 
 
 type buttonCallBackType = {
@@ -20,7 +21,7 @@ export type DialogsPropsType = {
     dialogs: DialogType[]
     messages: MessageType[]
     newMessageText: string
-    dispatch: (action: any) => void
+    dispatch: (action: ActionsType) => void
     //removeMessage: (id: string)=>void
     //addNewMessage: (message: string)=>void
     //setNewMessageText: (newMessageText: string)=>void

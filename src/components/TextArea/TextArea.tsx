@@ -3,7 +3,7 @@ import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
 type TextAreaPropsType = {
     value: string;
     setValue: (newText:string) => void;
-    dispatch?: (action: any) => void
+    //dispatch?: (action: any) => void
     textAreaCallBack: () => void
     placeholder?: string
 }

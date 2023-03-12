@@ -3,11 +3,12 @@ import classes from './Profile.module.css'
 import MyPosts, {PostType} from "./MyPosts/MyPosts";
 import mainLogo from "./../../images/main.png"
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
+import {ActionsType} from '../../redux/state';
 
 type ProfilePropsType = {
     posts: PostType[]
     newPostText: string
-    dispatch: (action: any) => void
+    dispatch: (action: ActionsType) => void
     //addNewPost: () => void
     //removePost: (id: string) => void
     //setNewPostText:(NewPostText: string)=>void

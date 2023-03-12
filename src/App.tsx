@@ -9,7 +9,7 @@ import Dialogs, {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
-import {stateType, storeType} from './redux/state';
+import {ActionsType, StateType, StoreType} from './redux/state';
 import {v1} from 'uuid';
 
 // старая версия проппсов
@@ -24,9 +24,9 @@ import {v1} from 'uuid';
 // }
 
 export type AppPropsType = {
-    store: storeType
-    state:stateType
-    dispatch: (action: any) => void
+    store: StoreType
+    state:StateType
+    dispatch: (action: ActionsType) => void
 }
 const App: React.FC<AppPropsType> = (props) => {
     // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)

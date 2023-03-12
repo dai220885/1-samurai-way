@@ -1,7 +1,7 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
-import profileReduser from './profile-reduser';
+import profileReduser, {removePostActionCreator, setNewPostTextActionCreator} from './profile-reduser';
 import dialogsReduser from './dialogs-reduser';
 
 //переменные, в которые сохраним значения свойств type для dispatch
@@ -13,36 +13,68 @@ const REMOVE_MESSAGE = 'REMOVE-MESSAGE';
 const SET_NEW_MESSAGE_TEXT = 'SET-NEW-MESSAGE-TEXT';
 
 //subscribe вызывается в index.tsx и получает в качестве коллбэка функцию rerenderEntireTree (уже настоящую, которая перерисовывает все дерево)) Получив коллбэк subscribe присваивает его в локальную для state.tsx функцию rerenderEntireTree
-export type profilePageType ={
+export type ProfilePageType ={
         posts: PostType[]
         newPostText: string
 }
-export type messagePageType ={
+export type MessagePageType ={
     dialogs: DialogType[]
     messages: MessageType[]
     newMessageText: string
 }
 
-export type stateType = {
-    profilePage: profilePageType
-    messagesPage: messagePageType
+export type StateType = {
+    profilePage: ProfilePageType
+    messagesPage: MessagePageType
 }
 
-export type storeType = {
-    _state: stateType
-    _rerenderEntireTree: (state: stateType) => void //в видео этоо _callSubscriber
+export type AddPostActionType = {
+    type: 'ADD-POST'
+}
+// export type RemovePostActionType = {
+//     type: 'REMOVE-POST',
+//     postForRemoveId: string
+// }
+export type RemovePostActionType = ReturnType<typeof removePostActionCreator> //можно делать так, чтобы не дублировать
+export type SetNewPostTextActionType = {
+    type: 'SET-NEW-POST-TEXT',
+    newPostText: string
+}
+export type AddMessageActionType = {
+    type: 'ADD-MESSAGE'
+}
+export type RemoveMessageActionType = {
+    type: 'REMOVE-MESSAGE',
+    messageForRemoveId: string
+}
+export type SetNewMessageActionType = {
+    type: 'SET-NEW-MESSAGE-TEXT',
+    newMessageText: string
+}
+
+export type ActionsType =
+    AddPostActionType
+    |RemovePostActionType
+    |SetNewPostTextActionType
+    |AddMessageActionType
+    |RemoveMessageActionType
+    |SetNewMessageActionType
+
+export type StoreType = {
+    _state: StateType
+    _rerenderEntireTree: (state: StateType) => void //в видео этоо _callSubscriber
     setNewPostText: (newText: string) => void
     removeMessage: (id: string) => void
     setNewMessageText: (newMessage: string) => void
     addNewMessage: (message: string) => void
     addNewPost: () => void
     removePost: (id: string) => void
-    subscribe: (observer: (state: stateType) => void) => void
-    getState: () => stateType
-    dispatch: (action: any) => void
+    subscribe: (observer: (state: StateType) => void) => void
+    getState: () => StateType
+    dispatch: (action: ActionsType) => void
 }
 
-export const store: storeType = {
+export const store: StoreType = {
     _state: {
         messagesPage: {
             dialogs: [

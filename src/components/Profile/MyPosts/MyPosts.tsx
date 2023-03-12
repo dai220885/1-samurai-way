@@ -8,6 +8,7 @@ import {
     removePostActionCreator,
     setNewPostTextActionCreator
 } from '../../../redux/profile-reduser';
+import {ActionsType} from '../../../redux/state';
 
 export type PostType = {
     id: string
@@ -18,7 +19,7 @@ export type PostType = {
 type MyPostsPropsType = {
     posts: PostType[]
     newPostText: string
-    dispatch: (action: any) => void
+    dispatch: (action: ActionsType) => void
     //addNewPost: () => void
     //removePost: (id: string) => void
     //setNewPostText: (newPostText: string)=> void

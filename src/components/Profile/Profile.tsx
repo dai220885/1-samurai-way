@@ -7,9 +7,10 @@ import ProfileInfo from "./ProfileInfo/ProfileInfo";
 type ProfilePropsType = {
     posts: PostType[]
     newPostText: string
-    addNewPost: (post: string) => void
-    removePost: (id: string) => void
-    setNewPostText:(NewPostText: string)=>void
+    dispatch: (action: any) => void
+    //addNewPost: () => void
+    //removePost: (id: string) => void
+    //setNewPostText:(NewPostText: string)=>void
     // inputTitle: string
     // inputSetTitle:(inputTitle:string)=> void;
 
@@ -18,17 +19,14 @@ type ProfilePropsType = {
 function Profile (props: ProfilePropsType) {
     return (
         <div>
-            <div>
-                {/*добавил баттон просто для тестирования. Можно удалить*/}
-                <button onClick={() => {props.addNewPost("Hello, I'm a new post from Profile")}}>Add post from Profile</button>
-            </div>
             <ProfileInfo/>
             <MyPosts
                 posts={props.posts}
-                addNewPost={props.addNewPost}
-                removePost={props.removePost}
                 newPostText = {props.newPostText}
-                setNewPostText={props.setNewPostText}
+                dispatch={props.dispatch}
+                //addNewPost={props.addNewPost}
+                //removePost={props.removePost}
+                //setNewPostText={props.setNewPostText}
             />
         </div>
     )

@@ -1,8 +1,10 @@
 import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
+import {setNewPostTextActionCreator} from '../../redux/state';
 
 type TextAreaPropsType = {
     value: string;
-    setValue: (newPostText:string)=> void;
+    setValue: (newText:string) => void;
+    dispatch?: (action: any) => void
     textAreaCallBack: () => void
     placeholder?: string
 }
@@ -11,18 +13,22 @@ type TextAreaPropsType = {
 export const TextArea = (props:TextAreaPropsType) => {
     let onChangeTextAreaHandler = (e: ChangeEvent<HTMLTextAreaElement>)=>{
         props.setValue(e.currentTarget.value);
+        //let action = {type: 'SET-NEW-POST-TEXT', newPostText: e.currentTarget.value};//объект, который передаем методу dispatch
+        //props.dispatch(setNewPostTextActionCreator(e.currentTarget.value))
 
     }
     let onKeyPressTextAreaHandler = (e: KeyboardEvent<HTMLTextAreaElement>)=>{
-        //console.log(e)
-        if((e.code==="Enter"||e.code==="NumpadEnter") && e.ctrlKey){
+        console.log(e)
+        if((e.code==="Enter"||e.code==="NumpadEnter") && e.ctrlKey)
+          // if(e.key==="Enter"&& e.ctrlKey) //так не рабобтает
+        {
             props.textAreaCallBack()
         }
     }
 
     return (
         <textarea
-            placeholder={props.placeholder? props.placeholder: 'tipe something'}
+            placeholder={props.placeholder? props.placeholder: 'type something'}
             value ={props.value}
             onChange={onChangeTextAreaHandler}
             onKeyPress={onKeyPressTextAreaHandler}>

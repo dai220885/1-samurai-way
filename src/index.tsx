@@ -4,13 +4,13 @@ import './index.css';
 import App from './App';
 import {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
-import {store} from './redux/state';
+import {stateType, store} from './redux/state';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
 
 
-let rerenderEntireTree = () => {
+let rerenderEntireTree = (state:stateType) => {
     ReactDOM.render(
         <BrowserRouter>
             {/*// <App dialogs={dialogs} messages={messages} posts={posts}/>,*/}
@@ -24,7 +24,7 @@ let rerenderEntireTree = () => {
             {/*    setNewPostText = {store.setNewPostText}*/}
             {/*    setNewMessageText={store.setNewMessageText}*/}
             {/*/>*/}
-            <App store = {store}/>
+            <App store={store} state = {state} dispatch={store.dispatch.bind(store)}/>
         </BrowserRouter>,
         document.getElementById('root')
     );
@@ -32,7 +32,7 @@ let rerenderEntireTree = () => {
 
 
 
-rerenderEntireTree();
+rerenderEntireTree(store.getState());
 
 store.subscribe(rerenderEntireTree)
 

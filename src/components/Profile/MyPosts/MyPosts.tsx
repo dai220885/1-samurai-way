@@ -3,6 +3,7 @@ import classes from './MyPosts.module.css'
 import Post from './Post/Post';
 import {Button} from '../../Button/Button';
 import {TextArea} from '../../TextArea/TextArea';
+import {addPostActionCreator, removePostActionCreator, setNewPostTextActionCreator} from '../../../redux/state';
 
 export type PostType = {
     id: string
@@ -12,10 +13,11 @@ export type PostType = {
 
 type MyPostsPropsType = {
     posts: PostType[]
-    addNewPost: (post: string) => void
-    removePost: (id: string) => void
     newPostText: string
-    setNewPostText: (newPostText: string)=> void
+    dispatch: (action: any) => void
+    //addNewPost: () => void
+    //removePost: (id: string) => void
+    //setNewPostText: (newPostText: string)=> void
     // inputTitle: string
     // inputSetTitle: (inputTitle: string) => void;
 
@@ -25,7 +27,9 @@ function MyPosts(props: MyPostsPropsType) {
     //let [title, setTitle] = useState('') //стейт для хранения введенного текста в textArea
 
     let postsElements = props.posts.map((post) => {
-        let removePostOnClickHandler = () => props.removePost(post.id)
+        //let removePostOnClickHandler = () => props.removePost(post.id)
+        //let action = {type: 'REMOVE-POST', postForRemoveId: post.id};//объект, который передаем методу dispatch
+        let removePostOnClickHandler = () => props.dispatch(removePostActionCreator(post.id))
         return (
             <div key={post.id}>
                 <Post message={post.message} likeCount={post.likeCount}/>
@@ -34,10 +38,15 @@ function MyPosts(props: MyPostsPropsType) {
         )
     })
     const addNewPostCallBackHandler = () => {
-        props.addNewPost(props.newPostText);
+        //props.addNewPost();
+        //let action = {type: 'ADD-POST'};//объект, который передаем методу dispatch
+        props.dispatch(addPostActionCreator());
         //setTitle('')
     }
-
+    const setNewPostTextHandler =(newPostText: string) =>{
+        //debugger
+        props.dispatch(setNewPostTextActionCreator(newPostText))
+    }
     return (
         <div className={classes.postBlock}>
             <h3>My posts</h3>
@@ -46,7 +55,8 @@ function MyPosts(props: MyPostsPropsType) {
                     <TextArea
                         placeholder={'add new post'}
                         value={props.newPostText}
-                        setValue={props.setNewPostText}
+                        setValue={setNewPostTextHandler}
+                        //dispatch={props.dispatch}
                         textAreaCallBack={addNewPostCallBackHandler}
                     />
                 </div>

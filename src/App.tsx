@@ -25,6 +25,8 @@ import {v1} from 'uuid';
 
 export type AppPropsType = {
     store: storeType
+    state:stateType
+    dispatch: (action: any) => void
 }
 const App: React.FC<AppPropsType> = (props) => {
     // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
@@ -69,7 +71,7 @@ const App: React.FC<AppPropsType> = (props) => {
         setCount(count += 1)
     }
 
-    const state = props.store.getState();
+    const state = props.state;
     return (
         <div className="app-wrapper">
             <div>
@@ -90,10 +92,11 @@ const App: React.FC<AppPropsType> = (props) => {
                         <Dialogs
                             dialogs={state.messagesPage.dialogs}
                             messages={state.messagesPage.messages}
-                            addNewMessage={props.store.addNewMessage.bind(props.store)}
-                            removeMessage={props.store.removeMessage.bind(props.store)}
                             newMessageText={state.messagesPage.newMessageText}
-                            setNewMessageText={props.store.setNewMessageText.bind(props.store)}
+                            dispatch={props.dispatch}
+                            //addNewMessage={props.store.addNewMessage.bind(props.store)}
+                            //removeMessage={props.store.removeMessage.bind(props.store)}
+                            //setNewMessageText={props.store.setNewMessageText.bind(props.store)}
                         />}
                 />
                 <Route
@@ -101,10 +104,11 @@ const App: React.FC<AppPropsType> = (props) => {
                     render={() =>
                         <Profile
                             posts={state.profilePage.posts}
-                            addNewPost={props.store.addNewPost.bind(props.store)}
-                            removePost={props.store.removePost.bind(props.store)}
+                            dispatch={props.dispatch}
+                            //addNewPost={props.store.addNewPost.bind(props.store)}
+                            //removePost={props.store.removePost.bind(props.store)}
                             newPostText={state.profilePage.newPostText}
-                            setNewPostText={props.store.setNewPostText.bind(props.store)}
+                            //setNewPostText={props.store.setNewPostText.bind(props.store)}
                         />}
                 />
                 {/*<Route path="/news" component={News}/>*/}

@@ -1,5 +1,4 @@
 import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
-import {setNewPostTextActionCreator} from '../../redux/state';
 
 type TextAreaPropsType = {
     value: string;

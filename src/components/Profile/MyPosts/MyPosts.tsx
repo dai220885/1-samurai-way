@@ -3,7 +3,11 @@ import classes from './MyPosts.module.css'
 import Post from './Post/Post';
 import {Button} from '../../Button/Button';
 import {TextArea} from '../../TextArea/TextArea';
-import {addPostActionCreator, removePostActionCreator, setNewPostTextActionCreator} from '../../../redux/state';
+import {
+    addPostActionCreator,
+    removePostActionCreator,
+    setNewPostTextActionCreator
+} from '../../../redux/profile-reduser';
 
 export type PostType = {
     id: string

@@ -2,16 +2,16 @@ import React, {ChangeEvent, KeyboardEventHandler, KeyboardEvent} from 'react';
 
 type TextAreaPropsType = {
     value: string;
-    setValue: (newText:string) => void;
-    //dispatch?: (action: any) => void
-    textAreaCallBack: () => void
+    onChange: (newText:string) => void;
+    onKeyPress: () => void
     placeholder?: string
+    //dispatch?: (action: any) => void
 }
 
 
 export const TextArea = (props:TextAreaPropsType) => {
     let onChangeTextAreaHandler = (e: ChangeEvent<HTMLTextAreaElement>)=>{
-        props.setValue(e.currentTarget.value);
+        props.onChange(e.currentTarget.value);
         //let action = {type: 'SET-NEW-POST-TEXT', newPostText: e.currentTarget.value};//объект, который передаем методу dispatch
         //props.dispatch(setNewPostTextActionCreator(e.currentTarget.value))
 
@@ -21,7 +21,7 @@ export const TextArea = (props:TextAreaPropsType) => {
         if((e.code==="Enter"||e.code==="NumpadEnter") && e.ctrlKey)
           // if(e.key==="Enter"&& e.ctrlKey) //так не рабобтает
         {
-            props.textAreaCallBack()
+            props.onKeyPress()
         }
     }
 

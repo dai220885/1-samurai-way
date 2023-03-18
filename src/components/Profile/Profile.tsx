@@ -3,12 +3,14 @@ import classes from './Profile.module.css'
 import MyPosts, {PostType} from "./MyPosts/MyPosts";
 import mainLogo from "./../../images/main.png"
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {ActionsType} from '../../redux/store';
+import {ActionsType, StoreType} from '../../redux/store';
+import MyPostsContainer from './MyPosts/MyPostsContainer';
 
 type ProfilePropsType = {
-    posts: PostType[]
-    newPostText: string
-    dispatch: (action: ActionsType) => void
+    store: StoreType //для контейнерной компоненты
+    //posts: PostType[]
+    //newPostText: string
+    //dispatch: (action: ActionsType) => void
     //addNewPost: () => void
     //removePost: (id: string) => void
     //setNewPostText:(NewPostText: string)=>void
@@ -21,13 +23,16 @@ function Profile (props: ProfilePropsType) {
     return (
         <div>
             <ProfileInfo/>
-            <MyPosts
-                posts={props.posts}
-                newPostText = {props.newPostText}
-                dispatch={props.dispatch}
-                //addNewPost={props.addNewPost}
-                //removePost={props.removePost}
-                //setNewPostText={props.setNewPostText}
+            {/*<MyPosts*/}
+            {/*    posts={props.posts}*/}
+            {/*    newPostText = {props.newPostText}*/}
+            {/*    dispatch={props.dispatch}*/}
+            {/*    //addNewPost={props.addNewPost}*/}
+            {/*    //removePost={props.removePost}*/}
+            {/*    //setNewPostText={props.setNewPostText}*/}
+            {/*/>*/}
+            <MyPostsContainer
+                store={props.store}
             />
         </div>
     )

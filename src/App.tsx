@@ -9,7 +9,7 @@ import Dialogs, {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
-import {ActionsType, StateType, StoreType} from './redux/state';
+import {ActionsType, StateType, StoreType} from './redux/store';
 import {v1} from 'uuid';
 
 // старая версия проппсов
@@ -29,6 +29,7 @@ export type AppPropsType = {
     dispatch: (action: ActionsType) => void
 }
 const App: React.FC<AppPropsType> = (props) => {
+    debugger
     // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
     let [count, setCount] = useState<number>(1)
     //let [messages, setMessages] = useState<MessageType[]>(props.state.messagesPage.messages)

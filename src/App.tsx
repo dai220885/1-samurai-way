@@ -29,7 +29,7 @@ export type AppPropsType = {
     dispatch: (action: ActionsType) => void
 }
 const App: React.FC<AppPropsType> = (props) => {
-    debugger
+    //debugger
     // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
     let [count, setCount] = useState<number>(1)
     //let [messages, setMessages] = useState<MessageType[]>(props.state.messagesPage.messages)
@@ -104,11 +104,12 @@ const App: React.FC<AppPropsType> = (props) => {
                     path="/profile"
                     render={() =>
                         <Profile
-                            posts={state.profilePage.posts}
-                            dispatch={props.dispatch}
+                            store={props.store} // для контейнерной компоненты
+                            //posts={state.profilePage.posts}
+                            //dispatch={props.dispatch}
                             //addNewPost={props.store.addNewPost.bind(props.store)}
                             //removePost={props.store.removePost.bind(props.store)}
-                            newPostText={state.profilePage.newPostText}
+                            //newPostText={state.profilePage.newPostText}
                             //setNewPostText={props.store.setNewPostText.bind(props.store)}
                         />}
                 />

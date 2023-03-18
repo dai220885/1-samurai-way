@@ -3,7 +3,7 @@ import classes from './Profile.module.css'
 import MyPosts, {PostType} from "./MyPosts/MyPosts";
 import mainLogo from "./../../images/main.png"
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {ActionsType} from '../../redux/state';
+import {ActionsType} from '../../redux/store';
 
 type ProfilePropsType = {
     posts: PostType[]

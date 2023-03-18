@@ -8,8 +8,8 @@ import {
     addMessageActionCreator,
     removeMessageActionCreator,
     setNewMessageTextActionCreator
-} from '../../redux/dialogs-reduser';
-import {ActionsType} from '../../redux/state';
+} from '../../redux/dialogs-reducer';
+import {ActionsType} from '../../redux/store';
 
 
 type buttonCallBackType = {

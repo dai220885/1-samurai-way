@@ -7,8 +7,8 @@ import {
     addPostActionCreator,
     removePostActionCreator,
     setNewPostTextActionCreator
-} from '../../../redux/profile-reduser';
-import {ActionsType} from '../../../redux/state';
+} from '../../../redux/profile-reducer';
+import {ActionsType} from '../../../redux/store';
 
 export type PostType = {
     id: string

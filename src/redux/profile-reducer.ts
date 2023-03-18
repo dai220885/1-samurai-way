@@ -1,4 +1,11 @@
-import {AddPostActionType, ProfilePageType, RemovePostActionType, SetNewPostTextActionType, StateType} from './state';
+import {
+    ActionsType,
+    AddPostActionType,
+    ProfilePageType,
+    RemovePostActionType,
+    SetNewPostTextActionType,
+    StateType
+} from './store';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
 
@@ -6,7 +13,18 @@ const ADD_POST = 'ADD-POST';
 const REMOVE_POST = 'REMOVE-POST';
 const SET_NEW_POST_TEXT = 'SET-NEW-POST-TEXT';
 
-const profileReduser = (state: ProfilePageType, action: any) => {
+let initialState = {
+    posts: [
+        {id: v1(), message: 'Hello, it\'s a post 1', likeCount: 7},
+        {id: v1(), message: 'Hi, it\'s a post 2', likeCount: 3},
+        {id: v1(), message: 'By-By', likeCount: 4},
+        {id: v1(), message: 'How are you?', likeCount: 1},
+    ],
+    newPostText: ''
+}
+
+const profileReducer = (state: ProfilePageType = initialState, action: ActionsType) => {
+    //debugger
     switch (action.type) {
         case ADD_POST:
             //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
@@ -29,7 +47,7 @@ const profileReduser = (state: ProfilePageType, action: any) => {
 }
 
 //функции, которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const addPostActionCreator =():AddPostActionType=> ({type: ADD_POST})
+export const addPostActionCreator =()=> ({type: ADD_POST}) as const
 export const removePostActionCreator = (postForRemoveId: string) => ({type: REMOVE_POST, postForRemoveId: postForRemoveId}) as const
-export const setNewPostTextActionCreator = (newPostText:string):SetNewPostTextActionType => ({type: SET_NEW_POST_TEXT, newPostText: newPostText})
-export default profileReduser;
+export const setNewPostTextActionCreator = (newPostText:string) => ({type: SET_NEW_POST_TEXT, newPostText: newPostText}) as const
+export default profileReducer;

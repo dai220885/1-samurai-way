@@ -53,7 +53,7 @@ function Dialogs (props: DialogsPropsType) {
         return(
             <div key={message.id} className={classes.dialogItems}>
                 <Message message={message.message} className={classes.dialogItems}/>
-                <Button name={'remove message'} buttonCallBack={removeMessageOnClickHandler}/>
+                <Button name={'remove message'} onClick={removeMessageOnClickHandler}/>
                 {/*<p></p>*/}
         </div>
         )
@@ -75,13 +75,13 @@ function Dialogs (props: DialogsPropsType) {
                     <TextArea
                         placeholder={'add new message'}
                         value={props.newMessageText}
-                        setValue={setNewMessageTextHandler}
+                        onChange={setNewMessageTextHandler}
                         //dispatch={props.dispatch}
-                        textAreaCallBack={addNewMessageCallBackHandler}
+                        onKeyPress={addNewMessageCallBackHandler}
                     />
                     <Button
                         name={"Send message"}
-                        buttonCallBack={addNewMessageCallBackHandler}
+                        onClick={addNewMessageCallBackHandler}
                     />
                     {messagesElements}
                 </div>

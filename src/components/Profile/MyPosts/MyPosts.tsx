@@ -19,13 +19,12 @@ export type PostType = {
 type MyPostsPropsType = {
     posts: PostType[]
     newPostText: string
-    dispatch: (action: ActionsType) => void
-    //addNewPost: () => void
-    //removePost: (id: string) => void
-    //setNewPostText: (newPostText: string)=> void
+    //dispatch: (action: ActionsType) => void
+    addNewPost: () => void
+    removePost: (id: string) => void
+    setNewPostText: (newPostText: string)=> void
     // inputTitle: string
     // inputSetTitle: (inputTitle: string) => void;
-
 }
 
 function MyPosts(props: MyPostsPropsType) {
@@ -34,23 +33,26 @@ function MyPosts(props: MyPostsPropsType) {
     let postsElements = props.posts.map((post) => {
         //let removePostOnClickHandler = () => props.removePost(post.id)
         //let action = {type: 'REMOVE-POST', postForRemoveId: post.id};//объект, который передаем методу dispatch
-        let removePostOnClickHandler = () => props.dispatch(removePostActionCreator(post.id))
+        //let removePostOnClickHandler = () => props.dispatch(removePostActionCreator(post.id))
+        let removePostOnClickHandler = () => props.removePost(post.id)
         return (
             <div key={post.id}>
                 <Post message={post.message} likeCount={post.likeCount}/>
-                <Button name={'-'} buttonCallBack={removePostOnClickHandler}/>
+                <Button name={'-'} onClick={removePostOnClickHandler}/>
             </div>
         )
     })
-    const addNewPostCallBackHandler = () => {
+    const addNewPostHandler = () => {
         //props.addNewPost();
         //let action = {type: 'ADD-POST'};//объект, который передаем методу dispatch
-        props.dispatch(addPostActionCreator());
+        //props.dispatch(addPostActionCreator());
+        props.addNewPost();
+
         //setTitle('')
     }
     const setNewPostTextHandler =(newPostText: string) =>{
         //debugger
-        props.dispatch(setNewPostTextActionCreator(newPostText))
+        props.setNewPostText(newPostText)
     }
     return (
         <div className={classes.postBlock}>
@@ -60,16 +62,16 @@ function MyPosts(props: MyPostsPropsType) {
                     <TextArea
                         placeholder={'add new post'}
                         value={props.newPostText}
-                        setValue={setNewPostTextHandler}
+                        onChange={setNewPostTextHandler}
                         //dispatch={props.dispatch}
-                        textAreaCallBack={addNewPostCallBackHandler}
+                        onKeyPress={addNewPostHandler}
                     />
                 </div>
                 <div>
                     {/*<button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>*/}
                     <Button
-                        name={'Add New Post (component)'}
-                        buttonCallBack={addNewPostCallBackHandler}
+                        name={'Add New Post'}
+                        onClick={addNewPostHandler}
                     />
                 </div>
             </div>

@@ -12,7 +12,7 @@ import './index.css';
 
 
 let rerenderEntireTree = (state:StateType) => {
-    debugger
+    //debugger
     ReactDOM.render(
         <BrowserRouter>
             {/*// <App dialogs={dialogs} messages={messages} posts={posts}/>,*/}

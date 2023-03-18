@@ -4,13 +4,15 @@ import './index.css';
 import App from './App';
 import {DialogType, MessageType} from './components/Dialogs/Dialogs';
 import {PostType} from './components/Profile/MyPosts/MyPosts';
-import {StateType, store} from './redux/state';
+import {StateType} from './redux/store';
+import store from './redux/redux-store';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
 
 
 let rerenderEntireTree = (state:StateType) => {
+    debugger
     ReactDOM.render(
         <BrowserRouter>
             {/*// <App dialogs={dialogs} messages={messages} posts={posts}/>,*/}
@@ -29,12 +31,18 @@ let rerenderEntireTree = (state:StateType) => {
         document.getElementById('root')
     );
 }
-
-
-
+//первый вызов функции rerenderEntireTree с передачей в нее актуального стейта для отображения на странице
 rerenderEntireTree(store.getState());
 
-store.subscribe(rerenderEntireTree)
+
+
+//далее функцию rerenderEntireTree передаем в качестве параметра в метод store.subscribe() (store.subscribe(rerenderEntireTree)) который  изменит поведение метода 'store._rerenderEntireTree' на поведение функции 'rerenderEntireTree', которая придет в качестве параметра
+
+//store.subscribe(rerenderEntireTree)
+//
+// было так, когда наш store сам передавал актуальный(измененный стейт) в функцию rerenderEntireTree (в методе dispatch), store из реакта так не делает, он просто уведомляет подписчика об изменении стейта, поэтому актуальный стейт нужно передать самостоятельно, для этого в subscribe передаем анонимную функцию, которая запустит наш rerenderEntireTree и передаст в нее актуальный стейт (store.getState())
+
+store.subscribe(()=>rerenderEntireTree(store.getState()))
 
 
 /*

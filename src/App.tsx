@@ -11,6 +11,7 @@ import {PostType} from './components/Profile/MyPosts/MyPosts';
 import {TextArea} from './components/TextArea/TextArea';
 import {ActionsType, StateType, StoreType} from './redux/store';
 import {v1} from 'uuid';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
 
 // старая версия проппсов
 // type AppPropsType = {
@@ -90,11 +91,12 @@ const App: React.FC<AppPropsType> = (props) => {
                 <Route
                     path="/dialogs"
                     render={() =>
-                        <Dialogs
-                            dialogs={state.messagesPage.dialogs}
-                            messages={state.messagesPage.messages}
-                            newMessageText={state.messagesPage.newMessageText}
-                            dispatch={props.dispatch}
+                        <DialogsContainer
+                            store={props.store}
+                            //dialogs={state.messagesPage.dialogs}
+                            //messages={state.messagesPage.messages}
+                            //newMessageText={state.messagesPage.newMessageText}
+                            //dispatch={props.dispatch}
                             //addNewMessage={props.store.addNewMessage.bind(props.store)}
                             //removeMessage={props.store.removeMessage.bind(props.store)}
                             //setNewMessageText={props.store.setNewMessageText.bind(props.store)}

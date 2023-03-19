@@ -7,7 +7,7 @@ import {ActionsType, StoreType} from '../../redux/store';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 
 type ProfilePropsType = {
-    store: StoreType //для контейнерной компоненты
+    //store: StoreType //для контейнерной компоненты
     //posts: PostType[]
     //newPostText: string
     //dispatch: (action: ActionsType) => void
@@ -19,7 +19,7 @@ type ProfilePropsType = {
 
 }
 
-function Profile (props: ProfilePropsType) {
+function Profile () {
     return (
         <div>
             <ProfileInfo/>
@@ -32,7 +32,7 @@ function Profile (props: ProfilePropsType) {
             {/*    //setNewPostText={props.setNewPostText}*/}
             {/*/>*/}
             <MyPostsContainer
-                store={props.store}
+                // store={props.store}
             />
         </div>
     )

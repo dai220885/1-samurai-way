@@ -9,7 +9,7 @@ import store from './redux/redux-store';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
-import StoreContext from './StoreContext';
+import StoreContext, {Provider} from './StoreContext';
 
 
 
@@ -28,10 +28,10 @@ let rerenderEntireTree = (state: StateType) => {
             {/*    setNewPostText = {store.setNewPostText}*/}
             {/*    setNewMessageText={store.setNewMessageText}*/}
             {/*/>*/}
-            <StoreContext.Provider value={store}>
+            <Provider store={store}>
                 {/*<App store={store} state={state} dispatch={store.dispatch.bind(store)}/>*/}
                 <App />
-            </StoreContext.Provider>
+            </Provider>
         </BrowserRouter>,
         document.getElementById('root')
     );

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     addMessageActionCreator,
     removeMessageActionCreator,
@@ -6,9 +6,10 @@ import {
 } from '../../redux/dialogs-reducer';
 import {ActionsType, StoreType} from '../../redux/store';
 import Dialogs from './Dialogs';
+import StoreContext from '../../StoreContext';
 
 export type DialogsContainerPropsType = {
-    store: StoreType
+    //store: StoreType
     //dialogs: DialogType[]
     //messages: MessageType[]
     //newMessageText: string
@@ -21,22 +22,32 @@ export type DialogsContainerPropsType = {
 }
 // создаем контейнерную компоненту 'DialogsContainer', которая будет отрисовывать презентационную компоненту 'Dialogs'
 //'DialogsContainer' в пропсах принимает весь 'store', после чего компоненту 'Dialogs' передает только нужные ей части 'store'
-function DialogsContainer (props: DialogsContainerPropsType) {
-    const state = props.store.getState() //просто выносим содержимое свойства '_state' из 'store' в переменную state
-    const removeMessage =(messageForRemoveID: string)=>props.store.dispatch(removeMessageActionCreator(messageForRemoveID))
-    const addNewMessage = () => props.store.dispatch(addMessageActionCreator());
-    const setNewMessageText =(newPostText: string) =>{
-        props.store.dispatch(setNewMessageTextActionCreator(newPostText))
-    }
+
+//Контейнерные компоненты не получают стор в пропсах, а вызывают соответствующие презентационные компоненты, обернутые в <StoreContext.Consumer>, в которую приходит стор, после чего к нему и происходит обращение и передача нужных параметров в презентационную компоненту
+function DialogsContainer() {
+
 
     return (
-        <Dialogs
-            dialogs={state.messagesPage.dialogs}
-            messages={state.messagesPage.messages}
-            newMessageText={state.messagesPage.newMessageText}
-            addNewMessage={addNewMessage}
-            removeMessage={removeMessage}
-            setNewMessageText={setNewMessageText} />
+        <StoreContext.Consumer>
+            {(store) => {
+                const state = store.getState() //просто выносим содержимое свойства '_state' из 'store' в переменную state
+                const removeMessage = (messageForRemoveID: string) => store.dispatch(removeMessageActionCreator(messageForRemoveID))
+                const addNewMessage = () => store.dispatch(addMessageActionCreator());
+                const setNewMessageText = (newPostText: string) => {
+                    store.dispatch(setNewMessageTextActionCreator(newPostText))
+                }
+                return <Dialogs
+                    dialogs={state.messagesPage.dialogs}
+                    messages={state.messagesPage.messages}
+                    newMessageText={state.messagesPage.newMessageText}
+                    addNewMessage={addNewMessage}
+                    removeMessage={removeMessage}
+                    setNewMessageText={setNewMessageText}
+                />}}
+
+
+        </StoreContext.Consumer>
+
     )
 }
 

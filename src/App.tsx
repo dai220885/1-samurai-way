@@ -29,7 +29,7 @@ export type AppPropsType = {
     state:StateType
     dispatch: (action: ActionsType) => void
 }
-const App: React.FC<AppPropsType> = (props) => {
+const App: React.FC = () => {
     //debugger
     // let [posts, setPosts] = useState<PostType[]>(props.state.profilePage.posts)
     let [count, setCount] = useState<number>(1)
@@ -73,7 +73,7 @@ const App: React.FC<AppPropsType> = (props) => {
         setCount(count += 1)
     }
 
-    const state = props.state;
+    //const state = props.state;
     return (
         <div className="app-wrapper">
             <div>
@@ -92,7 +92,7 @@ const App: React.FC<AppPropsType> = (props) => {
                     path="/dialogs"
                     render={() =>
                         <DialogsContainer
-                            store={props.store}
+                            //store={props.store}
                             //dialogs={state.messagesPage.dialogs}
                             //messages={state.messagesPage.messages}
                             //newMessageText={state.messagesPage.newMessageText}
@@ -106,7 +106,7 @@ const App: React.FC<AppPropsType> = (props) => {
                     path="/profile"
                     render={() =>
                         <Profile
-                            store={props.store} // для контейнерной компоненты
+                            //store={props.store} // для контейнерной компоненты
                             //posts={state.profilePage.posts}
                             //dispatch={props.dispatch}
                             //addNewPost={props.store.addNewPost.bind(props.store)}

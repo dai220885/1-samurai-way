@@ -4,27 +4,16 @@ import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import {Button} from "../Button/Button";
 import {TextArea} from '../TextArea/TextArea';
-import {
-    addMessageActionCreator,
-    removeMessageActionCreator,
-    setNewMessageTextActionCreator
-} from '../../redux/dialogs-reducer';
-import {ActionsType} from '../../redux/store';
-
-
-type buttonCallBackType = {
-    name:string;
-    function: Function
-}
 
 export type DialogsPropsType = {
+    //store: StoreType
     dialogs: DialogType[]
     messages: MessageType[]
     newMessageText: string
-    dispatch: (action: ActionsType) => void
-    //removeMessage: (id: string)=>void
-    //addNewMessage: (message: string)=>void
-    //setNewMessageText: (newMessageText: string)=>void
+    //dispatch: (action: ActionsType) => void
+    addNewMessage: ()=>void
+    removeMessage: (id: string)=>void
+    setNewMessageText: (newMessageText: string)=>void
     //buttonCallBack?: Function[]
 }
 
@@ -48,8 +37,7 @@ function Dialogs (props: DialogsPropsType) {
     //тот же синтаксис, что и у dialogsElements, но покороче, опущены скобки вокруг message внутри map
     //т.к. только один параметр, также опущено слово return (т.к. перед ним ничего нет)  и фигурные скобки после него
     let messagesElements = props.messages.map((message) => {
-        //const removeMessageOnClickHandler =()=>props.removeMessage(message.id)
-        const removeMessageOnClickHandler =()=>props.dispatch(removeMessageActionCreator(message.id))
+        const removeMessageOnClickHandler =()=>props.removeMessage(message.id)
         return(
             <div key={message.id} className={classes.dialogItems}>
                 <Message message={message.message} className={classes.dialogItems}/>
@@ -59,10 +47,9 @@ function Dialogs (props: DialogsPropsType) {
         )
     }
     )
-    //let addNewMessageCallBackHandler = () => props.addNewMessage(props.newMessageText);
-    let addNewMessageCallBackHandler = () => props.dispatch(addMessageActionCreator());
+    let addNewMessageHandler = () => props.addNewMessage();
     const setNewMessageTextHandler =(newPostText: string) =>{
-        props.dispatch(setNewMessageTextActionCreator(newPostText))
+        props.setNewMessageText(newPostText)
     }
 
     return (
@@ -77,11 +64,11 @@ function Dialogs (props: DialogsPropsType) {
                         value={props.newMessageText}
                         onChange={setNewMessageTextHandler}
                         //dispatch={props.dispatch}
-                        onKeyPress={addNewMessageCallBackHandler}
+                        onKeyPress={addNewMessageHandler}
                     />
                     <Button
                         name={"Send message"}
-                        onClick={addNewMessageCallBackHandler}
+                        onClick={addNewMessageHandler}
                     />
                     {messagesElements}
                 </div>

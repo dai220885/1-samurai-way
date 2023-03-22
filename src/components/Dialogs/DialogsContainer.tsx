@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-    addMessageActionCreator,
-    removeMessageActionCreator,
-    setNewMessageTextActionCreator
+    addMessageAC,
+    removeMessageAC,
+    setNewMessageTextAC
 } from '../../redux/dialogs-reducer';
 import {ActionsType, StoreType} from '../../redux/store';
 import Dialogs from './Dialogs';
@@ -25,16 +25,14 @@ export type DialogsContainerPropsType = {
 
 //Контейнерные компоненты не получают стор в пропсах, а вызывают соответствующие презентационные компоненты, обернутые в <StoreContext.Consumer>, в которую приходит стор, после чего к нему и происходит обращение и передача нужных параметров в презентационную компоненту
 function DialogsContainer() {
-
-
     return (
         <StoreContext.Consumer>
             {(store) => {
                 const state = store.getState() //просто выносим содержимое свойства '_state' из 'store' в переменную state
-                const removeMessage = (messageForRemoveID: string) => store.dispatch(removeMessageActionCreator(messageForRemoveID))
-                const addNewMessage = () => store.dispatch(addMessageActionCreator());
+                const removeMessage = (messageForRemoveID: string) => store.dispatch(removeMessageAC(messageForRemoveID))
+                const addNewMessage = () => store.dispatch(addMessageAC());
                 const setNewMessageText = (newPostText: string) => {
-                    store.dispatch(setNewMessageTextActionCreator(newPostText))
+                    store.dispatch(setNewMessageTextAC(newPostText))
                 }
                 return <Dialogs
                     dialogs={state.messagesPage.dialogs}

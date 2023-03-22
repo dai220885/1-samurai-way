@@ -9,8 +9,10 @@ import store from './redux/redux-store';
 import {BrowserRouter} from 'react-router-dom';
 
 import './index.css';
-import StoreContext, {Provider} from './StoreContext';
 
+import StoreContext, {Provider} from './StoreContext';
+// сначала пользовались провайдером из StoreContext.ts, теперь перешли на Provider из библиотеке 'react-redux'
+//import { Provider } from 'react-redux';
 
 
 let rerenderEntireTree = (state: StateType) => {

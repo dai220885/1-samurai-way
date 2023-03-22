@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {
-    addPostActionCreator,
-    removePostActionCreator,
-    setNewPostTextActionCreator
+    addPostAC,
+    removePostAC,
+    setNewPostTextAC
 } from '../../../redux/profile-reducer';
 import {ActionsType, StoreType} from '../../../redux/store';
 import MyPosts from './MyPosts';
@@ -22,16 +22,16 @@ function MyPostsContainer() {
         <StoreContext.Consumer>
             {(store) => {
                 const state = store.getState() //просто выносим содержимое свойства '_state' из 'store' в переменную state
-                const removePost = (postForRemoveID: string) => store.dispatch(removePostActionCreator(postForRemoveID))
+                const removePost = (postForRemoveID: string) => store.dispatch(removePostAC(postForRemoveID))
                 const addNewPost = () => {
                     //props.addNewPost();
                     //let action = {type: 'ADD-POST'};//объект, который передаем методу dispatch
-                    store.dispatch(addPostActionCreator());
+                    store.dispatch(addPostAC());
                     //setTitle('')
                 }
                 const setNewPostText = (newPostText: string) => {
                     //debugger
-                    store.dispatch(setNewPostTextActionCreator(newPostText))
+                    store.dispatch(setNewPostTextAC(newPostText))
                 }
                     return <MyPosts
                         posts={state.profilePage.posts}

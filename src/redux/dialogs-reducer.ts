@@ -1,9 +1,6 @@
 import {
     ActionsType,
-    AddMessageActionType,
     MessagePageType,
-    RemoveMessageActionType,
-    SetNewMessageActionType,
     StateType
 } from './store';
 import {v1} from 'uuid';
@@ -36,24 +33,52 @@ let initialState = {
 
 const dialogsReducer = (state: MessagePageType = initialState, action: ActionsType) => {
     switch (action.type) {
-        case ADD_MESSAGE:
+        case ADD_MESSAGE:{
             let newMessage: MessageType = {id: v1(), message: state.newMessageText}
-            state.messages.push(newMessage)
-            state.newMessageText = ''
+            return {...state, messages: [newMessage, ...state.messages], newMessageText: ''}
+            // state.messages.push(newMessage)
+            // state.newMessageText = ''
+            // return state;
+        }
+        case REMOVE_MESSAGE: {
+            return {...state, messages: state.messages.filter(m => m.id !== action.payload.messageForRemoveId)}
+            //state.messages = state.messages.filter(m => m.id !== action.payload.messageForRemoveId)
+            //return state;
+        }
+        case SET_NEW_MESSAGE_TEXT:{
+            return {...state, newMessageText: action.payload.newMessageText}
+            // state.newMessageText = action.payload.newMessageText;
+            // return state;
+        }
+        default:
             return state;
-        case REMOVE_MESSAGE:
-            state.messages = state.messages.filter(m => m.id !== action.messageForRemoveId)
-            return state;
-        case SET_NEW_MESSAGE_TEXT:
-            state.newMessageText = action.newMessageText;
-            return state;
-        default: return state;
     }
 }
+export type DialogsReducerActionsType =
+    AddMessageActionType
+    | RemoveMessageActionType
+    | SetNewMessageActionType
+//автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
+export type AddMessageActionType = ReturnType<typeof addMessageAC>
+export type RemoveMessageActionType = ReturnType<typeof removeMessageAC>
+export type SetNewMessageActionType = ReturnType<typeof setNewMessageTextAC>
 
-
-//функции, которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const addMessageActionCreator =(): AddMessageActionType=> ({type: ADD_MESSAGE})
-export const removeMessageActionCreator = (messageForRemoveId: string):RemoveMessageActionType =>({type: REMOVE_MESSAGE, messageForRemoveId: messageForRemoveId})
-export const setNewMessageTextActionCreator = (newMessageText:string):SetNewMessageActionType => ({type: SET_NEW_MESSAGE_TEXT, newMessageText: newMessageText})
+//функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
+export const addMessageAC = () => ({type: ADD_MESSAGE}) as const
+export const removeMessageAC = (messageForRemoveId: string) => {
+    return {
+        type: REMOVE_MESSAGE,
+        payload: {
+            messageForRemoveId
+        }
+    } as const
+}
+export const setNewMessageTextAC = (newMessageText: string) => {
+    return {
+        type: SET_NEW_MESSAGE_TEXT,
+            payload: {
+                newMessageText
+            }
+    }as const
+}
 export default dialogsReducer;

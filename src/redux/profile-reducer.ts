@@ -1,9 +1,6 @@
 import {
     ActionsType,
-    AddPostActionType,
     ProfilePageType,
-    RemovePostActionType,
-    SetNewPostTextActionType,
     StateType
 } from './store';
 import {PostType} from '../components/Profile/MyPosts/MyPosts';
@@ -26,28 +23,43 @@ let initialState = {
 const profileReducer = (state: ProfilePageType = initialState, action: ActionsType) => {
     //debugger
     switch (action.type) {
-        case ADD_POST:
+        case ADD_POST: {
             //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
             let newPost: PostType = {id: v1(), message: state.newPostText, likeCount: 0}
-            state.posts = [newPost, ...state.posts]
-            state.newPostText = '';
+            return {...state, posts: [newPost, ...state.posts], newPostText: ''}
+            //state.posts = [newPost, ...state.posts]
+            //state.newPostText = '';
             //this._rerenderEntireTree(this._state);
             //так тоже работает, но новый пост добавится в конец списка постов:
             //state.profilePage.posts.push(newPost)
-            return state;
-        case REMOVE_POST:
-            state.posts = state.posts.filter(p => p.id !== action.postForRemoveId) // при вызове в диспатч нужно передать action c доп. свойством "postForRemoveId"
-        //this._rerenderEntireTree(this._state);
-            return state;
-        case SET_NEW_POST_TEXT:
-            state.newPostText = action.newPostText; // при вызове в диспатч нужно передать action c доп. свойством "newPostText"
-            return state;
+        }
+        case REMOVE_POST: {
+            return {...state, posts: state.posts.filter(p => p.id !== action.payload.postForRemoveId)}
+
+            //state.posts = state.posts.filter(p => p.id !== action.payload.postForRemoveId)
+            //this._rerenderEntireTree(this._state);
+
+        }
+        case SET_NEW_POST_TEXT: {
+            return {...state, newPostText: action.payload.newPostText};
+            //state.newPostText = action.payload.newPostText;
+        }
         default: return state;
     }
 }
 
-//функции, которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const addPostActionCreator =()=> ({type: ADD_POST}) as const
-export const removePostActionCreator = (postForRemoveId: string) => ({type: REMOVE_POST, postForRemoveId: postForRemoveId}) as const
-export const setNewPostTextActionCreator = (newPostText:string) => ({type: SET_NEW_POST_TEXT, newPostText: newPostText}) as const
+export type ProfileReducerActionsType =
+    AddPostActionType
+    | RemovePostActionType
+    | SetNewPostTextActionType
+
+//автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
+export type AddPostActionType =  ReturnType<typeof addPostAC>//можно делать так, чтобы не дублировать
+export type RemovePostActionType = ReturnType<typeof removePostAC> //можно делать так, чтобы не дублировать
+export type SetNewPostTextActionType = ReturnType<typeof setNewPostTextAC>//можно делать так, чтобы не дублировать
+
+//функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
+export const addPostAC =()=> ({type: ADD_POST}) as const
+export const removePostAC = (postForRemoveId: string) => ({type: REMOVE_POST, payload: {postForRemoveId}}) as const
+export const setNewPostTextAC = (newPostText:string) => ({type: SET_NEW_POST_TEXT, payload: {newPostText}}) as const
 export default profileReducer;

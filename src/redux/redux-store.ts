@@ -7,7 +7,7 @@ import {StoreType} from './store';
 
 //в функции createStore() происходит создание стейта. createStore() в качестве параметра принимает combineReducers() со всеми  рудьюсерами
 
-let reducers = combineReducers({
+let rootReducer = combineReducers({
     messagesPage: dialogsReducer,
     profilePage: profileReducer,
     sidebar: sidebarReducer
@@ -15,6 +15,9 @@ let reducers = combineReducers({
 //
 // в combineReducers передали объект вида: {profileReducer: profileReducer,dialogsReducer: dialogsReducer,sidebarReducer: sidebarReducer} (когда в объекте название свойства и его значение идентичны, можно писать более коротко, просто название свойства (будет подразумеваться, что значение будет такое же)
 
-let store: StoreType = createStore(reducers);
+export type AppStateType = ReturnType<typeof rootReducer>
+export type DispatchType = typeof store.dispatch //(action: ActionsType) => void
+export type AppStoreType = typeof store
+let store  = createStore(rootReducer);
 
 export default store;

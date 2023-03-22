@@ -1,32 +1,14 @@
-import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
-import {PostType} from '../components/Profile/MyPosts/MyPosts';
 import {v1} from 'uuid';
 import profileReducer, {
-    addPostAC, ProfileReducerActionsType,
+    addPostAC, ProfilePageType, ProfileReducerActionsType,
     removePostAC,
     setNewPostTextAC
 } from './profile-reducer';
-import dialogsReducer, {DialogsReducerActionsType} from './dialogs-reducer';
+import dialogsReducer, {DialogsReducerActionsType, MessagePageType} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
 
-//переменные, в которые сохраним значения свойств type для dispatch
-const ADD_POST = 'ADD-POST';
-const REMOVE_POST = 'REMOVE-POST';
-const SET_NEW_POST_TEXT = 'SET-NEW-POST-TEXT';
-const ADD_MESSAGE = 'ADD-MESSAGE';
-const REMOVE_MESSAGE = 'REMOVE-MESSAGE';
-const SET_NEW_MESSAGE_TEXT = 'SET-NEW-MESSAGE-TEXT';
-
 //subscribe вызывается в index.tsx и получает в качестве коллбэка функцию rerenderEntireTree (уже настоящую, которая перерисовывает все дерево)) Получив коллбэк subscribe присваивает его в локальную для store.tsx функцию rerenderEntireTree
-export type ProfilePageType = {
-    posts: PostType[]
-    newPostText: string
-}
-export type MessagePageType = {
-    dialogs: DialogType[]
-    messages: MessageType[]
-    newMessageText: string
-}
+
 export type SidebarType = {}
 
 export type StateType = {
@@ -53,7 +35,7 @@ export type StoreType = {
     //removePost: (id: string) => void
 }
 
-export const store: StoreType = {
+export const store = {
     _state: {
         messagesPage: {
             dialogs: [
@@ -93,87 +75,16 @@ export const store: StoreType = {
     getState() {
         return this._state
     },
-    subscribe(observer) {
+    subscribe(observer: any) {
         this._rerenderEntireTree = observer //паттерн observer, похож на паттерн publisher-subscriber (по нему работает addEventListener, onClick, onChange...)//изменит поведение метода '_rerenderEntireTree' на функцию 'observer', которая придет в качестве параметра
     },
 
-    dispatch(action: ActionsType) {
+    dispatch(action: any) {
         this._state.profilePage = profileReducer(this._state.profilePage, action)
         this._state.messagesPage = dialogsReducer(this._state.messagesPage, action)
         this._state.sidebar = sidebarReducer(this._state.sidebar, action)
-        this._rerenderEntireTree(this._state);
-        //action - это объект, который описывает, какое действие нужно совершить.
-        // Обязательно должно быть свойсво "тип" (например, type: 'ADD-POST') с описанием действия, которое нужно совершить.
-//     if(action.type === ADD_POST) {
-// //debugger
-//         //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
-//         let newPost: PostType = {id: v1(), message: this._state.profilePage.newPostText, likeCount: 0}
-//         this._state.profilePage.posts = [newPost, ...this._state.profilePage.posts]
-//         this._state.profilePage.newPostText = '';
-//         this._rerenderEntireTree(this._state);
-//         //так тоже работает, но новый пост добавится в конец списка постов:
-//         //state.profilePage.posts.push(newPost)
-//     }
-//     else if (action.type === REMOVE_POST){
-//         this._state.profilePage.posts = this._state.profilePage.posts.filter(p => p.id !== action.postForRemoveId) // при вызове в диспатч нужно передать action c доп. свойством "postForRemoveId"
-//         this._rerenderEntireTree(this._state);
-//     }
-//     else if(action.type === SET_NEW_POST_TEXT) {
-//         this._state.profilePage.newPostText = action.newPostText; // при вызове в диспатч нужно передать action c доп. свойством "newText"
-//         this._rerenderEntireTree(this._state);
-//     }
-//     else if (action.type === ADD_MESSAGE) {
-//         let newMessage: MessageType = {id: v1(), message: this._state.messagesPage.newMessageText}
-//         this._state.messagesPage.messages.push(newMessage)
-//         this._state.messagesPage.newMessageText = ''
-//         this._rerenderEntireTree(this._state);
-//     }
-//     else if (action.type === REMOVE_MESSAGE){
-//         this._state.messagesPage.messages = this._state.messagesPage.messages.filter(m => m.id !== action.messageForRemoveId) //filter возвращает новый массив
-//         this._rerenderEntireTree(this._state);
-//     }
-//     else if (action.type === SET_NEW_MESSAGE_TEXT) {
-//         this._state.messagesPage.newMessageText = action.newMessageText;
-//         this._rerenderEntireTree(this._state);
-//     }
+        //this._rerenderEntireTree(this._state);
     },
-    //старые функции, которые уже заменили редьюсерами:
-    // removeMessage(id) {
-    //     //debugger
-    //     this._state.messagesPage.messages = this._state.messagesPage.messages.filter(m => m.id !== id) //filter возвращает новый массив
-    //     this._rerenderEntireTree(this._state);
-    // },//+
-    // setNewMessageText(newMessage) {
-    //     this._state.messagesPage.newMessageText = newMessage;
-    //     this._rerenderEntireTree(this._state);
-    // }, //+
-    // addNewMessage(message) {
-    //     //debugger
-    //     //можно вообще не передавать  извне текст сообщения, которое хотим добавить, а брать его из поля newMessageText (которое будет содержать актуальное значение, введенное в TextArea
-    //     let newMessage: MessageType = {id: v1(), message: message}
-    //     this._state.messagesPage.messages.push(newMessage)
-    //     this._state.messagesPage.newMessageText = ''
-    //     this._rerenderEntireTree(this._state);
-    // }, //+
-    // setNewPostText(newText) {
-    //     this._state.profilePage.newPostText = newText;
-    //     this._rerenderEntireTree(this._state);
-    // }, //+
-    // addNewPost() {
-    //     //debugger
-    //     //можно вообще не передавать  извне текст поста, который хотим добавить, а брать его из поля newPostText (которое будет содержать актуальное значение, введенное в TextArea
-    //     let newPost: PostType = {id: v1(), message: this._state.profilePage.newPostText, likeCount: 0}
-    //     this._state.profilePage.posts = [newPost, ...this._state.profilePage.posts]
-    //     this._state.profilePage.newPostText = '';
-    //     this._rerenderEntireTree(this._state);
-    //     //так тоже работает, но новый пост добавится в конец списка постов:
-    //     //state.profilePage.posts.push(newPost)
-    // }, //+
-    // removePost(id) {
-    //     //debugger
-    //     this._state.profilePage.posts = this._state.profilePage.posts.filter(p => p.id !== id)
-    //     this._rerenderEntireTree(this._state);
-    // }, //+
 }
 
 

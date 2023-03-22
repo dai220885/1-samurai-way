@@ -4,17 +4,11 @@ import Post from './Post/Post';
 import {Button} from '../../Button/Button';
 import {TextArea} from '../../TextArea/TextArea';
 import {
-    addPostAC,
+    addPostAC, PostType,
     removePostAC,
     setNewPostTextAC
 } from '../../../redux/profile-reducer';
 import {ActionsType} from '../../../redux/store';
-
-export type PostType = {
-    id: string
-    message: string
-    likeCount: number
-}
 
 type MyPostsPropsType = {
     posts: PostType[]

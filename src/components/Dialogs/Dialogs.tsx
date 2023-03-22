@@ -4,6 +4,7 @@ import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import {Button} from "../Button/Button";
 import {TextArea} from '../TextArea/TextArea';
+import {DialogType, MessageType} from '../../redux/dialogs-reducer';
 
 export type DialogsPropsType = {
     //store: StoreType
@@ -17,15 +18,7 @@ export type DialogsPropsType = {
     //buttonCallBack?: Function[]
 }
 
-export type DialogType = {
-    id: string
-    name: string
-}
 
-export type MessageType = {
-    id: string
-    message: string
-}
 
 
 function Dialogs (props: DialogsPropsType) {
@@ -47,7 +40,7 @@ function Dialogs (props: DialogsPropsType) {
         )
     }
     )
-    let addNewMessageHandler = () => props.addNewMessage();
+    const addNewMessageHandler = () => props.addNewMessage();
     const setNewMessageTextHandler =(newPostText: string) =>{
         props.setNewMessageText(newPostText)
     }

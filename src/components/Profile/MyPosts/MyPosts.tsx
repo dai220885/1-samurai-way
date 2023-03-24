@@ -8,7 +8,7 @@ import {
     removePostAC,
     setNewPostTextAC
 } from '../../../redux/profile-reducer';
-import {ActionsType} from '../../../redux/store';
+//import {ActionsType} from '../../../redux/store';
 
 type MyPostsPropsType = {
     posts: PostType[]

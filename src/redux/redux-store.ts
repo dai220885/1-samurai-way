@@ -3,7 +3,6 @@ import {combineReducers, legacy_createStore as createStore} from "redux"; //дл
 import dialogsReducer from './dialogs-reducer';
 import profileReducer from './profile-reducer';
 import sidebarReducer from './sidebar-reducer';
-import {StoreType} from './store';
 
 //в функции createStore() происходит создание стейта. createStore() в качестве параметра принимает combineReducers() со всеми  рудьюсерами
 

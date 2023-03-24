@@ -16,6 +16,7 @@ import {Provider} from 'react-redux';
 
 //let rerenderEntireTree = () => {
 //убрали отрисовку из функции, а просто единожды выполнили ее
+//в Provider передаем стор, после чего он будет доступен в контейнерной компоненте через StoreContext.Consumer
 ReactDOM.render(
     <BrowserRouter>
         <Provider store={store}>

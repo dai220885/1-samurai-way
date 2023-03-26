@@ -5,9 +5,8 @@ import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
 import {BrowserRouter, Route} from 'react-router-dom';
-import {v1} from 'uuid';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
-import {AppStateType, DispatchType} from './redux/redux-store';
+import UsersContainer from './components/Users/UsersContainer';
 
 const App: React.FC = () => {
     let [count, setCount] = useState<number>(1)
@@ -57,6 +56,10 @@ const App: React.FC = () => {
                             //newPostText={state.profilePage.newPostText}
                             //setNewPostText={props.store.setNewPostText.bind(props.store)}
                         />}
+                />
+                <Route
+                    path="/users"
+                    render={() => <UsersContainer/>}
                 />
                 {/*<Route path="/news" component={News}/>*/}
                 {/*<Route path="/music" component={Music}/>*/}

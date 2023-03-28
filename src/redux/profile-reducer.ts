@@ -4,18 +4,15 @@ const ADD_POST = 'ADD-POST';
 const REMOVE_POST = 'REMOVE-POST';
 const SET_NEW_POST_TEXT = 'SET-NEW-POST-TEXT';
 
-
 export type PostType = {
     id: string
     message: string
     likeCount: number
 }
-
 export type ProfilePageType = {
     posts: PostType[]
     newPostText: string
 }
-
 let initialState: ProfilePageType = {
     posts: [
         {id: v1(), message: 'Hello, it\'s a post 1', likeCount: 7},
@@ -26,7 +23,7 @@ let initialState: ProfilePageType = {
     newPostText: ''
 }
 
-const profileReducer = (state: ProfilePageType = initialState, action: ProfileReducerActionsType): ProfilePageType => {
+const profileReducer = (state: ProfilePageType = initialState, action: ProfileReducerActionType): ProfilePageType => {
     //debugger
     switch (action.type) {
         case ADD_POST: {
@@ -41,10 +38,8 @@ const profileReducer = (state: ProfilePageType = initialState, action: ProfileRe
         }
         case REMOVE_POST: {
             return {...state, posts: state.posts.filter(p => p.id !== action.payload.postForRemoveId)}
-
             //state.posts = state.posts.filter(p => p.id !== action.payload.postForRemoveId)
             //this._rerenderEntireTree(this._state);
-
         }
         case SET_NEW_POST_TEXT: {
             return {...state, newPostText: action.payload.newPostText};
@@ -54,7 +49,7 @@ const profileReducer = (state: ProfilePageType = initialState, action: ProfileRe
     }
 }
 
-export type ProfileReducerActionsType =
+export type ProfileReducerActionType =
     AddPostActionType
     | RemovePostActionType
     | SetNewPostTextActionType
@@ -64,7 +59,7 @@ export type AddPostActionType =  ReturnType<typeof addPostAC>//можно дел
 export type RemovePostActionType = ReturnType<typeof removePostAC> //можно делать так, чтобы не дублировать
 export type SetNewPostTextActionType = ReturnType<typeof setNewPostTextAC>//можно делать так, чтобы не дублировать
 
-//функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
+//функции (ActionCreator-ы), которые будут создавать объекты action
 export const addPostAC =()=> ({type: ADD_POST}) as const
 export const removePostAC = (postForRemoveId: string) => ({type: REMOVE_POST, payload: {postForRemoveId}}) as const
 export const setNewPostTextAC = (newPostText:string) => ({type: SET_NEW_POST_TEXT, payload: {newPostText}}) as const

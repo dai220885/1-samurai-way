@@ -19,34 +19,34 @@ export type UserPageType = {
     users: UserType[]
 }
 
-let initialState: UserPageType = {
-    users: [
-        {
-            id: v1(),
-            photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-            followed: true,
-            fullName: 'Alexandr',
-            status: 'i am a student',
-            location: {city: 'Minsk', country: 'Belarus'}
-        },
-        {
-            id: v1(),
-            photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-            followed: false,
-            fullName: 'Victor',
-            status: 'i like music',
-            location: {city: 'Vitebsk', country: 'Belarus'}
-        },
-        {
-            id: v1(),
-            photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-            followed: true,
-            fullName: 'Sergey',
-            status: 'good boy',
-            location: {city: 'Moscow', country: 'Russia'}
-        },
+let initialState = {
+     users: [
+    //     {
+    //         id: v1(),
+    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+    //         followed: true,
+    //         fullName: 'Alexandr',
+    //         status: 'i am a student',
+    //         location: {city: 'Minsk', country: 'Belarus'}
+    //     },
+    //     {
+    //         id: v1(),
+    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+    //         followed: false,
+    //         fullName: 'Victor',
+    //         status: 'i like music',
+    //         location: {city: 'Vitebsk', country: 'Belarus'}
+    //     },
+    //     {
+    //         id: v1(),
+    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+    //         followed: true,
+    //         fullName: 'Sergey',
+    //         status: 'good boy',
+    //         location: {city: 'Moscow', country: 'Russia'}
+    //     },
     ],
-}
+} as UserPageType
 
 const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionType): UserPageType => {
     switch (action.type) {
@@ -79,7 +79,6 @@ export type UsersReducerActionType =
 export type FollowUserActionType = ReturnType<typeof followUserAC>
 export type UnFollowUserActionType = ReturnType<typeof unFollowUserAC>
 export type SetUsersActionType = ReturnType<typeof setUsersAC>
-
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
 export const followUserAC = (userId: string) => ({

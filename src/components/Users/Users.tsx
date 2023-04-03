@@ -12,25 +12,28 @@ export type UsersPropsType = {
     setUsers: (users: UserType[]) => void
 }
 export const Users = (props: UsersPropsType) => {
-    if (props.users.length === 0){
-        axios.get("https://social-network.samuraijs.com/api/1.0/users")
-            .then(response =>{
-                //debugger
-                //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
-                //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
-                let newUsers: UserType[] = response.data.items.map((el:{ id: any; photos: {small: string, large: string}; followed: any; name: any; status: any; }):UserType =>
-                    ({
-                        id: el.id,
-                        photoUrl: el.photos.small,
-                        followed: el.followed,
-                        fullName: el.name,
-                        status: el.status,  location: {
-                            city: '',
-                            country: ''
-                        }}))
-                props.setUsers(newUsers)
-            })
+    const getUsers = () => {
+        if (props.users.length === 0){
+            axios.get("https://social-network.samuraijs.com/api/1.0/users")
+                .then(response =>{
+                    //debugger
+                    //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
+                    //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
+                    let newUsers: UserType[] = response.data.items.map((el:{ id: any; photos: {small: string, large: string}; followed: any; name: any; status: any; }):UserType =>
+                        ({
+                            id: el.id,
+                            photoUrl: el.photos.small? el.photos.small: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTBU5APFtvEEsvOwobgk6YEjQUVuQjZTbGFKRjDNQ1iQwK0mTbpHoUZFPAgEFvlaf8gY&usqp=CAU',
+                            followed: el.followed,
+                            fullName: el.name,
+                            status: el.status,  location: {
+                                city: '',
+                                country: ''
+                            }}))
+                    props.setUsers(newUsers)
+                })
+        }
     }
+
 
     // {props.setUsers(
     //     [
@@ -62,21 +65,22 @@ export const Users = (props: UsersPropsType) => {
     // )}
 
     //в зависимости от того, подписаны ли мы на пользователя, в коллбэк кнопки передается либо функция followUser, либо unFollowUser
-    let buttonOnClickHandler = (followed: boolean, userId: string) => {
+    let followOnClickHandler = (followed: boolean, userId: string) => {
         followed ? props.unfollowUser(userId) : props.followUser(userId)
     }
     return (
         <div>
+            <button onClick={getUsers}>Get users</button>
             {
                 props.users.map(user =>
                     <div key={user.id}>
                         <span>
                             <div>
-                                <img src={user.photoUrl} className={styles.userPhoto}/>
+                                <img src={user.photoUrl} alt = '   photo   'className={styles.userPhoto}/>
                             </div>
                             <div>
                                 <button onClick={() => {
-                                    buttonOnClickHandler(user.followed, user.id)
+                                    followOnClickHandler(user.followed, user.id)
                                 }}>
                                     {user.followed ? 'Unfollow' : 'Follow'} </button>
                             </div>

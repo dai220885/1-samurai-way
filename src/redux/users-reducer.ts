@@ -3,6 +3,8 @@ import {v1} from 'uuid';
 const FOLLOW_USER = 'FOLLOW-USER';
 const UNFOLLOW_USER = 'UNFOLLOW-USER';
 const SET_USERS = 'SET-USERS';
+const SET_CURRENT_PAGE = 'SET-CURRENT_PAGE';
+const SET_USERS_TOTAL_COUNT = 'SET-USERS-TOTAL-COUNT';
 
 export type UserType = {
     id: string
@@ -16,39 +18,45 @@ export type UserType = {
     }
 }
 export type UserPageType = {
-    users: UserType[]
+    users: UserType[],
+    pageSize: number,
+    totalUsersCount: number,
+    currentPage: number
 }
 
-let initialState = {
-     users: [
-    //     {
-    //         id: v1(),
-    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-    //         followed: true,
-    //         fullName: 'Alexandr',
-    //         status: 'i am a student',
-    //         location: {city: 'Minsk', country: 'Belarus'}
-    //     },
-    //     {
-    //         id: v1(),
-    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-    //         followed: false,
-    //         fullName: 'Victor',
-    //         status: 'i like music',
-    //         location: {city: 'Vitebsk', country: 'Belarus'}
-    //     },
-    //     {
-    //         id: v1(),
-    //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-    //         followed: true,
-    //         fullName: 'Sergey',
-    //         status: 'good boy',
-    //         location: {city: 'Moscow', country: 'Russia'}
-    //     },
+let initialState: UserPageType = {
+    users: [
+        //     {
+        //         id: v1(),
+        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+        //         followed: true,
+        //         fullName: 'Alexandr',
+        //         status: 'i am a student',
+        //         location: {city: 'Minsk', country: 'Belarus'}
+        //     },
+        //     {
+        //         id: v1(),
+        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+        //         followed: false,
+        //         fullName: 'Victor',
+        //         status: 'i like music',
+        //         location: {city: 'Vitebsk', country: 'Belarus'}
+        //     },
+        //     {
+        //         id: v1(),
+        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
+        //         followed: true,
+        //         fullName: 'Sergey',
+        //         status: 'good boy',
+        //         location: {city: 'Moscow', country: 'Russia'}
+        //     },
     ],
+    pageSize: 15,
+    totalUsersCount: 0,
+    currentPage: 8,
 } as UserPageType
 
-const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionType): UserPageType => {
+const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionsType): UserPageType => {
     switch (action.type) {
         case FOLLOW_USER: {
             return {
@@ -63,22 +71,31 @@ const usersReducer = (state: UserPageType = initialState, action: UsersReducerAc
             }
         }
         case SET_USERS: {
-            //return {...state, users: action.payload.users} //так полностью заменяем существующих юзеров
-            return {...state, users: [...state.users, ...action.payload.users]}
+            return {...state, users: action.payload.users} //так полностью заменяем существующих юзеров
+            //return {...state, users: [...state.users, ...action.payload.users]} //так добавляем новых юзеров к существующим
         }
-
+        case SET_CURRENT_PAGE: {
+            return {...state, currentPage: action.payload.currentPageNumber}
+        }
+        case SET_USERS_TOTAL_COUNT: {
+            return {...state, totalUsersCount: action.payload.usersTotalCount}
+        }
         default:
             return state;
     }
 }
-export type UsersReducerActionType =
+export type UsersReducerActionsType =
     FollowUserActionType
     | UnFollowUserActionType
     | SetUsersActionType
+    | SetCurrentPageActionType
+    | SetUsersTotalCountActionType
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
 export type FollowUserActionType = ReturnType<typeof followUserAC>
 export type UnFollowUserActionType = ReturnType<typeof unFollowUserAC>
 export type SetUsersActionType = ReturnType<typeof setUsersAC>
+export type SetCurrentPageActionType = ReturnType<typeof setCurrentPageAC>
+export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCountAC>
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
 export const followUserAC = (userId: string) => ({
@@ -102,4 +119,22 @@ export const setUsersAC = (users: UserType[]) => ({
         }
     } as const
 )
+
+export const setCurrentPageAC = (currentPageNumber: number) => ({
+        type: SET_CURRENT_PAGE,
+        payload: {
+            currentPageNumber
+        }
+    } as const)
+
+export const setUsersTotalCountAC = (usersTotalCount: number) => ({
+        type: SET_USERS_TOTAL_COUNT,
+        payload: {
+            usersTotalCount
+        }
+    } as const)
+
+
+
+
 export default usersReducer;

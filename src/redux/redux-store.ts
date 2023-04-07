@@ -19,6 +19,10 @@ let rootReducer = combineReducers({
 export type AppStateType = ReturnType<typeof rootReducer>
 export type DispatchType = typeof store.dispatch //(action: ActionsType) => void
 export type AppStoreType = typeof store
+
 let store  = createStore(rootReducer);
 
 export default store;
+
+// @ts-ignore
+window.store = store;

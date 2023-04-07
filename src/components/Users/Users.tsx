@@ -3,15 +3,11 @@ import {UserType} from '../../redux/users-reducer';
 import styles from './Users.module.css'
 import {v1} from 'uuid';
 import axios from 'axios';
+import {RootUsersPropsType} from './UsersContainer';
 //import * as axios from 'axios'; //? в видео так сказано делать
 
-export type UsersPropsType = {
-    users: UserType[]
-    followUser: (userId: string) => void
-    unfollowUser: (userId: string) => void
-    setUsers: (users: UserType[]) => void
-}
-export const Users = (props: UsersPropsType) => {
+
+export const Users = (props: RootUsersPropsType) => {
     const getUsers = () => {
         if (props.users.length === 0){
             axios.get("https://social-network.samuraijs.com/api/1.0/users")

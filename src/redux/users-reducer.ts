@@ -3,6 +3,7 @@ const UNFOLLOW_USER = 'UNFOLLOW-USER';
 const SET_USERS = 'SET-USERS';
 const SET_CURRENT_PAGE = 'SET-CURRENT_PAGE';
 const SET_USERS_TOTAL_COUNT = 'SET-USERS-TOTAL-COUNT';
+const SET_IS_FETCHING = 'SET-IS-FETCHING';
 
 export type UserType = {
     id: string
@@ -20,6 +21,7 @@ export type UserPageType = {
     pageSize: number,
     totalUsersCount: number,
     currentPage: number
+    isFetching: boolean
 }
 
 let initialState: UserPageType = {
@@ -52,6 +54,7 @@ let initialState: UserPageType = {
     pageSize: 15,
     totalUsersCount: 0,
     currentPage: 1,
+    isFetching: false,
 } as UserPageType
 
 const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionsType): UserPageType => {
@@ -78,6 +81,9 @@ const usersReducer = (state: UserPageType = initialState, action: UsersReducerAc
         case SET_USERS_TOTAL_COUNT: {
             return {...state, totalUsersCount: action.payload.usersTotalCount}
         }
+        case SET_IS_FETCHING: {
+            return {...state, isFetching: action.payload.isFetching}
+        }
         default:
             return state;
     }
@@ -88,12 +94,14 @@ export type UsersReducerActionsType =
     | SetUsersActionType
     | SetCurrentPageActionType
     | SetUsersTotalCountActionType
+    |SetIsFetchingActionType
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
 export type FollowUserActionType = ReturnType<typeof followUser>
 export type UnfollowUserActionType = ReturnType<typeof unfollowUser>
 export type SetUsersActionType = ReturnType<typeof setUsers>
 export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
 export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
+export type SetIsFetchingActionType = ReturnType<typeof setIsFetching>
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
 export const followUser = (userId: string) => ({
@@ -127,6 +135,12 @@ export const setUsersTotalCount = (usersTotalCount: number) => ({
         type: SET_USERS_TOTAL_COUNT,
         payload: {
             usersTotalCount
+        }
+    } as const)
+export const setIsFetching = (isFetching: boolean) => ({
+        type: SET_IS_FETCHING,
+        payload: {
+            isFetching
         }
     } as const)
 

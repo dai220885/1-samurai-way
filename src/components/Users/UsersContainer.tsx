@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
 import {
-    followUser, setCurrentPage,
+    followUser, setCurrentPage, setIsFetching,
     setUsers, setUsersTotalCount,
     unfollowUser,
     UsersReducerActionsType,
@@ -11,6 +11,8 @@ import {
 import {Dispatch} from 'redux';
 import {UsersFuncComponent} from './UsersFuncComponent';
 import axios from 'axios';
+import {Preloader} from '../common/Preloader/Preloader';
+
 //import * as axios from 'axios'; //? в видео так сказано делать
 
 
@@ -21,8 +23,10 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     componentDidUpdate(prevProps: Readonly<RootUsersPropsType>, prevState: Readonly<{}>, snapshot?: any) {
         console.log('componentDidUpdate')
     }
+
     componentDidMount() {
         console.log('componentDidMount')
+        this.props.setIsFetching(true)
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
             .then(response => {
                 //debugger
@@ -43,13 +47,16 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                 const usersTotalCount = response.data.totalCount;
                 this.props.setUsers(newUsers);
                 this.props.setUsersTotalCount(usersTotalCount);
+                this.props.setIsFetching(false);
             })
     }
+
     followOnClickHandler = (followed: boolean, userId: string) => {
         followed ? this.props.unfollowUser(userId) : this.props.followUser(userId)
     }
     pageNumberOnClickHandler = (currentPageNumber: number) => {
         this.props.setCurrentPage(currentPageNumber);
+        this.props.setIsFetching(true)
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPageNumber}&count=${this.props.pageSize}`)
             .then(response => {
                 //debugger
@@ -67,10 +74,12 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                             country: ''
                         }
                     }))
+                this.props.setIsFetching(false)
                 this.props.setUsers(newUsers)
             })
 
     }
+
     render() {
         let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
         let pagesNumbers = [];
@@ -115,17 +124,21 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
             //             </div>)
             //     }
             // </div>
-            <UsersFuncComponent
-                pagesNumbers={pagesNumbers}
-                users={this.props.users}
-                currentPage={this.props.currentPage}
-                pageNumberOnClickHandler={this.pageNumberOnClickHandler}
-                followOnClickHandler={this.followOnClickHandler}
-            />
+            <>
+                {this.props.isFetching ?
+                    <Preloader/>
+                    : null}
+                <UsersFuncComponent
+                    pagesNumbers={pagesNumbers}
+                    users={this.props.users}
+                    currentPage={this.props.currentPage}
+                    pageNumberOnClickHandler={this.pageNumberOnClickHandler}
+                    followOnClickHandler={this.followOnClickHandler}
+                />
+            </>
         )
     }
 }
-
 
 
 //UsersPropsType тот же тип, что и "type RootUsersPropsType = MapStateToPropsType & MapDispatchToPropsType", просто на RootUsersPropsType иногда в строке "const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersClassComponent);" в UsersClassComponent выдает ошибку типизации (Уже не выдает))))
@@ -154,7 +167,8 @@ let mapStateToProps = (state: AppStateType) => {
         users: state.userPage.users,
         pageSize: state.userPage.pageSize,
         totalUsersCount: state.userPage.totalUsersCount,
-        currentPage: state.userPage.currentPage
+        currentPage: state.userPage.currentPage,
+        isFetching: state.userPage.isFetching,
     }
 }
 //титпизируем mapDispatchToProps
@@ -164,6 +178,7 @@ let mapStateToProps = (state: AppStateType) => {
 //     setUsers: (users: UserType[]) => void;
 //     setCurrentPage: (currentPageNumber: number) => void;
 //     setUsersTotalCount: (usersTotalCount: number) => void;
+//     setIsFetching: (isFetching: boolean) => void;
 // }
 //можно использовать автоматическую типизацию:
 //с автоматической типизацией в строке "const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersClassComponent);" в UsersClassComponent выдает ошибку типизации (уже не выдает)))
@@ -173,11 +188,14 @@ let mapDispatchToProps = (dispatch: Dispatch<UsersReducerActionsType>) => {
         //можно просто описать функцию, по названию которой она будет доступна в пропсах:
         //followUser(userId: string) {dispatch(followUserAC(userId))},
         //а можно указать название свойства, которому присвоить функцию:
-        followUser: (userId: string) => {dispatch(followUser(userId))},
+        followUser: (userId: string) => {
+            dispatch(followUser(userId))
+        },
         unfollowUser: (userId: string) => dispatch(unfollowUser(userId)),
         setUsers: (users: UserType[]) => dispatch(setUsers(users)),
         setCurrentPage: (currentPageNumber: number) => dispatch(setCurrentPage(currentPageNumber)),
         setUsersTotalCount: (usersTotalCount: number) => dispatch(setUsersTotalCount(usersTotalCount)),
+        setIsFetching: (isFetching: boolean) => dispatch(setIsFetching(isFetching)),
     }
 }
 //const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
@@ -189,6 +207,7 @@ const UsersContainer = connect(mapStateToProps, {
     setUsers,
     setCurrentPage,
     setUsersTotalCount,
+    setIsFetching,
 })(UsersClassComponent);
 
 export default UsersContainer;

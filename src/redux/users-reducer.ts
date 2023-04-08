@@ -84,55 +84,50 @@ const usersReducer = (state: UserPageType = initialState, action: UsersReducerAc
 }
 export type UsersReducerActionsType =
     FollowUserActionType
-    | UnFollowUserActionType
+    | UnfollowUserActionType
     | SetUsersActionType
     | SetCurrentPageActionType
     | SetUsersTotalCountActionType
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
-export type FollowUserActionType = ReturnType<typeof followUserAC>
-export type UnFollowUserActionType = ReturnType<typeof unFollowUserAC>
-export type SetUsersActionType = ReturnType<typeof setUsersAC>
-export type SetCurrentPageActionType = ReturnType<typeof setCurrentPageAC>
-export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCountAC>
+export type FollowUserActionType = ReturnType<typeof followUser>
+export type UnfollowUserActionType = ReturnType<typeof unfollowUser>
+export type SetUsersActionType = ReturnType<typeof setUsers>
+export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
+export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const followUserAC = (userId: string) => ({
+export const followUser = (userId: string) => ({
         type: FOLLOW_USER,
         payload: {
             userId
         }
     } as const
 )
-export const unFollowUserAC = (userId: string) => ({
+export const unfollowUser = (userId: string) => ({
         type: UNFOLLOW_USER,
         payload: {
             userId
         }
     } as const
 )
-export const setUsersAC = (users: UserType[]) => ({
+export const setUsers = (users: UserType[]) => ({
         type: SET_USERS,
         payload: {
             users
         }
     } as const
 )
-
-export const setCurrentPageAC = (currentPageNumber: number) => ({
+export const setCurrentPage = (currentPageNumber: number) => ({
         type: SET_CURRENT_PAGE,
         payload: {
             currentPageNumber
         }
     } as const)
-
-export const setUsersTotalCountAC = (usersTotalCount: number) => ({
+export const setUsersTotalCount = (usersTotalCount: number) => ({
         type: SET_USERS_TOTAL_COUNT,
         payload: {
             usersTotalCount
         }
     } as const)
-
-
-
 
 export default usersReducer;

@@ -9,3 +9,9 @@
 .descriptionBlock{
     padding: 10px;
 }
+
+.profilePhoto {
+    max-width: 600px;
+    max-height: 400px;
+    //border-radius: 50%;
+}

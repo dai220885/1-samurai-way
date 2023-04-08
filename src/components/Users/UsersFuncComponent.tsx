@@ -16,7 +16,7 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
             {/*отрисовка номеров страничек с пользователями (пагинация)*/}
             <div>
                 {props.pagesNumbers.map(number =>
-                    <span className={
+                    <span key = {number} className={
                         props.currentPage === number
                             ? styles.selectedPage
                             : ''} onClick={()=>props.pageNumberOnClickHandler(number)}>{number+' '}

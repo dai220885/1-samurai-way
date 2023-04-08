@@ -1,6 +1,7 @@
 import React from 'react';
 import {UserType} from '../../redux/users-reducer';
 import styles from './Users.module.css'
+import {NavLink} from 'react-router-dom';
 
 type UserFuncComponentPropsType = {
     pagesNumbers: number[],
@@ -29,7 +30,9 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
                     <div key={user.id}>
                         <span>
                             <div>
-                                <img src={user.photoUrl} alt="   photo   " className={styles.userPhoto}/>
+                                <NavLink to ={'/profile/'+ user.id}>
+                                    <img src={user.photoUrl} alt="   photo   " className={styles.userPhoto}/>
+                                </NavLink>
                             </div>
                             <div>
                                 <button onClick={() => {

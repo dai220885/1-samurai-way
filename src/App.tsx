@@ -3,11 +3,11 @@ import './App.css';
 import React, {useState} from 'react';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
-import Profile from './components/Profile/Profile';
 import {BrowserRouter, Route} from 'react-router-dom';
 //import { Routes, Route, Navigate } from 'react-router-dom'
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import UsersContainer from './components/Users/UsersContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
 
 const App: React.FC = () => {
     let [count, setCount] = useState<number>(1)
@@ -48,7 +48,7 @@ const App: React.FC = () => {
                 <Route
                     path="/profile"
                     render={() =>
-                        <Profile
+                        <ProfileContainer
                             //store={props.store} // для контейнерной компоненты
                             //posts={state.profilePage.posts}
                             //dispatch={props.dispatch}

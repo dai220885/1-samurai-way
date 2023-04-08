@@ -21,11 +21,11 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     //     super(props);
     // } //если конструктор ничего не делает, кроме передачи пропсов конструктору родительского класса, то его можно не писать, т.к. все это и так происходит по умолчанию
     componentDidUpdate(prevProps: Readonly<RootUsersPropsType>, prevState: Readonly<{}>, snapshot?: any) {
-        console.log('componentDidUpdate')
+        console.log('UsersClassComponent.componentDidUpdate')
     }
 
     componentDidMount() {
-        console.log('componentDidMount')
+        console.log('UsersClassComponent.componentDidMount')
         this.props.setIsFetching(true)
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
             .then(response => {

@@ -1,11 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Users} from './Users';
 import {AppStateType} from '../../redux/redux-store';
 import {
-    followUserAC, setCurrentPageAC,
-    setUsersAC, setUsersTotalCountAC,
-    unFollowUserAC,
+    followUser, setCurrentPage,
+    setUsers, setUsersTotalCount,
+    unfollowUser,
     UsersReducerActionsType,
     UserType
 } from '../../redux/users-reducer';
@@ -174,14 +173,22 @@ let mapDispatchToProps = (dispatch: Dispatch<UsersReducerActionsType>) => {
         //можно просто описать функцию, по названию которой она будет доступна в пропсах:
         //followUser(userId: string) {dispatch(followUserAC(userId))},
         //а можно указать название свойства, которому присвоить функцию:
-        followUser: (userId: string) => {dispatch(followUserAC(userId))},
-        unfollowUser: (userId: string) => dispatch(unFollowUserAC(userId)),
-        setUsers: (users: UserType[]) => dispatch(setUsersAC(users)),
-        setCurrentPage: (currentPageNumber: number) => dispatch(setCurrentPageAC(currentPageNumber)),
-        setUsersTotalCount: (usersTotalCount: number) => dispatch(setUsersTotalCountAC(usersTotalCount)),
+        followUser: (userId: string) => {dispatch(followUser(userId))},
+        unfollowUser: (userId: string) => dispatch(unfollowUser(userId)),
+        setUsers: (users: UserType[]) => dispatch(setUsers(users)),
+        setCurrentPage: (currentPageNumber: number) => dispatch(setCurrentPage(currentPageNumber)),
+        setUsersTotalCount: (usersTotalCount: number) => dispatch(setUsersTotalCount(usersTotalCount)),
     }
 }
 //const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
-const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersClassComponent);
+
+//вместо mapDispatchToProps в connect передали объект со свойствами, идентичными названиям экшенкриэйтеров
+const UsersContainer = connect(mapStateToProps, {
+    followUser,
+    unfollowUser,
+    setUsers,
+    setCurrentPage,
+    setUsersTotalCount,
+})(UsersClassComponent);
 
 export default UsersContainer;

@@ -1,5 +1,3 @@
-import {v1} from 'uuid';
-
 const FOLLOW_USER = 'FOLLOW-USER';
 const UNFOLLOW_USER = 'UNFOLLOW-USER';
 const SET_USERS = 'SET-USERS';
@@ -53,7 +51,7 @@ let initialState: UserPageType = {
     ],
     pageSize: 15,
     totalUsersCount: 0,
-    currentPage: 8,
+    currentPage: 1,
 } as UserPageType
 
 const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionsType): UserPageType => {

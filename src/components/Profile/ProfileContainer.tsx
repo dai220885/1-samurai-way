@@ -9,18 +9,22 @@ import {UserType} from '../../redux/users-reducer';
 import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
 import {setUserProfile, UserProfileType} from '../../redux/profile-reducer';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
 
-class ProfileContainer extends React.Component <RootProfilePropsType> {
+class ProfileClassComponent extends React.Component <RootProfilePropsType> {
     // constructor(props:RootProfilePropsType) {
     //     super(props);
     // }
     componentDidUpdate(prevProps: Readonly<RootProfilePropsType>, prevState: Readonly<{}>, snapshot?: any) {
-        console.log('ProfileContainer.componentDidUpdate')
+        console.log('ProfileClassComponent.componentDidUpdate')
     }
 
     componentDidMount() {
-        console.log('ProfileContainer.componentDidMount')
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/2`)
+        //debugger
+        console.log('ProfileClassComponent.componentDidMount')
+        let userId = this.props.match.params.userId||'2'
+        console.log(`userId: ${userId}`)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
             .then(response => {
                 //debugger
                 this.props.setUserProfile(response.data)
@@ -33,14 +37,20 @@ class ProfileContainer extends React.Component <RootProfilePropsType> {
         )
     }
 }
-type RootProfilePropsType = MapStateToPropsType & mapDispatchToPropsType
+
 type MapStateToPropsType = ReturnType<typeof mapStateToProps>
+type mapDispatchToPropsType = {
+    setUserProfile: (profile: UserProfileType) => void;
+}
+type ProfileConnectPropsType = MapStateToPropsType & mapDispatchToPropsType
+type PathParamsType ={
+    userId: string
+} //типизируем параметры, полученные из урл
+type RootProfilePropsType = RouteComponentProps<PathParamsType> & ProfileConnectPropsType
 let mapStateToProps = (state: AppStateType) => ({
     profile: state.profilePage.profile,
 })
 
-type mapDispatchToPropsType = {
-    setUserProfile: (profile: UserProfileType) => void;
-}
-
-export default connect(mapStateToProps, {setUserProfile})(ProfileContainer);
+const ProfileWithRouter = withRouter(ProfileClassComponent)
+const ProfileContainer = connect(mapStateToProps, {setUserProfile})(ProfileWithRouter);
+export default ProfileContainer

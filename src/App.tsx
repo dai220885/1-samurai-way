@@ -46,7 +46,7 @@ const App: React.FC = () => {
                         />}
                 />
                 <Route
-                    path="/profile"
+                    path="/profile/:userId?"
                     render={() =>
                         <ProfileContainer
                             //store={props.store} // для контейнерной компоненты

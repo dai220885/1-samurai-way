@@ -27,7 +27,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     componentDidMount() {
         console.log('UsersClassComponent.componentDidMount')
         this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {withCredentials: true})
             .then(response => {
                 //debugger
                 //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
@@ -44,6 +44,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                             country: ''
                         }
                     }))
+                console.log(newUsers)
                 const usersTotalCount = response.data.totalCount;
                 this.props.setUsers(newUsers);
                 this.props.setUsersTotalCount(usersTotalCount);
@@ -57,7 +58,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     pageNumberOnClickHandler = (currentPageNumber: number) => {
         this.props.setCurrentPage(currentPageNumber);
         this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPageNumber}&count=${this.props.pageSize}`)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPageNumber}&count=${this.props.pageSize}`,  {withCredentials: true})
             .then(response => {
                 //debugger
                 //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())

@@ -2,6 +2,7 @@ import React from 'react';
 import {UserType} from '../../redux/users-reducer';
 import styles from './Users.module.css'
 import {NavLink} from 'react-router-dom';
+import axios from 'axios';
 
 type UserFuncComponentPropsType = {
     pagesNumbers: number[],
@@ -36,7 +37,37 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
                             </div>
                             <div>
                                 <button onClick={() => {
-                                    props.followOnClickHandler(user.followed, user.id)
+                                    if(!user.followed) {
+                                        axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {}, {
+                                            withCredentials: true,
+                                            baseURL: 'https://social-network.samuraijs.com/api/1.0/',
+                                            headers: {
+                                                "API-KEY": "3128443d-f108-4e76-956c-6d97ad90fd1e"
+                                            }
+                                        })
+                                            .then(response => {
+                                                //debugger
+                                                if (response.data.resultCode === 0) {
+                                                    props.followOnClickHandler(user.followed, user.id)
+                                                }
+                                            })
+                                    }
+                                    else {
+                                        axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {
+                                            withCredentials: true,
+                                            baseURL: 'https://social-network.samuraijs.com/api/1.0/',
+                                            headers: {
+                                                "API-KEY": "3128443d-f108-4e76-956c-6d97ad90fd1e"
+                                            }
+                                        })
+                                            .then(response => {
+                                                //debugger
+                                                if (response.data.resultCode === 0) {
+                                                    props.followOnClickHandler(user.followed, user.id)
+                                                }
+                                            })
+                                    }
+
                                 }}>
                                     {user.followed ? 'Unfollow' : 'Follow'} </button>
                             </div>

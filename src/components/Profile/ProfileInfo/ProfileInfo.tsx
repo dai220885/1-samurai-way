@@ -24,6 +24,9 @@ function ProfileInfo(props: ProfileInfoPropsType) {
                     <div>
                         {props.profile.aboutMe}
                     </div>
+                    <div>
+                        {  `userID: ${props.profile.userId}`}
+                    </div>
                     <img src={props.profile.photos.large} alt="   photo   " className={classes.profilePhoto}/>
                 </div>
 

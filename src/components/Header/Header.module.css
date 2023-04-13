@@ -7,3 +7,15 @@
 .header img{
     max-width: 80px;
 }
+
+
+.loginBlock {
+    float: right;
+    color: white;
+    text-decoration: none;
+}
+
+.loginBlock a {
+    color: white;
+    text-decoration: none;
+}

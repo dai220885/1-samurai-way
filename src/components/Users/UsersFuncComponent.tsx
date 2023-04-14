@@ -2,7 +2,7 @@ import React from 'react';
 import {UserType} from '../../redux/users-reducer';
 import styles from './Users.module.css'
 import {NavLink} from 'react-router-dom';
-import axios from 'axios';
+import {userAPI} from '../../api/api';
 
 type UserFuncComponentPropsType = {
     pagesNumbers: number[],
@@ -18,11 +18,14 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
             {/*отрисовка номеров страничек с пользователями (пагинация)*/}
             <div>
                 {props.pagesNumbers.map(number =>
-                    <span key = {number} className={
-                        props.currentPage === number
-                            ? styles.selectedPage
-                            : ''} onClick={()=>props.pageNumberOnClickHandler(number)}>{number+' '}
-                        </span>
+                    <span
+                        key={number}
+                        className={
+                            props.currentPage === number
+                                ? styles.selectedPage
+                                : ''}
+                        onClick={() => props.pageNumberOnClickHandler(number)}>{number + ' '}
+                    </span>
                 )}
             </div>
             {/*отрисовка списка юзеров*/}
@@ -31,43 +34,24 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
                     <div key={user.id}>
                         <span>
                             <div>
-                                <NavLink to ={'/profile/'+ user.id}>
+                                <NavLink to={'/profile/' + user.id}>
                                     <img src={user.photoUrl} alt="   photo   " className={styles.userPhoto}/>
                                 </NavLink>
                             </div>
                             <div>
                                 <button onClick={() => {
-                                    if(!user.followed) {
-                                        axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {}, {
-                                            withCredentials: true,
-                                            baseURL: 'https://social-network.samuraijs.com/api/1.0/',
-                                            headers: {
-                                                "API-KEY": "3128443d-f108-4e76-956c-6d97ad90fd1e"
-                                            }
-                                        })
-                                            .then(response => {
-                                                //debugger
-                                                if (response.data.resultCode === 0) {
+                                    if (!user.followed)
+                                    {userAPI.followUser(user.id).then(data => {
+                                                if (data.resultCode === 0) {
                                                     props.followOnClickHandler(user.followed, user.id)
                                                 }
-                                            })
-                                    }
-                                    else {
-                                        axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {
-                                            withCredentials: true,
-                                            baseURL: 'https://social-network.samuraijs.com/api/1.0/',
-                                            headers: {
-                                                "API-KEY": "3128443d-f108-4e76-956c-6d97ad90fd1e"
-                                            }
-                                        })
-                                            .then(response => {
-                                                //debugger
-                                                if (response.data.resultCode === 0) {
+                                            })}
+                                    else
+                                    {userAPI.unfollowUser(user.id).then(data => {
+                                                if (data.resultCode === 0) {
                                                     props.followOnClickHandler(user.followed, user.id)
                                                 }
-                                            })
-                                    }
-
+                                            })}
                                 }}>
                                     {user.followed ? 'Unfollow' : 'Follow'} </button>
                             </div>

@@ -10,26 +10,21 @@ import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
 import {setUserProfile, UserProfileType} from '../../redux/profile-reducer';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {profileAPI} from '../../api/api';
 
 class ProfileClassComponent extends React.Component <RootProfilePropsType> {
-
     // constructor(props:RootProfilePropsType) {
     //     super(props);
     // }
     componentDidUpdate(prevProps: Readonly<RootProfilePropsType>, prevState: Readonly<{}>, snapshot?: any) {
         console.log('ProfileClassComponent.componentDidUpdate')
-        //console.log(this.props.match.params.userId)
-        //console.log(this.props.profile)
-
-        //запрос на сервер выполнится только в том случае, если match.params.userId и profile?.userId будут разные, такое происходит, когда на страничке юзеров кликнули на аватарку, перешли на страничку профиля (с инфой о кликнутом юзере) и при этом кликаем на собственный логин(верхний правый угол), срабатывает componentDidUpdate, в роутинге меняется адрес на profile/наш_айдишник, но в пропсах еще предыдущий юзер сидит со своей айдишкой
+          //запрос на сервер выполнится только в том случае, если match.params.userId и profile?.userId будут разные, такое происходит, когда на страничке юзеров кликнули на аватарку, перешли на страничку профиля (с инфой о кликнутом юзере) и при этом кликаем на собственный логин(верхний правый угол), срабатывает componentDidUpdate, в роутинге меняется адрес на profile/наш_айдишник, но в пропсах еще предыдущий юзер сидит со своей айдишкой
         if (String(this.props.match.params.userId) !== String(this.props.profile?.userId)) {
-            axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.props.match.params.userId}`)
-                .then(response => {
-                    this.props.setUserProfile(response.data)
+            //axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.props.match.params.userId}`)
+            profileAPI.getProfile(this.props.match.params.userId).then(data => {
+                    this.props.setUserProfile(data)
                 })
         }
-        //this.render()
-
     }
 
     componentDidMount() {
@@ -37,15 +32,11 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
         console.log('ProfileClassComponent.componentDidMount')
         let userId = this.props.match.params.userId||'28386'
         //console.log(`userId: ${userId}`)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
-            .then(response => {
-                //debugger
-                this.props.setUserProfile(response.data)
-            })
+        //axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
+        profileAPI.getProfile(userId).then(data => {this.props.setUserProfile(data)})
     }
 
     render() {
-        //debugger
         return (
             <Profile profile={this.props.profile}/>
         )

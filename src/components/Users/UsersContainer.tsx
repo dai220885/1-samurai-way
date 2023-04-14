@@ -10,11 +10,8 @@ import {
 } from '../../redux/users-reducer';
 import {Dispatch} from 'redux';
 import {UsersFuncComponent} from './UsersFuncComponent';
-import axios from 'axios';
 import {Preloader} from '../common/Preloader/Preloader';
-
-//import * as axios from 'axios'; //? в видео так сказано делать
-
+import {userAPI} from '../../api/api';
 
 class UsersClassComponent extends React.Component <RootUsersPropsType> {
     // constructor(props:RootUsersPropsType) {
@@ -27,29 +24,28 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     componentDidMount() {
         console.log('UsersClassComponent.componentDidMount')
         this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {withCredentials: true})
-            .then(response => {
-                //debugger
-                //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
-                //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
-                const photoAvatarUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTBU5APFtvEEsvOwobgk6YEjQUVuQjZTbGFKRjDNQ1iQwK0mTbpHoUZFPAgEFvlaf8gY&usqp=CAU'
-                let newUsers: UserType[] = response.data.items.map((el: { id: any; photos: { small: string, large: string }; followed: any; name: any; status: any; }): UserType =>
-                    ({
-                        id: el.id,
-                        photoUrl: el.photos.small ? el.photos.small : photoAvatarUrl,
-                        followed: el.followed,
-                        fullName: el.name,
-                        status: el.status, location: {
-                            city: '',
-                            country: ''
-                        }
-                    }))
-                console.log(newUsers)
-                const usersTotalCount = response.data.totalCount;
-                this.props.setUsers(newUsers);
-                this.props.setUsersTotalCount(usersTotalCount);
-                this.props.setIsFetching(false);
-            })
+        userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
+            //debugger
+            //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
+            //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
+            const photoAvatarUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTBU5APFtvEEsvOwobgk6YEjQUVuQjZTbGFKRjDNQ1iQwK0mTbpHoUZFPAgEFvlaf8gY&usqp=CAU'
+            let newUsers: UserType[] = data.items.map((el: { id: any; photos: { small: string, large: string }; followed: any; name: any; status: any; }): UserType =>
+                ({
+                    id: el.id,
+                    photoUrl: el.photos.small ? el.photos.small : photoAvatarUrl,
+                    followed: el.followed,
+                    fullName: el.name,
+                    status: el.status, location: {
+                        city: '',
+                        country: ''
+                    }
+                }))
+            console.log(newUsers)
+            const usersTotalCount = data.totalCount;
+            this.props.setUsers(newUsers);
+            this.props.setUsersTotalCount(usersTotalCount);
+            this.props.setIsFetching(false);
+        })
     }
 
     followOnClickHandler = (followed: boolean, userId: string) => {
@@ -58,13 +54,12 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     pageNumberOnClickHandler = (currentPageNumber: number) => {
         this.props.setCurrentPage(currentPageNumber);
         this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPageNumber}&count=${this.props.pageSize}`,  {withCredentials: true})
-            .then(response => {
+        userAPI.getUsers(currentPageNumber, this.props.pageSize).then(data => {
                 //debugger
                 //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
                 //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
                 const photoAvatarUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTBU5APFtvEEsvOwobgk6YEjQUVuQjZTbGFKRjDNQ1iQwK0mTbpHoUZFPAgEFvlaf8gY&usqp=CAU'
-                let newUsers: UserType[] = response.data.items.map((el: { id: any; photos: { small: string, large: string }; followed: any; name: any; status: any; }): UserType =>
+                let newUsers: UserType[] = data.items.map((el: { id: any; photos: { small: string, large: string }; followed: any; name: any; status: any; }): UserType =>
                     ({
                         id: el.id,
                         photoUrl: el.photos.small ? el.photos.small : photoAvatarUrl,
@@ -78,7 +73,6 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                 this.props.setIsFetching(false)
                 this.props.setUsers(newUsers)
             })
-
     }
 
     render() {
@@ -89,42 +83,6 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
         }
         return (
             //все, что раньше отрисовывала UsersClassComponent, теперь вынесено в отдельную компоненту UsersFuncComponent
-            // <div>
-            //     <div>
-            //         {pagesNumbers.map(number =>
-            //             <span className={
-            //                 this.props.currentPage === number
-            //                     ? styles.selectedPage
-            //                     : ''} onClick={()=>this.pageNumberOnClickHandler(number)}>{number}
-            //             </span>
-            //         )}
-            //     </div>
-            //     {
-            //         this.props.users.map(user =>
-            //             <div key={user.id}>
-            //             <span>
-            //                 <div>
-            //                     <img src={user.photoUrl} alt="   photo   " className={styles.userPhoto}/>
-            //                 </div>
-            //                 <div>
-            //                     <button onClick={() => {
-            //                         this.followOnClickHandler(user.followed, user.id)
-            //                     }}>
-            //                         {user.followed ? 'Unfollow' : 'Follow'} </button>
-            //                 </div>
-            //             </span>
-            //                 <span>
-            //                 <span>
-            //                     <div>{`${user.fullName} - ${user.followed}`}</div><div>{user.status}</div>
-            //                 </span>
-            //                 <span>
-            //                     <div>{user.location.country}</div>
-            //                     <div>{user.location.city}</div>
-            //                 </span>
-            //             </span>
-            //             </div>)
-            //     }
-            // </div>
             <>
                 {this.props.isFetching ?
                     <Preloader/>

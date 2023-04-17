@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
 import {
-    followUser, setCurrentPage, setIsFetching,
+    followUser, setCurrentPage, toggleIsFetching,
     setUsers, setUsersTotalCount,
     unfollowUser,
     UsersReducerActionsType,
-    UserType
+    UserType, toggleIsFollowingInProgress
 } from '../../redux/users-reducer';
 import {Dispatch} from 'redux';
 import {UsersFuncComponent} from './UsersFuncComponent';
@@ -23,7 +23,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
 
     componentDidMount() {
         console.log('UsersClassComponent.componentDidMount')
-        this.props.setIsFetching(true)
+        this.props.toggleIsFetching(true)
         userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
             //debugger
             //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
@@ -44,7 +44,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
             const usersTotalCount = data.totalCount;
             this.props.setUsers(newUsers);
             this.props.setUsersTotalCount(usersTotalCount);
-            this.props.setIsFetching(false);
+            this.props.toggleIsFetching(false);
         })
     }
 
@@ -53,7 +53,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
     }
     pageNumberOnClickHandler = (currentPageNumber: number) => {
         this.props.setCurrentPage(currentPageNumber);
-        this.props.setIsFetching(true)
+        this.props.toggleIsFetching(true);
         userAPI.getUsers(currentPageNumber, this.props.pageSize).then(data => {
                 //debugger
                 //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
@@ -70,7 +70,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                             country: ''
                         }
                     }))
-                this.props.setIsFetching(false)
+                this.props.toggleIsFetching(false)
                 this.props.setUsers(newUsers)
             })
     }
@@ -91,8 +91,10 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
                     pagesNumbers={pagesNumbers}
                     users={this.props.users}
                     currentPage={this.props.currentPage}
+                    isFollowingInProgress={this.props.isFollowingInProgress}
                     pageNumberOnClickHandler={this.pageNumberOnClickHandler}
                     followOnClickHandler={this.followOnClickHandler}
+                    toggleIsFollowing={(IsFollowingInProgress, userId: string)=>{this.props.toggleIsFollowingInProgress(IsFollowingInProgress, userId)}}
                 />
             </>
         )
@@ -128,6 +130,7 @@ let mapStateToProps = (state: AppStateType) => {
         totalUsersCount: state.userPage.totalUsersCount,
         currentPage: state.userPage.currentPage,
         isFetching: state.userPage.isFetching,
+        isFollowingInProgress: state.userPage.isFollowingInProgress,
     }
 }
 //титпизируем mapDispatchToProps
@@ -154,7 +157,8 @@ let mapDispatchToProps = (dispatch: Dispatch<UsersReducerActionsType>) => {
         setUsers: (users: UserType[]) => dispatch(setUsers(users)),
         setCurrentPage: (currentPageNumber: number) => dispatch(setCurrentPage(currentPageNumber)),
         setUsersTotalCount: (usersTotalCount: number) => dispatch(setUsersTotalCount(usersTotalCount)),
-        setIsFetching: (isFetching: boolean) => dispatch(setIsFetching(isFetching)),
+        toggleIsFetching: (isFetching: boolean) => dispatch(toggleIsFetching(isFetching)),
+        toggleIsFollowingInProgress: (isFollowingInProgress: boolean, userId: string) => dispatch(toggleIsFollowingInProgress(isFollowingInProgress, userId)),
     }
 }
 //const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
@@ -166,7 +170,8 @@ const UsersContainer = connect(mapStateToProps, {
     setUsers,
     setCurrentPage,
     setUsersTotalCount,
-    setIsFetching,
+    toggleIsFetching,
+    toggleIsFollowingInProgress,
 })(UsersClassComponent);
 
 export default UsersContainer;

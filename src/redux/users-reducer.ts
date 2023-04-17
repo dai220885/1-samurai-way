@@ -3,7 +3,8 @@ const UNFOLLOW_USER = 'UNFOLLOW-USER';
 const SET_USERS = 'SET-USERS';
 const SET_CURRENT_PAGE = 'SET-CURRENT_PAGE';
 const SET_USERS_TOTAL_COUNT = 'SET-USERS-TOTAL-COUNT';
-const SET_IS_FETCHING = 'SET-IS-FETCHING';
+const TOGGLE_IS_FETCHING = 'TOGGLE-IS-FETCHING';
+const TOGGLE_IS_FOLLOWING_IN_PROGRESS = 'TOGGLE-IS-FOLLOWING-IN-PROGRESS';
 
 export type UserType = {
     id: string
@@ -22,6 +23,7 @@ export type UserPageType = {
     totalUsersCount: number,
     currentPage: number
     isFetching: boolean
+    isFollowingInProgress: string[]
 }
 
 let initialState: UserPageType = {
@@ -55,6 +57,7 @@ let initialState: UserPageType = {
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
+    isFollowingInProgress: [],
 } as UserPageType
 
 const usersReducer = (state: UserPageType = initialState, action: UsersReducerActionsType): UserPageType => {
@@ -81,8 +84,14 @@ const usersReducer = (state: UserPageType = initialState, action: UsersReducerAc
         case SET_USERS_TOTAL_COUNT: {
             return {...state, totalUsersCount: action.payload.usersTotalCount}
         }
-        case SET_IS_FETCHING: {
+        case TOGGLE_IS_FETCHING: {
             return {...state, isFetching: action.payload.isFetching}
+        }
+        case TOGGLE_IS_FOLLOWING_IN_PROGRESS: {
+            return {...state,
+                isFollowingInProgress: action.payload.isFetching?
+                    [...state.isFollowingInProgress, action.payload.userId]
+                    :state.isFollowingInProgress.filter(id => id!== action.payload.userId)}
         }
         default:
             return state;
@@ -94,14 +103,16 @@ export type UsersReducerActionsType =
     | SetUsersActionType
     | SetCurrentPageActionType
     | SetUsersTotalCountActionType
-    |SetIsFetchingActionType
+    |ToggleIsFetchingActionType
+    |ToggleIsFollowingInProgressActionType
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
 export type FollowUserActionType = ReturnType<typeof followUser>
 export type UnfollowUserActionType = ReturnType<typeof unfollowUser>
 export type SetUsersActionType = ReturnType<typeof setUsers>
 export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
 export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
-export type SetIsFetchingActionType = ReturnType<typeof setIsFetching>
+export type ToggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
+export type ToggleIsFollowingInProgressActionType = ReturnType<typeof toggleIsFollowingInProgress>
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
 export const followUser = (userId: string) => ({
@@ -109,22 +120,19 @@ export const followUser = (userId: string) => ({
         payload: {
             userId
         }
-    } as const
-)
+    } as const)
 export const unfollowUser = (userId: string) => ({
         type: UNFOLLOW_USER,
         payload: {
             userId
         }
-    } as const
-)
+    } as const)
 export const setUsers = (users: UserType[]) => ({
         type: SET_USERS,
         payload: {
             users
         }
-    } as const
-)
+    } as const)
 export const setCurrentPage = (currentPageNumber: number) => ({
         type: SET_CURRENT_PAGE,
         payload: {
@@ -137,10 +145,17 @@ export const setUsersTotalCount = (usersTotalCount: number) => ({
             usersTotalCount
         }
     } as const)
-export const setIsFetching = (isFetching: boolean) => ({
-        type: SET_IS_FETCHING,
+export const toggleIsFetching = (isFetching: boolean) => ({
+        type: TOGGLE_IS_FETCHING,
         payload: {
             isFetching
+        }
+    } as const)
+export const toggleIsFollowingInProgress = (isFetching: boolean, userId: string) => ({
+        type: TOGGLE_IS_FOLLOWING_IN_PROGRESS,
+        payload: {
+            isFetching,
+            userId
         }
     } as const)
 

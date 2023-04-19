@@ -17,7 +17,7 @@ export const TextArea = (props:TextAreaPropsType) => {
 
     }
     let onKeyPressTextAreaHandler = (e: KeyboardEvent<HTMLTextAreaElement>)=>{
-        console.log(e)
+        //console.log(e)
         if((e.code==="Enter"||e.code==="NumpadEnter") && e.ctrlKey)
           // if(e.key==="Enter"&& e.ctrlKey) //так не рабобтает
         {

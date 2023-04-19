@@ -1,4 +1,8 @@
 import {addMessageAC} from './dialogs-reducer';
+import {authAPI, userAPI} from '../api/api';
+import {toggleIsFollowingInProgress, unfollowUserSuccess, UsersReducerActionsType} from './users-reducer';
+import {ThunkAction} from 'redux-thunk';
+import {AppStateType} from './redux-store';
 
 const SET_USER_DATA = 'SET-USER-DATA'
 
@@ -43,5 +47,23 @@ export const setAuthUserDataAC = (authUserData: AuthUserDataType) => {
         }
     }as const
 }
+
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, AuthReducerActionType>
+
+export const setAuthUserDataThunkCreator =(): ThunkType => {
+    return async (dispatch, getState) => {
+        authAPI.login().then(data => {
+            if (data.resultCode === 0) {
+                dispatch(setAuthUserDataAC(data.data))
+            }
+        })
+    }
+}
+
+
+
+
+
 
 export default authReducer

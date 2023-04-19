@@ -1,3 +1,8 @@
+import {userAPI} from '../api/api';
+import {Dispatch} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+import {AppStateType} from './redux-store';
+
 const FOLLOW_USER = 'FOLLOW-USER';
 const UNFOLLOW_USER = 'UNFOLLOW-USER';
 const SET_USERS = 'SET-USERS';
@@ -35,22 +40,6 @@ let initialState: UserPageType = {
         //         fullName: 'Alexandr',
         //         status: 'i am a student',
         //         location: {city: 'Minsk', country: 'Belarus'}
-        //     },
-        //     {
-        //         id: v1(),
-        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-        //         followed: false,
-        //         fullName: 'Victor',
-        //         status: 'i like music',
-        //         location: {city: 'Vitebsk', country: 'Belarus'}
-        //     },
-        //     {
-        //         id: v1(),
-        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-        //         followed: true,
-        //         fullName: 'Sergey',
-        //         status: 'good boy',
-        //         location: {city: 'Moscow', country: 'Russia'}
         //     },
     ],
     pageSize: 15,
@@ -106,8 +95,8 @@ export type UsersReducerActionsType =
     |ToggleIsFetchingActionType
     |ToggleIsFollowingInProgressActionType
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
-export type FollowUserActionType = ReturnType<typeof followUser>
-export type UnfollowUserActionType = ReturnType<typeof unfollowUser>
+export type FollowUserActionType = ReturnType<typeof followUserSuccess>
+export type UnfollowUserActionType = ReturnType<typeof unfollowUserSuccess>
 export type SetUsersActionType = ReturnType<typeof setUsers>
 export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
 export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
@@ -115,13 +104,13 @@ export type ToggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
 export type ToggleIsFollowingInProgressActionType = ReturnType<typeof toggleIsFollowingInProgress>
 
 //функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const followUser = (userId: string) => ({
+export const followUserSuccess = (userId: string) => ({
         type: FOLLOW_USER,
         payload: {
             userId
         }
     } as const)
-export const unfollowUser = (userId: string) => ({
+export const unfollowUserSuccess = (userId: string) => ({
         type: UNFOLLOW_USER,
         payload: {
             userId
@@ -159,4 +148,62 @@ export const toggleIsFollowingInProgress = (isFetching: boolean, userId: string)
         }
     } as const)
 
+//типизация санки
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UsersReducerActionsType>
+
+//export type GetUsersThunkCreatorType = ReturnType<typeof getUsersThunkCreator>
+//можно было просто назвать санкКриэйтор "getUsers", чтобы в коннект потом передать короткое название
+export const getUsersThunkCreator =(currentPage: number, pageSize: number): ThunkType => {
+    return async (dispatch, getState) => {
+        dispatch(setCurrentPage(currentPage))
+        dispatch(toggleIsFetching(true))
+        userAPI.getUsers(currentPage, pageSize).then(data => {
+            //debugger
+            //в newUsers положили массив новых пользователей, которых получили, промапив массив response.data.items и преобразовав в тип UserType (el в мапе ругался на типизацию (Parameter 'el' implicitly has an 'any' type), пришлось указать его тип). затем полученный массив newUsers передали в колбэк из пропсов (props.setUsers())
+            //можно было просто изменить UserType под тот формат данных о пользователе, который приходит с сервера
+            const photoAvatarUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTBU5APFtvEEsvOwobgk6YEjQUVuQjZTbGFKRjDNQ1iQwK0mTbpHoUZFPAgEFvlaf8gY&usqp=CAU'
+            let newUsers: UserType[] = data.items.map((el: { id: any; photos: { small: string, large: string }; followed: any; name: any; status: any; }): UserType =>
+                ({
+                    id: el.id,
+                    photoUrl: el.photos.small ? el.photos.small : photoAvatarUrl,
+                    followed: el.followed,
+                    fullName: el.name,
+                    status: el.status, location: {
+                        city: '',
+                        country: ''
+                    }
+                }))
+            //console.log(newUsers)
+            dispatch(toggleIsFetching(false));
+            const usersTotalCount = data.totalCount;
+            dispatch(setUsers(newUsers));
+            dispatch(setUsersTotalCount(usersTotalCount));
+
+        })
+    }
+}
+
+export const followUserThunkCreator =(userId: string ): ThunkType => {
+    return async (dispatch, getState) => {
+        dispatch(toggleIsFollowingInProgress(true, userId))
+        userAPI.followUser(userId).then(data => {
+            if (data.resultCode === 0) {
+                dispatch(followUserSuccess(userId))
+            }
+            dispatch(toggleIsFollowingInProgress(false, userId))
+        })
+    }
+}
+
+export const unfollowUserThunkCreator =(userId: string ): ThunkType => {
+    return async (dispatch, getState) => {
+        dispatch(toggleIsFollowingInProgress(true, userId))
+        userAPI.unfollowUser(userId).then(data => {
+            if (data.resultCode === 0) {
+                dispatch(unfollowUserSuccess(userId))
+            }
+            dispatch(toggleIsFollowingInProgress(false, userId))
+        })
+    }
+}
 export default usersReducer;

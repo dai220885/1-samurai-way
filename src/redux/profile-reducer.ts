@@ -1,4 +1,8 @@
 import {v1} from 'uuid';
+import {ThunkAction} from 'redux-thunk';
+import {AppStateType} from './redux-store';
+import {authAPI, profileAPI} from '../api/api';
+import {AuthReducerActionType, setAuthUserDataAC} from './auth-reducer';
 
 const ADD_POST = 'ADD-POST';
 const REMOVE_POST = 'REMOVE-POST';
@@ -83,14 +87,25 @@ export type ProfileReducerActionType =
     |SetUserProfileActionType
 
 //автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
-export type AddPostActionType =  ReturnType<typeof addPost>//можно делать так, чтобы не дублировать
+export type AddPostActionType =  ReturnType<typeof addNewPost>//можно делать так, чтобы не дублировать
 export type RemovePostActionType = ReturnType<typeof removePost> //можно делать так, чтобы не дублировать
 export type SetNewPostTextActionType = ReturnType<typeof setNewPostText>//можно делать так, чтобы не дублировать
 export type SetUserProfileActionType = ReturnType<typeof setUserProfile>//м
 
 //функции (ActionCreator-ы), которые будут создавать объекты action
-export const addPost =()=> ({type: ADD_POST}) as const
+export const addNewPost =()=> ({type: ADD_POST}) as const
 export const removePost = (postForRemoveId: string) => ({type: REMOVE_POST, payload: {postForRemoveId}}) as const
 export const setNewPostText = (newPostText:string) => ({type: SET_NEW_POST_TEXT, payload: {newPostText}}) as const
-export const setUserProfile = (profile: any) => ({type: SET_USER_PROFILE, payload: {profile}}) as const //fix any type !!!!!!!!!!!!!!!!!!!!!!!!
+export const setUserProfile = (profile: UserProfileType) => ({type: SET_USER_PROFILE, payload: {profile}}) as const //?????fix any type !!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ProfileReducerActionType>
+
+export const setUserProfileThunkCreator =(userId: string): ThunkType => {
+    return async (dispatch, getState) => {
+        profileAPI.getProfile(userId).then(data => dispatch(setUserProfile(data)))
+    }
+}
+
 export default profileReducer;

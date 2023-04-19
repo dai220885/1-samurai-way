@@ -4,9 +4,7 @@ import Post from './Post/Post';
 import {Button} from '../../Button/Button';
 import {TextArea} from '../../TextArea/TextArea';
 import {
-    addPost, PostType,
-    removePost,
-    setNewPostText
+    PostType,
 } from '../../../redux/profile-reducer';
 //import {ActionsType} from '../../../redux/store';
 

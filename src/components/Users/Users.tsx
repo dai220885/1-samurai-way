@@ -6,8 +6,18 @@ import axios from 'axios';
 import {RootUsersPropsType} from './UsersContainer';
 //import * as axios from 'axios'; //? в видео так сказано делать
 
-
-export const Users = (props: RootUsersPropsType) => {
+type UsersPropsType = {
+    users: UserType[]
+    pageSize: number,
+    totalUsersCount: number,
+    currentPage: number
+    followUser: (userId: string) => void
+    unfollowUser: (userId: string) => void
+    setUsers: (users: UserType[]) => void
+    setCurrentPage: (currentPageNumber: number) => void
+    setUsersTotalCount: (usersTotalCount: number) => void;
+}
+export const Users = (props: UsersPropsType) => {
     const getUsers = () => {
         if (props.users.length === 0){
             axios.get("https://social-network.samuraijs.com/api/1.0/users")

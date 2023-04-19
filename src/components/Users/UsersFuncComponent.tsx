@@ -10,8 +10,10 @@ type UserFuncComponentPropsType = {
     currentPage: number,
     isFollowingInProgress: string[],
     pageNumberOnClickHandler: (currentPageNumber: number) => void,
-    followOnClickHandler: (followed: boolean, userId: string) => void,
-    toggleIsFollowing: (isFollowingInProgress: boolean, userId: string) => void,
+    //followOnClickHandler: (followed: boolean, userId: string) => void,
+    followOnClickHandler: (userId: string) => void,
+    unfollowOnClickHandler: (userId: string) => void,
+    //toggleIsFollowing: (isFollowingInProgress: boolean, userId: string) => void,
 }
 //компонента просто отрисовывает юзеров, никаких запросов не делает, все необходимое получает через пропсы от UsersClassComponent
 export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
@@ -43,21 +45,9 @@ export const UsersFuncComponent = (props: UserFuncComponentPropsType) => {
                             <div>
                                 <button onClick={() => {
                                     if (!user.followed) {
-                                        props.toggleIsFollowing(true, user.id)
-                                        userAPI.followUser(user.id).then(data => {
-                                            if (data.resultCode === 0) {
-                                                props.followOnClickHandler(user.followed, user.id)
-                                            }
-                                            props.toggleIsFollowing(false, user.id)
-                                        })
+                                        props.followOnClickHandler(user.id)
                                     } else {
-                                        props.toggleIsFollowing(true, user.id)
-                                        userAPI.unfollowUser(user.id).then(data => {
-                                            if (data.resultCode === 0) {
-                                                props.followOnClickHandler(user.followed, user.id)
-                                            }
-                                            props.toggleIsFollowing(false, user.id)
-                                        })
+                                        props.unfollowOnClickHandler(user.id)
                                     }
                                 }} disabled={props.isFollowingInProgress.some(id => id === user.id)}>
                                     {user.followed ? 'Unfollow' : 'Follow'} </button>

@@ -1,10 +1,11 @@
 //import {createStore} from 'redux';//для старой версии redux
-import {combineReducers, legacy_createStore as createStore} from "redux"; //для новой версии redux
+import {applyMiddleware, combineReducers, legacy_createStore as createStore} from 'redux'; //для новой версии redux
 import dialogsReducer from './dialogs-reducer';
 import profileReducer from './profile-reducer';
 import sidebarReducer from './sidebar-reducer';
 import usersReducer from './users-reducer';
 import authReducer from './auth-reducer';
+import thunkMiddleWare from 'redux-thunk' //под именем thunk в redux-thunk находится так называемый thunkMiddleWare (промежуточный слой, который помогает задиспатчить санку как обычный экшен
 
 //в функции createStore() происходит создание стейта. createStore() в качестве параметра принимает combineReducers() со всеми  рудьюсерами
 
@@ -22,7 +23,7 @@ export type AppStateType = ReturnType<typeof rootReducer>
 export type DispatchType = typeof store.dispatch //(action: ActionsType) => void
 export type AppStoreType = typeof store
 
-let store  = createStore(rootReducer);
+let store  = createStore(rootReducer, applyMiddleware(thunkMiddleWare));
 
 export default store;
 

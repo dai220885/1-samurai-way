@@ -1,6 +1,11 @@
 import React from 'react';
 import Header from './Header';
-import {AuthReducerActionType, AuthUserDataType, setAuthUserDataAC} from '../../redux/auth-reducer';
+import {
+    AuthReducerActionType,
+    AuthUserDataType,
+    setAuthUserDataAC,
+    setAuthUserDataThunkCreator
+} from '../../redux/auth-reducer';
 import {AppStateType} from '../../redux/redux-store';
 import {Dispatch} from 'redux';
 import {connect} from 'react-redux';
@@ -9,12 +14,7 @@ import {authAPI} from '../../api/api';
 class HeaderClassComponent extends React.Component <RootHeaderPropsType> {
     componentDidMount() {
         //axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`, {withCredentials: true})
-
-        authAPI.login().then(data => {
-                if (data.resultCode === 0) {
-                    this.props.setAuthUserData(data.data)
-                }
-            })
+        this.props.setAuthUserData()
     }
 
     render() {
@@ -24,9 +24,14 @@ class HeaderClassComponent extends React.Component <RootHeaderPropsType> {
     }
 }
 
-export type RootHeaderPropsType = MapStateToPropsType & MapDispatchToPropsType
+export type RootHeaderPropsType = MapStateToPropsType & MapDispatchToPropsType & OwnHeaderPropsType
 
+type OwnHeaderPropsType = {}
 type MapStateToPropsType = ReturnType<typeof mapStateToProps>
+type MapDispatchToPropsType ={
+    setAuthUserData: () => void,
+}
+
 let mapStateToProps = (state: AppStateType) => {
     return {
         id: state.auth.id,
@@ -36,8 +41,7 @@ let mapStateToProps = (state: AppStateType) => {
         //isFetching: state.auth.isFetching,
     }
 }
-
-type MapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>
+//type MapDispatchToPropsType = ReturnType<typeof mapDispatchToProps>
 let mapDispatchToProps = (dispatch: Dispatch<AuthReducerActionType>) => {
     return {
         setAuthUserData: (authUserData: AuthUserDataType) => {
@@ -46,7 +50,7 @@ let mapDispatchToProps = (dispatch: Dispatch<AuthReducerActionType>) => {
     }
 }
 
-const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(HeaderClassComponent);
+const HeaderContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnHeaderPropsType, AppStateType>(mapStateToProps, {setAuthUserData:setAuthUserDataThunkCreator})(HeaderClassComponent);
 
 
 export default HeaderContainer;

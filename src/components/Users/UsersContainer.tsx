@@ -40,6 +40,7 @@ class UsersClassComponent extends React.Component <RootUsersPropsType> {
 
     pageNumberOnClickHandler = (currentPageNumber: number) => {
         //this.props.setCurrentPage(currentPageNumber);
+        //диспатчим вызов санккриэйтора
         this.props.getUsers(currentPageNumber, this.props.pageSize)
     }
 

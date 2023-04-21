@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Profile from './Profile';
 import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
 import {setUserProfileThunkCreator} from '../../redux/profile-reducer';
-import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
 
 class ProfileClassComponent extends React.Component <RootProfilePropsType> {
     // constructor(props:RootProfilePropsType) {
@@ -30,6 +30,7 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
     }
 
     render() {
+        if (!this.props.isAuth) return <Redirect to={'/login'}/>
         return (
             <Profile profile={this.props.profile}/>
         )
@@ -50,6 +51,7 @@ type OwnProfileContainerPropsType = {
 type RootProfilePropsType = RouteComponentProps<PathParamsType> & ProfileConnectPropsType
 let mapStateToProps = (state: AppStateType) => ({
     profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth,
 })
 
 const ProfileWithRouter = withRouter(ProfileClassComponent)

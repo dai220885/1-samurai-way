@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-    addMessageAC, MessagePageType,
+    addMessageAC,
     removeMessageAC,
     setNewMessageTextAC
 } from '../../redux/dialogs-reducer';
 import Dialogs from './Dialogs';
-import StoreContext from '../../StoreContext';
 import {connect} from 'react-redux';
-import MyPostsContainer from '../Profile/MyPosts/MyPostsContainer';
-import {AppStateType, DispatchType} from '../../redux/redux-store';
+import {AppStateType} from '../../redux/redux-store';
 import { Dispatch } from 'redux';
 
 export type DialogsContainerPropsType = {
@@ -27,36 +25,24 @@ export type DialogsContainerPropsType = {
 //'DialogsContainer' в пропсах принимает весь 'store', после чего компоненту 'Dialogs' передает только нужные ей части 'store'
 
 //Контейнерные компоненты не получают стор в пропсах, а вызывают соответствующие презентационные компоненты, обернутые в <StoreContext.Consumer>, в которую приходит стор, после чего к нему и происходит обращение и передача нужных параметров в презентационную компоненту
-function DialogsContainerOLD() {
-    return (
-        <StoreContext.Consumer>
-            {(store) => {
-                const state = store.getState() //просто выносим содержимое свойства '_state' из 'store' в переменную state
-                const removeMessage = (messageForRemoveID: string) => store.dispatch(removeMessageAC(messageForRemoveID))
-                const addNewMessage = () => store.dispatch(addMessageAC());
-                const setNewMessageText = (newPostText: string) => {
-                    store.dispatch(setNewMessageTextAC(newPostText))
-                }
-                return <Dialogs
-                    dialogs={state.messagesPage.dialogs}
-                    messages={state.messagesPage.messages}
-                    newMessageText={state.messagesPage.newMessageText}
-                    addNewMessage={addNewMessage}
-                    removeMessage={removeMessage}
-                    setNewMessageText={setNewMessageText}
-                />}}
-        </StoreContext.Consumer>
-    )
-}
 
-let mapStateToProps = (state: AppStateType): MessagePageType =>{
+export type RootDialogsPropsType = MapStateToPropsType & MapDispatchToPropsType & OwnDialogsPropsType
+type OwnDialogsPropsType = {}
+type MapStateToPropsType = ReturnType<typeof mapStateToProps>
+let mapStateToProps = (state: AppStateType) =>{
     return {
         dialogs: state.messagesPage.dialogs,
         messages: state.messagesPage.messages,
-        newMessageText: state.messagesPage.newMessageText
+        newMessageText: state.messagesPage.newMessageText,
+        isAuth: state.auth.isAuth
     }
 }
 //типизировали dispatch импортировав { Dispatch } from 'redux', DispatchType из 'redux-store' тоже работает;
+type MapDispatchToPropsType = {
+    addNewMessage: ()=>void,
+    removeMessage: (messageForRemoveID: string)=> void,
+    setNewMessageText: (newPostText: string) => void
+}
 let mapDispatchToProps = (dispatch: Dispatch) =>{
     return {
         addNewMessage: ()=>{dispatch(addMessageAC())},
@@ -65,8 +51,14 @@ let mapDispatchToProps = (dispatch: Dispatch) =>{
     }
 }
 
+
 //контейнерная компонента с использованием react-redux:
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
+//можно в редьюсере убрать из экшенкриэйтеров буквы AC, чтобы названия совпадали с названиями свойств и укоротить объект, переданный в качестве mapDispatchToProps в функцию connect
+const DialogsContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnDialogsPropsType, AppStateType>
+(mapStateToProps, {
+    addNewMessage: addMessageAC,
+    removeMessage: removeMessageAC,
+    setNewMessageText: setNewMessageTextAC})(Dialogs); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
 
 export default DialogsContainer;
 

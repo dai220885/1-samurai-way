@@ -7,7 +7,7 @@ import {
 import Dialogs from './Dialogs';
 import {connect} from 'react-redux';
 import {AppStateType} from '../../redux/redux-store';
-import { Dispatch } from 'redux';
+import {compose, Dispatch} from 'redux';
 import {withAuthRedirect} from '../../hoc/AuthRedirect';
 
 export type DialogsContainerPropsType = {
@@ -52,16 +52,15 @@ let mapDispatchToProps = (dispatch: Dispatch) =>{
     }
 }
 
-
-let AuthRedirectComponent = withAuthRedirect(Dialogs)
-
-//контейнерная компонента с использованием react-redux:
-//можно в редьюсере убрать из экшенкриэйтеров буквы AC, чтобы названия совпадали с названиями свойств и укоротить объект, переданный в качестве mapDispatchToProps в функцию connect
-const DialogsContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnDialogsPropsType, AppStateType>
-(mapStateToProps, {
-    addNewMessage: addMessageAC,
-    removeMessage: removeMessageAC,
-    setNewMessageText: setNewMessageTextAC})(AuthRedirectComponent); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
+const DialogsContainer = compose  <React.ComponentType> (
+    connect<MapStateToPropsType, MapDispatchToPropsType, OwnDialogsPropsType, AppStateType>
+    (mapStateToProps, {
+        addNewMessage: addMessageAC,
+        removeMessage: removeMessageAC,
+        setNewMessageText: setNewMessageTextAC}
+    ),
+    withAuthRedirect
+)(Dialogs)
 
 export default DialogsContainer;
 

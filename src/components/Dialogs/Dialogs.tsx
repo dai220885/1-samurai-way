@@ -6,7 +6,6 @@ import {Button} from "../Button/Button";
 import {TextArea} from '../TextArea/TextArea';
 import {DialogType, MessageType} from '../../redux/dialogs-reducer';
 import {RootDialogsPropsType} from './DialogsContainer';
-import {Redirect} from 'react-router-dom';
 
 //вместо этого типа используем RootDialogsPropsType, описанный в DialogsContainer
 export type DialogsPropsType = {
@@ -23,7 +22,7 @@ export type DialogsPropsType = {
 
 function Dialogs (props: RootDialogsPropsType) {
 
-    if (!props.isAuth) return <Redirect to={'/login'}/>
+    //if (!props.isAuth) return <Redirect to={'/login'}/>
     let dialogsElements = props.dialogs.map((dialog) => {
         return <DialogItem key = {dialog.id} id={dialog.id} name={dialog.name}/>
         }

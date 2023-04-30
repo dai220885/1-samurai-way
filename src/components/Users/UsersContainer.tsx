@@ -8,7 +8,7 @@ import {
     UsersReducerActionsType,
     UserType, toggleIsFollowingInProgress, getUsersThunkCreator, followUserThunkCreator, unfollowUserThunkCreator
 } from '../../redux/users-reducer';
-import {Dispatch} from 'redux';
+import {compose, Dispatch} from 'redux';
 import {UsersFuncComponent} from './UsersFuncComponent';
 import {Preloader} from '../common/Preloader/Preloader';
 import {userAPI} from '../../api/api';
@@ -152,17 +152,13 @@ let mapDispatchToProps = (dispatch: Dispatch<UsersReducerActionsType>) => {
  //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
 //вместо mapDispatchToProps в connect передали объект со свойствами, идентичными названиям экшенкриэйтеров и санккриэйтеров
 //для типизации коннекта, у него в угловых скобках указываем следующие типы:  <TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState>
-const UsersContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnUsersContainerPropsType, AppStateType>(mapStateToProps, {
-    //followUser: followUserSuccess,
-    //unfollowUser: unfollowUserSuccess,
-    //setUsers,
-    //setCurrentPage,
-    //setUsersTotalCount,
-    //toggleIsFetching,
-    //toggleIsFollowingInProgress,
+const UsersContainer = compose <React.ComponentType>(
+    //withAuthRedirect,
+    connect<MapStateToPropsType, MapDispatchToPropsType, OwnUsersContainerPropsType, AppStateType>(mapStateToProps, {
     getUsers: getUsersThunkCreator,
     follow: followUserThunkCreator,
     unfollow: unfollowUserThunkCreator,
-})(UsersClassComponent);
+}),
+)(UsersClassComponent);
 
 export default UsersContainer;

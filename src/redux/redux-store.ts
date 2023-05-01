@@ -6,6 +6,7 @@ import sidebarReducer from './sidebar-reducer';
 import usersReducer from './users-reducer';
 import authReducer from './auth-reducer';
 import thunkMiddleWare from 'redux-thunk' //под именем thunk в redux-thunk находится так называемый thunkMiddleWare (промежуточный слой, который помогает задиспатчить санку как обычный экшен
+import {reducer as formReducer} from 'redux-form'
 
 //в функции createStore() происходит создание стейта. createStore() в качестве параметра принимает combineReducers() со всеми  рудьюсерами
 
@@ -15,6 +16,7 @@ let rootReducer = combineReducers({
     sidebar: sidebarReducer,
     userPage: usersReducer,
     auth: authReducer,
+    form: formReducer, //ветка, с которой будет работать редакс форм
 }); //воспринимаем объект не как связку редьсеров, а как стейт со свойствами messagesPage, profilePage и т.д., в которых находятся объекты, возвращаемые соответствующими редьюсерами
 //
 // в combineReducers передали объект вида: {profileReducer: profileReducer,dialogsReducer: dialogsReducer,sidebarReducer: sidebarReducer,  userPage: usersReducer} (когда в объекте название свойства и его значение идентичны, можно писать более коротко, просто название свойства (будет подразумеваться, что значение будет такое же)

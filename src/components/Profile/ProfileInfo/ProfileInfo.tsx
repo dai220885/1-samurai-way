@@ -8,6 +8,8 @@ import ProfileStatus from './ProfileIstatus';
 
 type ProfileInfoPropsType = {
     profile: UserProfileType | undefined
+    status: string
+    updateStatus: (newStatus: string) => void
 }
 
 function ProfileInfo(props: ProfileInfoPropsType) {
@@ -30,7 +32,7 @@ function ProfileInfo(props: ProfileInfoPropsType) {
                         {  `userID: ${props.profile.userId}`}
                     </div>
                     <img src={props.profile.photos.large} alt="   photo   " className={classes.profilePhoto}/>
-                    <ProfileStatus status={'some status'}/>
+                    <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
                 </div>
 
 

@@ -24,6 +24,10 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
         //тестовый вариант, чтобы при отображении чужого профилотображать мой профиль п
         //let userId = this.props.match.params.userId
         let userId = this.props.match.params.userId || '28386'
+        // if (prevProps.match.params.userId !== userId || undefined ){
+        //     this.props.getUserProfile(userId)
+        //     this.props.getUserStatus(userId)
+        // }
         if (userId) {
             if (String(userId) !== String(this.props.profile?.userId)) {
                 this.props.getUserProfile(userId)

@@ -1,9 +1,4 @@
 import React, {ChangeEvent} from 'react';
-import classes from './ProfileInfo.module.css'
-import mainLogo from './../../../images/main.png'
-import {UserProfileType} from '../../../redux/profile-reducer';
-import {Preloader} from '../../common/Preloader/Preloader';
-//import styles from '../../Users/Users.module.css';
 
 type ProfileStatusPropsType = {
     status: string
@@ -11,9 +6,22 @@ type ProfileStatusPropsType = {
     //profile: UserProfileType | undefined
 }
 
+type ProfileStatusLocalStateType = {
+    editMode: boolean
+    status: string
+}
+
 class ProfileStatus extends React.Component <ProfileStatusPropsType> {
 
-    state = {
+    componentDidUpdate(prevProps: Readonly<ProfileStatusPropsType>, prevState: Readonly<ProfileStatusLocalStateType>, snapshot?: any) {
+        if(prevProps.status !== this.props.status) {
+            //debugger
+            this.setState(
+                {status: this.props.status}
+            )
+        }
+    }
+    state: ProfileStatusLocalStateType = {
         editMode: false,
         status: this.props.status
     }

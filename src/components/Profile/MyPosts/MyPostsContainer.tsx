@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {
-    addNewPost,
-    removePost,
-    setNewPostText
+    addNewPostAC,
+    removePostAC,
+    //setNewPostText
 } from '../../../redux/profile-reducer';
 import MyPosts from './MyPosts';
 import StoreContext from '../../../StoreContext';
 import {connect} from 'react-redux';
-import {addMessageAC, removeMessageAC, setNewMessageTextAC} from '../../../redux/dialogs-reducer';
+import {addMessageAC, removeMessageAC} from '../../../redux/dialogs-reducer';
 import Dialogs from '../../Dialogs/Dialogs';
 import {AppStateType, DispatchType} from '../../../redux/redux-store';
 import { Dispatch } from 'redux';
@@ -20,16 +20,16 @@ type MyPostsContainerPropsType = {
 
 type MapStateToPropsType = ReturnType<typeof mapStateToProps>
 type mapDispatchToPropsType = {
-    addNewPost: () => void,
+    addNewPost: (newPost: string) => void,
     removePost: (postForRemoveID: string) => void,
-    setNewPostText: (newPostText: string) => void,
+    //setNewPostText: (newPostText: string) => void,
 }
 type OwnMyPostsContainerPropsType = {}
 
 let mapStateToProps = (state: AppStateType) =>{
     return {
         posts: state.profilePage.posts,
-        newPostText: state.profilePage.newPostText,
+        //newPostText: state.profilePage.newPostText,
         //profile: state.profilePage.profile //MyPostsContainer не использует это свойство. можно убрать,
     }
 }
@@ -43,6 +43,9 @@ let mapStateToProps = (state: AppStateType) =>{
 // }
 
 //контейнерная компонента с использованием react-redux:
-const MyPostsContainer = connect<MapStateToPropsType, mapDispatchToPropsType, OwnMyPostsContainerPropsType, AppStateType>(mapStateToProps, {addNewPost, removePost, setNewPostText})(MyPosts); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
+const MyPostsContainer = connect<MapStateToPropsType, mapDispatchToPropsType, OwnMyPostsContainerPropsType, AppStateType>(mapStateToProps, {
+    addNewPost: addNewPostAC,
+    removePost: removePostAC,
+    })(MyPosts); //когда две пары круглых скобок, то значит, что после первого вызова функция что-то вернет, а вторыми скобками мы вызываем, то, что вернется после первого вызова)))
 
 export default MyPostsContainer;

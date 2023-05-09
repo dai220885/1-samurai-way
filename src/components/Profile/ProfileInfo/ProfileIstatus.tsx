@@ -14,13 +14,14 @@ type ProfileStatusLocalStateType = {
 class ProfileStatus extends React.Component <ProfileStatusPropsType> {
 
     componentDidUpdate(prevProps: Readonly<ProfileStatusPropsType>, prevState: Readonly<ProfileStatusLocalStateType>, snapshot?: any) {
-        if(prevProps.status !== this.props.status) {
+        if (prevProps.status !== this.props.status) {
             //debugger
             this.setState(
                 {status: this.props.status}
             )
         }
     }
+
     state: ProfileStatusLocalStateType = {
         editMode: false,
         status: this.props.status
@@ -44,6 +45,7 @@ class ProfileStatus extends React.Component <ProfileStatusPropsType> {
             {status: e.currentTarget.value}
         )
     }
+
     render() {
         return (
             <>

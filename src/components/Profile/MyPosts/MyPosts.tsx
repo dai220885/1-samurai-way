@@ -7,6 +7,8 @@ import {
     PostType,
 } from '../../../redux/profile-reducer';
 import {Field, InjectedFormProps, reduxForm} from 'redux-form';
+import {maxLengthCreator, requiredField} from '../../../utils/validators/validators';
+import {TextAreaWithValidate} from '../../common/FormsControls/FormsControls';
 //import {ActionsType} from '../../../redux/store';
 
 type MyPostsPropsType = {
@@ -75,11 +77,17 @@ type AddPostFormDataType = {
     newPost: string
 }
 
+const maxLength15 = maxLengthCreator(15)
+
 const AddPostForm: React.FC<InjectedFormProps<AddPostFormDataType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder='add new post' name = 'newPost' component = 'textarea'/>
+                <Field placeholder='add new post'
+                       name = 'newPost'
+                       component ={TextAreaWithValidate}
+                       validate = {[requiredField, maxLength15]}
+                />
             </div>
             <div><button>Add post</button></div>
         </form>

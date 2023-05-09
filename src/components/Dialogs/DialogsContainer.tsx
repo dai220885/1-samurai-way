@@ -2,7 +2,7 @@ import React from 'react';
 import {
     addMessageAC,
     removeMessageAC,
-    setNewMessageTextAC
+    //setNewMessageTextAC
 } from '../../redux/dialogs-reducer';
 import Dialogs from './Dialogs';
 import {connect} from 'react-redux';
@@ -34,21 +34,21 @@ let mapStateToProps = (state: AppStateType) =>{
     return {
         dialogs: state.messagesPage.dialogs,
         messages: state.messagesPage.messages,
-        newMessageText: state.messagesPage.newMessageText,
+        //newMessageText: state.messagesPage.newMessageText,
         //isAuth: state.auth.isAuth
     }
 }
 //типизировали dispatch импортировав { Dispatch } from 'redux', DispatchType из 'redux-store' тоже работает;
 type MapDispatchToPropsType = {
-    addNewMessage: ()=>void,
+    addNewMessage: (newMessage: string)=>void,
     removeMessage: (messageForRemoveID: string)=> void,
-    setNewMessageText: (newPostText: string) => void
+    //setNewMessageText: (newPostText: string) => void
 }
 let mapDispatchToProps = (dispatch: Dispatch) =>{
     return {
-        addNewMessage: ()=>{dispatch(addMessageAC())},
+        addNewMessage: (newMessage: string)=>{dispatch(addMessageAC(newMessage))},
         removeMessage: (messageForRemoveID: string)=>{dispatch(removeMessageAC(messageForRemoveID))},
-        setNewMessageText: (newPostText: string) => {dispatch(setNewMessageTextAC(newPostText))}
+        //setNewMessageText: (newPostText: string) => {dispatch(setNewMessageTextAC(newPostText))}
     }
 }
 
@@ -57,7 +57,8 @@ const DialogsContainer = compose  <React.ComponentType> (
     (mapStateToProps, {
         addNewMessage: addMessageAC,
         removeMessage: removeMessageAC,
-        setNewMessageText: setNewMessageTextAC}
+        //setNewMessageText: setNewMessageTextAC
+    }
     ),
     withAuthRedirect
 )(Dialogs)

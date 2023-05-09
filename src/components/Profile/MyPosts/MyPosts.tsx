@@ -6,15 +6,16 @@ import {TextArea} from '../../TextArea/TextArea';
 import {
     PostType,
 } from '../../../redux/profile-reducer';
+import {Field, InjectedFormProps, reduxForm} from 'redux-form';
 //import {ActionsType} from '../../../redux/store';
 
 type MyPostsPropsType = {
     posts: PostType[]
-    newPostText: string
+    // newPostText: string
     //dispatch: (action: ActionsType) => void
-    addNewPost: () => void
+    addNewPost: (newPost: string) => void
     removePost: (id: string) => void
-    setNewPostText: (newPostText: string)=> void
+    //setNewPostText: (newPostText: string) => void
     // inputTitle: string
     // inputSetTitle: (inputTitle: string) => void;
 }
@@ -34,44 +35,58 @@ function MyPosts(props: MyPostsPropsType) {
             </div>
         )
     })
-    const addNewPostHandler = () => {
+    const addNewPostHandler = (formData: AddPostFormDataType) => {
         //props.addNewPost();
         //let action = {type: 'ADD-POST'};//объект, который передаем методу dispatch
         //props.dispatch(addPostActionCreator());
-        props.addNewPost();
+        props.addNewPost(formData.newPost);
 
         //setTitle('')
     }
-    const setNewPostTextHandler =(newPostText: string) =>{
-        //debugger
-        props.setNewPostText(newPostText)
-    }
+    // const setNewPostTextHandler = (newPostText: string) => {
+    //     //     //debugger
+    //     //     props.setNewPostText(newPostText)
+    //     // }
     return (
         <div className={classes.postBlock}>
             <h3>My posts</h3>
-            <div>
-                <div>
-                    <TextArea
-                        placeholder={'add new post'}
-                        value={props.newPostText}
-                        onChange={setNewPostTextHandler}
-                        //dispatch={props.dispatch}
-                        onKeyPress={addNewPostHandler}
-                    />
-                </div>
-                <div>
-                    {/*<button onClick={() => {props.addNewPost("new Posssssttt")}}>Add post</button>*/}
-                    <Button
-                        name={'Add New Post'}
-                        onClick={addNewPostHandler}
-                    />
-                </div>
-            </div>
+            {/*<div>*/}
+            {/*    <div>*/}
+            {/*        <TextArea placeholder={'add new post'}*/}
+            {/*                  value={props.newPostText}*/}
+            {/*                  onChange={setNewPostTextHandler}*/}
+            {/*                  onKeyPress={addNewPostHandler}/>*/}
+            {/*    </div>*/}
+            {/*    <div>*/}
+            {/*        <Button name={'Add New Post'} onClick={addNewPostHandler}/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+
+            <AddPostReduxForm onSubmit = {addNewPostHandler}/>
             <div className={classes.posts}>
                 {postsElements}
             </div>
         </div>
     )
 }
+
+
+type AddPostFormDataType = {
+    newPost: string
+}
+
+const AddPostForm: React.FC<InjectedFormProps<AddPostFormDataType>> = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field placeholder='add new post' name = 'newPost' component = 'textarea'/>
+            </div>
+            <div><button>Add post</button></div>
+        </form>
+    )
+}
+
+const AddPostReduxForm = reduxForm<AddPostFormDataType>({form: 'profileAddPostForm'})(AddPostForm)
+
 
 export default MyPosts;

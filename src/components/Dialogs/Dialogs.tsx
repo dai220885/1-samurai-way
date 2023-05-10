@@ -7,6 +7,9 @@ import {TextArea} from '../TextArea/TextArea';
 import {DialogType, MessageType} from '../../redux/dialogs-reducer';
 import {RootDialogsPropsType} from './DialogsContainer';
 import {Field, InjectedFormProps, reduxForm} from 'redux-form';
+import {TextAreaWithValidate} from '../common/FormsControls/FormsControls';
+import {maxLengthCreator, requiredField} from '../../utils/validators/validators';
+import {AddMessageFormDataType, AddMessageReduxForm} from './AddMessageForm/AddMessageForm';
 
 //вместо этого типа используем RootDialogsPropsType, описанный в DialogsContainer
 export type DialogsPropsType = {
@@ -68,21 +71,5 @@ function Dialogs(props: RootDialogsPropsType) {
     )
 }
 
-type AddMessageFormDataType = {
-    newMessage: string
-}
-
-const AddMessageForm: React.FC<InjectedFormProps<AddMessageFormDataType>> = (props) => {
-    return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field placeholder='add new message' name = 'newMessage' component = 'textarea'/>
-            </div>
-            <div><button>Send message</button></div>
-        </form>
-    )
-}
-
-const AddMessageReduxForm = reduxForm<AddMessageFormDataType>({form: 'dialogAddMessageForm'})(AddMessageForm)
 export default Dialogs;
 

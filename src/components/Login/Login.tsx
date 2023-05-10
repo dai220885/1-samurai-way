@@ -1,5 +1,7 @@
 import React from 'react';
 import {Field, InjectedFormProps, reduxForm} from 'redux-form';
+import {InputWithValidate} from '../common/FormsControls/FormsControls';
+import {maxLengthCreator, requiredField} from '../../utils/validators/validators';
 
 type LoginPropsType = {}
 type FormDataType = {
@@ -10,7 +12,7 @@ type FormDataType = {
 
 export const Login = (props: LoginPropsType) => {
     const onSubmit = (formData: FormDataType) => {
-        //console.log(formData)
+        console.log(formData)
     }
     return (
         <div>
@@ -21,19 +23,30 @@ export const Login = (props: LoginPropsType) => {
     );
 };
 
-
+//const maxLength15 = maxLengthCreator(15)
 const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
     return (
         //handleSubmit - свойство из 'redux-form', которое появляется в пропсах, когда компоненту закидываем в reduxForm
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={'Login'} name = {'login'} component={'input'}/>
+                <Field placeholder={'Login'}
+                       name = {'login'}
+                       component={InputWithValidate}
+                       validate = {[requiredField]}
+                />
             </div>
             <div>
-                <Field placeholder={'Password'} name = {'password'} component={'input'}/>
+                <Field placeholder={'Password'}
+                       name = {'password'}
+                       component={InputWithValidate}
+                       validate = {[requiredField]}
+                />
             </div>
             <div>
-                <Field component={'input'} name = {'rememberMe'} type={'checkbox'}/> Remember me
+                <Field component={InputWithValidate}
+                       name = {'rememberMe'}
+                       type={'checkbox'}
+                /> Remember me
             </div>
             <div>
                 <button>Login</button>

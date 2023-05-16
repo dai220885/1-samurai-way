@@ -8,12 +8,14 @@ const SET_USER_DATA = 'SET-USER-DATA'
 
 export type AuthReducerActionType = SetUserDataActionType
 
-export type AuthUserDataType = {
+type AuthUserDataFromServerType = {
     id: number
     email: string
     login: string
+}
+
+export type AuthUserDataType = AuthUserDataFromServerType & {
     isAuth: boolean
-    //isFetching: boolean
 }
 
 let initialState : AuthUserDataType = {
@@ -31,7 +33,7 @@ const authReducer = (state: AuthUserDataType = initialState, action: AuthReducer
             return {
                 ...state,
                 ...action.payload.authUserData, //данные (свойства) из action.payload.data перезапишут данные (свойства), которые были в state
-                isAuth: true,
+                //isAuth: true,
             }
         }
         default: return state;
@@ -51,18 +53,37 @@ export const setAuthUserDataAC = (authUserData: AuthUserDataType) => {
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, AuthReducerActionType>
 
-export const setAuthUserDataThunkCreator =(): ThunkType => {
+export const setAuthUserDataTC =(): ThunkType => {
     return async (dispatch, getState) => {
-        authAPI.login().then(data => {
+        authAPI.me().then(data => {
             if (data.resultCode === 0) {
-                dispatch(setAuthUserDataAC(data.data))
+                //в setAuthUserDataAC передаем деструктуризированный оъект, который пришел с сервера (типа AuthUserDataFromServerType), и добавляем свойство "isAuth: true", после чего получили объект типа AuthUserDataType
+                dispatch(setAuthUserDataAC({...data.data, isAuth: true}))
             }
         })
     }
 }
 
+export const loginTC =(email:string, password: string, rememberMe: boolean): ThunkType => {
+    return async (dispatch) => {
+        authAPI.login(email, password, rememberMe).then(data => {
+            if (data.resultCode === 0) {
+                dispatch(setAuthUserDataTC())
+            }
+        })
+    }
+}
 
-
+export const logoutTC =(): ThunkType => {
+    return async (dispatch) => {
+        authAPI.logout().then(data => {
+            if (data.resultCode === 0) {
+                //когда вылогинились, нужно занулить данные о пользователе, для этого мы диспатчим initialState
+                dispatch(setAuthUserDataAC(initialState))
+            }
+        })
+    }
+}
 
 
 

@@ -8,6 +8,7 @@ import {AppStateType} from '../../redux/redux-store';
 import {addMessageAC} from '../../redux/dialogs-reducer';
 import {MapDispatchToPropsType, MapStateToPropsType} from './LoginContainer';
 import {Redirect} from 'react-router-dom';
+import styles from '../common/FormsControls/FormsControls.module.css'
 
 
 
@@ -37,6 +38,10 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
                        type={'checkbox'}
                 /> Remember me
             </div>
+            {/*если в редакс форме есть ошибка, то покажется дивка с ошибкой. ошибка попадает в форму с помощью stopSubmit (в auth-reducer), когда с сервера приходит ответ, что введен неверный логин или пароль */}
+            {props.error && <div className={styles.formSummaryError}>
+                {props.error}
+            </div>}
             <div>
                 <button>Login</button>
             </div>

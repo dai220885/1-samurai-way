@@ -6,8 +6,9 @@ type ValidatePropsType = {
     //dispatch?: (action: any) => void
 }
 
+type FormControlPropsType = DetailedHTMLProps<any, any>
 
-const FormControl: React.FC<any> = ({input, meta, child, ...props}) => {
+const FormControl: React.FC<FormControlPropsType> = ({input, meta, child, ...props}) => {
 
     const hasError = meta.touched && meta.error
     return (
@@ -21,14 +22,14 @@ const FormControl: React.FC<any> = ({input, meta, child, ...props}) => {
 }
 
 
-export const TextAreaWithValidate: React.FC<any> = (props) => {
+export const TextAreaWithValidate: React.FC<FormControlPropsType & ValidatePropsType> = (props) => {
     const {input, meta, child, ...restProps} = props;
      return (
          <FormControl {...props}><textarea {...input} {...restProps}/></FormControl>
     );
 };
 
-export const InputWithValidate: React.FC<any> = (props) => {
+export const InputWithValidate: React.FC<FormControlPropsType & ValidatePropsType> = (props) => {
     const {input, meta, child, ...restProps} = props;
     return (
         <FormControl {...props}><input {...input} {...restProps}/></FormControl>

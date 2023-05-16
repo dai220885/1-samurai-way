@@ -25,7 +25,6 @@ export type DialogsPropsType = {
 }
 
 function Dialogs(props: RootDialogsPropsType) {
-
     //if (!props.isAuth) return <Redirect to={'/login'}/>
     let dialogsElements = props.dialogs.map((dialog) => {
             return <DialogItem key={dialog.id} id={dialog.id} name={dialog.name}/>

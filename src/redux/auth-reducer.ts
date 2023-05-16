@@ -3,20 +3,10 @@ import {authAPI, userAPI} from '../api/api';
 import {toggleIsFollowingInProgress, unfollowUserSuccess, UsersReducerActionsType} from './users-reducer';
 import {ThunkAction} from 'redux-thunk';
 import {AppStateType} from './redux-store';
+import {stopSubmit} from 'redux-form';
 
 const SET_USER_DATA = 'SET-USER-DATA'
 
-export type AuthReducerActionType = SetUserDataActionType
-
-type AuthUserDataFromServerType = {
-    id: number
-    email: string
-    login: string
-}
-
-export type AuthUserDataType = AuthUserDataFromServerType & {
-    isAuth: boolean
-}
 
 let initialState : AuthUserDataType = {
     id: NaN,
@@ -40,7 +30,6 @@ const authReducer = (state: AuthUserDataType = initialState, action: AuthReducer
     }
 }
 
-export type SetUserDataActionType = ReturnType<typeof setAuthUserDataAC>
 export const setAuthUserDataAC = (authUserData: AuthUserDataType) => {
     return {
         type: SET_USER_DATA,
@@ -69,6 +58,11 @@ export const loginTC =(email:string, password: string, rememberMe: boolean): Thu
         authAPI.login(email, password, rememberMe).then(data => {
             if (data.resultCode === 0) {
                 dispatch(setAuthUserDataTC())
+            } else {
+                let errorMessage = data.messages.length? data.messages[0]: 'Some error... try again'
+                //первым параметном в stopSubmit передаем название формы, которую стопаем (название задавали, когда оборачивали в reduxForm), второй параметр: вместо _error можно указывать поля из формы, которые нужно подсветить ошибкой и сам текст ошибки. _error - что-то типо глобальной ошибки формы, которая придет в нее через пропсы автоматом
+                // stopSubmit из redux-form, используем, если resultCode !==0, т.е. логин или пароль введены неверно.
+                dispatch (stopSubmit('login', {_error: errorMessage}))
             }
         })
     }
@@ -85,6 +79,24 @@ export const logoutTC =(): ThunkType => {
     }
 }
 
+
+
+//types:
+export type AuthReducerActionType =
+    | SetUserDataActionType
+    | ReturnType<typeof stopSubmit>
+
+export type SetUserDataActionType = ReturnType<typeof setAuthUserDataAC>
+
+type AuthUserDataFromServerType = {
+    id: number
+    email: string
+    login: string
+}
+
+export type AuthUserDataType = AuthUserDataFromServerType & {
+    isAuth: boolean
+}
 
 
 export default authReducer

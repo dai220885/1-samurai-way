@@ -2,9 +2,9 @@ import React from 'react';
 import Header from './Header';
 import {
     AuthReducerActionType,
-    AuthUserDataType,
+    AuthUserDataType, logoutTC,
     setAuthUserDataAC,
-    setAuthUserDataThunkCreator
+    setAuthUserDataTC
 } from '../../redux/auth-reducer';
 import {AppStateType} from '../../redux/redux-store';
 import {Dispatch} from 'redux';
@@ -13,7 +13,6 @@ import {authAPI} from '../../api/api';
 
 class HeaderClassComponent extends React.Component <RootHeaderPropsType> {
     componentDidMount() {
-        //axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`, {withCredentials: true})
         this.props.setAuthUserData()
     }
 
@@ -30,6 +29,7 @@ type OwnHeaderPropsType = {}
 type MapStateToPropsType = ReturnType<typeof mapStateToProps>
 type MapDispatchToPropsType ={
     setAuthUserData: () => void,
+    logout: () => void,
 }
 
 let mapStateToProps = (state: AppStateType) => {
@@ -50,7 +50,7 @@ let mapDispatchToProps = (dispatch: Dispatch<AuthReducerActionType>) => {
     }
 }
 
-const HeaderContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnHeaderPropsType, AppStateType>(mapStateToProps, {setAuthUserData:setAuthUserDataThunkCreator})(HeaderClassComponent);
+const HeaderContainer = connect<MapStateToPropsType, MapDispatchToPropsType, OwnHeaderPropsType, AppStateType>(mapStateToProps, {setAuthUserData:setAuthUserDataTC, logout: logoutTC})(HeaderClassComponent);
 
 
 export default HeaderContainer;

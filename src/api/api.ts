@@ -11,6 +11,21 @@ const instance = axios.create(
     }
 )
 
+
+
+
+export const authAPI = {
+    me(){
+        return instance.get(`/auth/me`).then(response => response.data)
+    },
+    login(email:string, password: string, rememberMe: boolean = false){
+        return instance.post(`/auth/login`, {email, password, rememberMe}).then(response => response.data)
+    },
+    logout(){
+        return instance.delete(`/auth/login`).then(response => response.data)
+    }
+}
+
 export const userAPI = {
     //методы объекта userAPI:
     getUsers(currentPage: number = 1, pageSize: number = 10) {
@@ -24,11 +39,7 @@ export const userAPI = {
         return instance.delete(`follow/${userID}`).then(response => response.data)
     }
 }
-export const authAPI = {
-    login(){
-        return instance.get(`/auth/me`).then(response => response.data)
-    }
-}
+
 export const profileAPI = {
     getProfile(userID: string){
         return instance.get(`profile/${userID}`).then(response => response.data)

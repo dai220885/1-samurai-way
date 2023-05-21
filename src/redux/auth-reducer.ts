@@ -1,6 +1,4 @@
-import {addMessageAC} from './dialogs-reducer';
-import {authAPI, userAPI} from '../api/api';
-import {toggleIsFollowingInProgress, unfollowUserSuccess, UsersReducerActionsType} from './users-reducer';
+import {authAPI} from '../api/api';
 import {ThunkAction} from 'redux-thunk';
 import {AppStateType} from './redux-store';
 import {stopSubmit} from 'redux-form';
@@ -42,9 +40,10 @@ export const setAuthUserDataAC = (authUserData: AuthUserDataType) => {
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, AuthReducerActionType>
 
+//добавили return перед authAPI.me(), теперь, когда будем диспатчить эту санку в app-reducer, из нее вернется промис и можно будет написать логику в методе then
 export const setAuthUserDataTC =(): ThunkType => {
     return async (dispatch, getState) => {
-        authAPI.me().then(data => {
+        return authAPI.me().then(data => {
             if (data.resultCode === 0) {
                 //в setAuthUserDataAC передаем деструктуризированный оъект, который пришел с сервера (типа AuthUserDataFromServerType), и добавляем свойство "isAuth: true", после чего получили объект типа AuthUserDataType
                 dispatch(setAuthUserDataAC({...data.data, isAuth: true}))

@@ -23,27 +23,16 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
 
         //тестовый вариант, чтобы при отображении чужого профилотображать мой профиль п
         //let userId = this.props.match.params.userId
-        let userId = this.props.match.params.userId || '28386'
-        // if (prevProps.match.params.userId !== userId || undefined ){
-        //     this.props.getUserProfile(userId)
-        //     this.props.getUserStatus(userId)
-        // }
+        let userId = this.props.match.params.userId || this.props.authorizedUserId
         if (userId) {
             if (String(userId) !== String(this.props.profile?.userId)) {
                 this.props.getUserProfile(userId)
                 this.props.getUserStatus(userId)
             }
+        } else {
+            //переадресацию правильнее делать в jsx, однако для примера пробуем такой вариант(редиректим так же, как и в componentDidMount
+            this.props.history.push('/login')
         }
-
-
-        //if (String(this.props.match.params.userId) !== String(this.props.profile?.userId)) {
-        //if (String(this.props.profile?.userId) !== myId) {
-        //    let userId = this.props.match.params.userId || '28386'
-            //this.props.getUserProfile(this.props.match.params.userId)
-            //this.props.getUserStatus(this.props.match.params.userId)
-         //   this.props.getUserProfile(userId)
-        //    this.props.getUserStatus(userId)
-        //}
     }
 
     componentDidMount() {
@@ -51,9 +40,12 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
         console.log('ProfileClassComponent.componentDidMount')
         //let userId = this.props.match.params.userId || '28386'//просто захардкодили свою айдишку на время
         let userId = this.props.match.params.userId || this.props.authorizedUserId
+        //переадресацию правильнее делать в jsx, однако для примера пробуем такой вариант
+        if (!userId){
+            this.props.history.push('/login')
+        }
         this.props.getUserProfile(userId)
         this.props.getUserStatus(userId)
-
     }
 
     render() {
@@ -97,7 +89,7 @@ const ProfileContainer = compose<React.ComponentType>(
         updateStatus: updateStatusThunkCreator,
     }),
     withRouter,
-    withAuthRedirect
+    //withAuthRedirect
 )(ProfileClassComponent)
 
 export default ProfileContainer

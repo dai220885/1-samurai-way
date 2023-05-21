@@ -1,15 +1,10 @@
 import React from 'react';
 import {Field, InjectedFormProps, reduxForm} from 'redux-form';
 import {InputWithValidate} from '../common/FormsControls/FormsControls';
-import {maxLengthCreator, requiredField} from '../../utils/validators/validators';
-import {connect} from 'react-redux';
-import {loginTC} from '../../redux/auth-reducer';
-import {AppStateType} from '../../redux/redux-store';
-import {addMessageAC} from '../../redux/dialogs-reducer';
+import {requiredField} from '../../utils/validators/validators';
 import {MapDispatchToPropsType, MapStateToPropsType} from './LoginContainer';
 import {Redirect} from 'react-router-dom';
 import styles from '../common/FormsControls/FormsControls.module.css'
-
 
 
 //const maxLength15 = maxLengthCreator(15)
@@ -69,6 +64,8 @@ const Login = (props: RootLoginPropsType) => {
     );
 };
 
+
+//types:
 export type OwnLoginPropsType = {}
 type FormDataType = {
     email: string
@@ -76,10 +73,4 @@ type FormDataType = {
     rememberMe: boolean
 }
 type RootLoginPropsType = OwnLoginPropsType & MapStateToPropsType & MapDispatchToPropsType
-//type MapStateToPropsType = null
-//type MapDispatchToPropsType = {
-   // addNewMessage: (newMessage: string)=>void,
-   // login: (email:string, password: string, rememberMe: boolean) => void
-//}
-//export default Login
 export default Login

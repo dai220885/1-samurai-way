@@ -2,56 +2,73 @@
 import './App.css';
 import React, {useState} from 'react';
 import Navbar from './components/Navbar/Navbar';
-import {Route} from 'react-router-dom';
+import {Route, withRouter} from 'react-router-dom';
 //import { Routes, Route, Navigate } from 'react-router-dom'
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
-import Login from './components/Login/Login';
 import LoginContainer from './components/Login/LoginContainer';
+import {connect} from 'react-redux';
+import {AppStateType} from './redux/redux-store';
+import {compose} from 'redux';
+import {initializeAppTC} from './redux/app-reducer';
+import {Preloader} from './components/common/Preloader/Preloader';
 
-const App: React.FC = () => {
-    let [count, setCount] = useState<number>(1)
+class App extends React.Component <RootAppPropsType>{
 
-    function addCount() {
-        setCount(count += 1)
+    componentDidMount() {
+        this.props.initializeApp()
     }
-
-    //const state = props.state;
-    return (
-        <div className="app-wrapper">
-            <div>
-                {count}
+    render() {
+        //const state = props.state;
+        if (!this.props.isInitialized) {
+           return <Preloader/>
+        }
+        return (
+            <div className="app-wrapper">
+                <HeaderContainer/>
+                <Navbar/>
+                <div className="app-wrapper-content">
+                    <Route
+                        path="/dialogs"
+                        render={() => <DialogsContainer/>}
+                    />
+                    <Route
+                        path="/profile/:userId?"
+                        render={() => <ProfileContainer/>}
+                    />
+                    <Route
+                        path="/users"
+                        render={() => <UsersContainer/>}
+                    />
+                    <Route
+                        path="/login"
+                        render={() => <LoginContainer/>}
+                    />
+                </div>
             </div>
-            <div>
-                <button onClick={() => {
-                    addCount()
-                }}>Add count
-                </button>
-            </div>
-            <HeaderContainer/>
-            <Navbar/>
-            <div className="app-wrapper-content">
-                <Route
-                    path="/dialogs"
-                    render={() => <DialogsContainer/>}
-                />
-                <Route
-                    path="/profile/:userId?"
-                    render={() => <ProfileContainer/>}
-                />
-                <Route
-                    path="/users"
-                    render={() => <UsersContainer/>}
-                />
-                <Route
-                    path="/login"
-                    render={() => <LoginContainer/>}
-                />
-            </div>
-        </div>
-    );
+        );
+    }
+}
+let mapStateToProps = (state: AppStateType) => {
+    return {
+        isInitialized: state.appInit.isInitialized
+    }
 }
 
-export default App;
+export default compose<React.ComponentType>(
+    connect<MapStateToPropsType, MapDispatchToPropsType, OwnAppPropsType, AppStateType>
+    (mapStateToProps, {initializeApp: initializeAppTC}),
+    withRouter,
+)(App);
+
+//types:
+export type RootAppPropsType = MapStateToPropsType & MapDispatchToPropsType & OwnAppPropsType
+type OwnAppPropsType = {}
+type MapStateToPropsType = ReturnType<typeof mapStateToProps>
+type MapDispatchToPropsType ={
+    initializeApp: () => void,
+}
+
+

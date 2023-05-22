@@ -1,5 +1,4 @@
 import {userAPI} from '../api/api';
-import {Dispatch} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {AppStateType} from './redux-store';
 
@@ -11,37 +10,8 @@ const SET_USERS_TOTAL_COUNT = 'SET-USERS-TOTAL-COUNT';
 const TOGGLE_IS_FETCHING = 'TOGGLE-IS-FETCHING';
 const TOGGLE_IS_FOLLOWING_IN_PROGRESS = 'TOGGLE-IS-FOLLOWING-IN-PROGRESS';
 
-export type UserType = {
-    id: string
-    photoUrl: string
-    followed: boolean
-    fullName: string
-    status: string
-    location: {
-        city: string
-        country: string
-    }
-}
-export type UserPageType = {
-    users: UserType[],
-    pageSize: number,
-    totalUsersCount: number,
-    currentPage: number
-    isFetching: boolean
-    isFollowingInProgress: string[]
-}
-
 let initialState: UserPageType = {
-    users: [
-        //     {
-        //         id: v1(),
-        //         photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiQSa00Huhj-j07rhDP24F3O0X0i05SQwI4A&usqp=CAU',
-        //         followed: true,
-        //         fullName: 'Alexandr',
-        //         status: 'i am a student',
-        //         location: {city: 'Minsk', country: 'Belarus'}
-        //     },
-    ],
+    users: [],
     pageSize: 15,
     totalUsersCount: 0,
     currentPage: 1,
@@ -77,83 +47,39 @@ const usersReducer = (state: UserPageType = initialState, action: UsersReducerAc
             return {...state, isFetching: action.payload.isFetching}
         }
         case TOGGLE_IS_FOLLOWING_IN_PROGRESS: {
-            return {...state,
-                isFollowingInProgress: action.payload.isFetching?
+            return {
+                ...state,
+                isFollowingInProgress: action.payload.isFetching ?
                     [...state.isFollowingInProgress, action.payload.userId]
-                    :state.isFollowingInProgress.filter(id => id!== action.payload.userId)}
+                    : state.isFollowingInProgress.filter(id => id !== action.payload.userId)
+            }
         }
         default:
             return state;
     }
 }
-export type UsersReducerActionsType =
-    FollowUserActionType
-    | UnfollowUserActionType
-    | SetUsersActionType
-    | SetCurrentPageActionType
-    | SetUsersTotalCountActionType
-    |ToggleIsFetchingActionType
-    |ToggleIsFollowingInProgressActionType
-//автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
-export type FollowUserActionType = ReturnType<typeof followUserSuccess>
-export type UnfollowUserActionType = ReturnType<typeof unfollowUserSuccess>
-export type SetUsersActionType = ReturnType<typeof setUsers>
-export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
-export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
-export type ToggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
-export type ToggleIsFollowingInProgressActionType = ReturnType<typeof toggleIsFollowingInProgress>
 
-//функции (ActionCreator-ы), которые будут создавать объекты action (чтобы не запутаться и не ошибиться при создании непосредственно в компоненте
-export const followUserSuccess = (userId: string) => ({
-        type: FOLLOW_USER,
-        payload: {
-            userId
-        }
-    } as const)
-export const unfollowUserSuccess = (userId: string) => ({
-        type: UNFOLLOW_USER,
-        payload: {
-            userId
-        }
-    } as const)
-export const setUsers = (users: UserType[]) => ({
-        type: SET_USERS,
-        payload: {
-            users
-        }
-    } as const)
-export const setCurrentPage = (currentPageNumber: number) => ({
-        type: SET_CURRENT_PAGE,
-        payload: {
-            currentPageNumber
-        }
-    } as const)
-export const setUsersTotalCount = (usersTotalCount: number) => ({
-        type: SET_USERS_TOTAL_COUNT,
-        payload: {
-            usersTotalCount
-        }
-    } as const)
-export const toggleIsFetching = (isFetching: boolean) => ({
-        type: TOGGLE_IS_FETCHING,
-        payload: {
-            isFetching
-        }
-    } as const)
-export const toggleIsFollowingInProgress = (isFetching: boolean, userId: string) => ({
-        type: TOGGLE_IS_FOLLOWING_IN_PROGRESS,
-        payload: {
-            isFetching,
-            userId
-        }
-    } as const)
+//actionCreators:
 
-//типизация санки
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UsersReducerActionsType>
+export const followUserSuccess = (userId: string) =>
+    ({type: FOLLOW_USER, payload: {userId}} as const)
+export const unfollowUserSuccess = (userId: string) =>
+    ({type: UNFOLLOW_USER, payload: {userId}} as const)
+export const setUsers = (users: UserType[]) =>
+    ({type: SET_USERS, payload: {users}} as const)
+export const setCurrentPage = (currentPageNumber: number) =>
+    ({type: SET_CURRENT_PAGE, payload: {currentPageNumber}} as const)
+export const setUsersTotalCount = (usersTotalCount: number) =>
+    ({type: SET_USERS_TOTAL_COUNT, payload: {usersTotalCount}} as const)
+export const toggleIsFetching = (isFetching: boolean) =>
+    ({type: TOGGLE_IS_FETCHING, payload: {isFetching}} as const)
+export const toggleIsFollowingInProgress = (isFetching: boolean, userId: string) =>
+    ({type: TOGGLE_IS_FOLLOWING_IN_PROGRESS, payload: {isFetching, userId}} as const)
 
-//export type GetUsersThunkCreatorType = ReturnType<typeof getUsersThunkCreator>
+
+//thunkCreators:
 //можно было просто назвать санкКриэйтор "getUsers", чтобы в коннект потом передать короткое название
-export const getUsersThunkCreator =(currentPage: number, pageSize: number): ThunkType => {
+export const getUsersThunkCreator = (currentPage: number, pageSize: number): ThunkType => {
     return async (dispatch, getState) => {
         dispatch(setCurrentPage(currentPage))
         dispatch(toggleIsFetching(true))
@@ -183,7 +109,7 @@ export const getUsersThunkCreator =(currentPage: number, pageSize: number): Thun
     }
 }
 
-export const followUserThunkCreator =(userId: string ): ThunkType => {
+export const followUserThunkCreator = (userId: string): ThunkType => {
     return async (dispatch, getState) => {
         dispatch(toggleIsFollowingInProgress(true, userId))
         userAPI.followUser(userId).then(data => {
@@ -195,7 +121,7 @@ export const followUserThunkCreator =(userId: string ): ThunkType => {
     }
 }
 
-export const unfollowUserThunkCreator =(userId: string ): ThunkType => {
+export const unfollowUserThunkCreator = (userId: string): ThunkType => {
     return async (dispatch, getState) => {
         dispatch(toggleIsFollowingInProgress(true, userId))
         userAPI.unfollowUser(userId).then(data => {
@@ -207,3 +133,44 @@ export const unfollowUserThunkCreator =(userId: string ): ThunkType => {
     }
 }
 export default usersReducer;
+
+//types:
+
+export type UserType = {
+    id: string
+    photoUrl: string
+    followed: boolean
+    fullName: string
+    status: string
+    location: {
+        city: string
+        country: string
+    }
+}
+export type UserPageType = {
+    users: UserType[],
+    pageSize: number,
+    totalUsersCount: number,
+    currentPage: number
+    isFetching: boolean
+    isFollowingInProgress: string[]
+}
+export type UsersReducerActionsType =
+    FollowUserActionType
+    | UnfollowUserActionType
+    | SetUsersActionType
+    | SetCurrentPageActionType
+    | SetUsersTotalCountActionType
+    | ToggleIsFetchingActionType
+    | ToggleIsFollowingInProgressActionType
+//автоматически типизируем ActionCreator-ы, но в ActionCreator-е обязательно добавлять в конце 'as const', чтобы свойство type воспринималось не как любая строка, а как константа:
+export type FollowUserActionType = ReturnType<typeof followUserSuccess>
+export type UnfollowUserActionType = ReturnType<typeof unfollowUserSuccess>
+export type SetUsersActionType = ReturnType<typeof setUsers>
+export type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
+export type SetUsersTotalCountActionType = ReturnType<typeof setUsersTotalCount>
+export type ToggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
+export type ToggleIsFollowingInProgressActionType = ReturnType<typeof toggleIsFollowingInProgress>
+//типизация санки
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UsersReducerActionsType>
+//export type GetUsersThunkCreatorType = ReturnType<typeof getUsersThunkCreator>

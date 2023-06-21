@@ -24,12 +24,12 @@ type MyPostsPropsType = {
 }
 
 
-class MyPosts extends React.Component<MyPostsPropsType> {
+class MyPosts extends React.PureComponent<MyPostsPropsType> {
 
-	shouldComponentUpdate(nextProps: Readonly<MyPostsPropsType>, nextState: Readonly<{}>, nextContext: any): boolean {
-		return this.props !== nextProps || this.state !== nextState
-
-	}
+//в PureComponent уже переопределен метод shouldComponentUpdate, самостоятельно можно это не делать
+// 	shouldComponentUpdate(nextProps: Readonly<MyPostsPropsType>, nextState: Readonly<{}>, nextContext: any): boolean {
+// 		return this.props !== nextProps || this.state !== nextState
+// 	}
 
 	render() {
 		//let [title, setTitle] = useState('') //стейт для хранения введенного текста в textArea

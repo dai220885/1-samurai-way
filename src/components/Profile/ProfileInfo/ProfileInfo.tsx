@@ -4,6 +4,7 @@ import mainLogo from "./../../../images/main.png"
 import {UserProfileType} from '../../../redux/profile-reducer';
 import {Preloader} from '../../common/Preloader/Preloader';
 import ProfileStatus from './ProfileIstatus';
+import ProfileStatusWithHooks from './ProfileIstatusWithHooks';
 //import styles from '../../Users/Users.module.css';
 
 type ProfileInfoPropsType = {
@@ -32,7 +33,8 @@ function ProfileInfo(props: ProfileInfoPropsType) {
                         {  `userID: ${props.profile.userId}`}
                     </div>
                     <img src={props.profile.photos.large} alt="   photo   " className={classes.profilePhoto}/>
-                    <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
+                    {/*<ProfileStatus status={props.status} updateStatus={props.updateStatus}/>*/}
+                    <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus}/>
                 </div>
 
 

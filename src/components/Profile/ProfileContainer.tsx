@@ -16,7 +16,7 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
     //     super(props);
     // }
     componentDidUpdate(prevProps: Readonly<RootProfilePropsType>, prevState: Readonly<{}>, snapshot?: any) {
-        console.log('ProfileClassComponent.componentDidUpdate')
+        //console.log('ProfileClassComponent.componentDidUpdate')
         //запрос на сервер выполнится только в том случае, если match.params.userId и profile?.userId будут разные, такое происходит, когда на страничке юзеров кликнули на аватарку, перешли на страничку профиля (с инфой о кликнутом юзере) и при этом кликаем на собственный логин(верхний правый угол) или на profile, срабатывает componentDidUpdate, в роутинге меняется адрес на profile/наш_айдишник или просто на profile/, но в пропсах еще предыдущий юзер сидит со своей айдишкой
        // debugger
         //let myId = '28386'
@@ -37,7 +37,7 @@ class ProfileClassComponent extends React.Component <RootProfilePropsType> {
 
     componentDidMount() {
         //debugger
-        console.log('ProfileClassComponent.componentDidMount')
+        //console.log('ProfileClassComponent.componentDidMount')
         //let userId = this.props.match.params.userId || '28386'//просто захардкодили свою айдишку на время
         let userId = this.props.match.params.userId || this.props.authorizedUserId
         //переадресацию правильнее делать в jsx, однако для примера пробуем такой вариант
